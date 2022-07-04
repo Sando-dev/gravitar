@@ -3,6 +3,7 @@
 #include <assert.h>
 #include <stdbool.h>
 #include <string.h>
+#include <math.h>
 
 typedef struct {
     float (*puntos)[2];
