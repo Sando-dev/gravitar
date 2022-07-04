@@ -65,7 +65,7 @@ polilinea_t *polilinea_clonar(const polilinea_t *polilinea){
 }
 
 
-double distancia_punto_a_polilinea(const float polilinea[][2], size_t n, float px, float py){
+/* double distancia_punto_a_polilinea(const float polilinea[][2], size_t n, float px, float py){
   //double dist[n-1];
   double distmin=1000;
   for(int i=0;i<n-1;i++){
@@ -91,7 +91,7 @@ double distancia_punto_a_polilinea(const float polilinea[][2], size_t n, float p
   }
   //return distancia_minima(dist,n-1);
   return distmin;
-}
+}*/
 
 void trasladar(float polilinea[][2], size_t n, float dx, float dy){
   for(int i=0;i<n;i++){
