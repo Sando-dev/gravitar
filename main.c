@@ -4,6 +4,18 @@
 #include "config.h"
 
 
+
+int computar_velocidad_(int vi, int a, int t) {
+    return t*a+vi;
+}
+
+int computar_posicion_(int pi, int vi, int t){
+    return pi+t*vi;
+}
+
+
+
+
 void trasladar(float polilinea[][2], size_t n, float dx, float dy){
   for(int i=0;i<n;i++){
     polilinea[i][0]+=dx;
@@ -48,9 +60,12 @@ int main() {
 
     rotar(nave, nave_tam, PI/2);
     rotar(chorro, chorro_tam, PI/2);
+    int vi = 0;
+    int pi = 0;
+    int a_chorro = 0;
 
     // Queremos que todo se dibuje escalado por f:
-    float f = 10;
+    float f = 1;
     // END código del alumno
 
     unsigned int ticks = SDL_GetTicks();
@@ -65,20 +80,17 @@ int main() {
                     case SDLK_UP:
                         // Prendemos el chorro:
                         chorro_prendido = true;
-                        trasladar(nave, nave_tam, 0,1);
-                        trasladar(chorro, chorro_tam, 0,1);
+                        trasladar(nave, nave_tam, 0,10);
+                        trasladar(chorro, chorro_tam, 0,10);
+                        a_chorro = 3;
                         break;
                     case SDLK_DOWN:
                         trasladar(nave, nave_tam, 0,-1);
                         trasladar(chorro, chorro_tam, 0,-1);
                         break;
                     case SDLK_RIGHT:
-                        rotar(nave, nave_tam, -PI*0.1);
-                        rotar(chorro, chorro_tam, -PI*0.1);
                         break;
                     case SDLK_LEFT:
-                        rotar(nave, nave_tam, PI*0.1);
-                        rotar(chorro, chorro_tam, PI*0.1);
                         break;
                 }
             }
@@ -88,6 +100,7 @@ int main() {
                     case SDLK_UP:
                         // Apagamos el chorro:
                         chorro_prendido = false;
+                        a_chorro = 0;
                         break;
                 }
             }
@@ -99,7 +112,14 @@ int main() {
         SDL_RenderClear(renderer);
         SDL_SetRenderDrawColor(renderer, 0xFF, 0xFF, 0xFF, 0x00);
 
+
+        
         // BEGIN código del alumno
+         
+        vi = computar_velocidad_(0, -1+a_chorro, ticks/1000);
+        pi = computar_posicion_(0, vi, ticks/1000);
+        trasladar(nave, nave_tam, 0, pi);
+        trasladar(chorro, chorro_tam, 0, pi);
         // Dibujamos la nave escalada por f en el centro de la pantalla:
         SDL_SetRenderDrawColor(renderer, 0xFF, 0xFF, 0xFF, 0x00);
         for(int i = 0; i < nave_tam - 1; i++)
@@ -146,4 +166,5 @@ int main() {
     SDL_Quit();
     return 0;
 }
+
 
