@@ -1,16 +1,16 @@
 #include <SDL2/SDL.h>
 #include <stdbool.h>
-
+#include <stdio.h>
 #include "config.h"
 
 
-
-int computar_velocidad_(int vi, int a, int t) {
-    return t*a+vi;
+double computar_velocidad(double vi, double a, double dt){
+  return dt*a+vi;
 }
 
-int computar_posicion_(int pi, int vi, int t){
-    return pi+t*vi;
+
+double computar_posicion(double pi, double vi, double dt){
+  return dt*vi+pi;
 }
 
 
@@ -60,9 +60,10 @@ int main() {
 
     rotar(nave, nave_tam, PI/2);
     rotar(chorro, chorro_tam, PI/2);
-    int vi = 0;
-    int pi = 0;
-    int a_chorro = 0;
+    double vi = 0;
+    double pi = 0;
+    double a_chorro = 0;
+    double rotacion=0;
 
     // Queremos que todo se dibuje escalado por f:
     float f = 1;
@@ -80,17 +81,15 @@ int main() {
                     case SDLK_UP:
                         // Prendemos el chorro:
                         chorro_prendido = true;
-                        trasladar(nave, nave_tam, 0,10);
-                        trasladar(chorro, chorro_tam, 0,10);
-                        a_chorro = 3;
+                        a_chorro = NAVE_ACELERACION;
                         break;
                     case SDLK_DOWN:
-                        trasladar(nave, nave_tam, 0,-1);
-                        trasladar(chorro, chorro_tam, 0,-1);
                         break;
                     case SDLK_RIGHT:
+                        rotacion=-NAVE_ROTACION_PASO;
                         break;
                     case SDLK_LEFT:
+                        rotacion=NAVE_ROTACION_PASO;
                         break;
                 }
             }
@@ -101,6 +100,14 @@ int main() {
                         // Apagamos el chorro:
                         chorro_prendido = false;
                         a_chorro = 0;
+                        break;
+                    case SDLK_DOWN:
+                        break;
+                    case SDLK_RIGHT:
+                        rotacion=0;
+                        break;
+                    case SDLK_LEFT:
+                        rotacion=0;
                         break;
                 }
             }
@@ -113,11 +120,12 @@ int main() {
         SDL_SetRenderDrawColor(renderer, 0xFF, 0xFF, 0xFF, 0x00);
 
 
-        
+
         // BEGIN código del alumno
-         
-        vi = computar_velocidad_(0, -1+a_chorro, ticks/1000);
-        pi = computar_posicion_(0, vi, ticks/1000);
+
+        vi = computar_velocidad(vi, -G+a_chorro, (float)1/JUEGO_FPS);
+        pi = computar_posicion(pi, vi, (float)1/JUEGO_FPS);
+        rotar(nave, nave_tam, rotacion);
         trasladar(nave, nave_tam, 0, pi);
         trasladar(chorro, chorro_tam, 0, pi);
         // Dibujamos la nave escalada por f en el centro de la pantalla:
@@ -166,5 +174,3 @@ int main() {
     SDL_Quit();
     return 0;
 }
-
-

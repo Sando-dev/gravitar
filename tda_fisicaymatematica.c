@@ -11,7 +11,7 @@ double computar_velocidad(double vi, double a, double dt){
 
 //calcular posicion
 double computar_posicion(double pi, double vi, double dt){
-  return DT*vi+pi;
+  return dt*vi+pi;
 }
 
 //prod interno x*x+y*y
