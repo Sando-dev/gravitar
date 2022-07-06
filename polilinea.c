@@ -5,10 +5,12 @@
 #include <string.h>
 #include <math.h>
 
-typedef struct {
+#include "polilinea.h"
+
+struct polilinea {
     float (*puntos)[2];
     size_t n;
-} polilinea_t;
+};
 
 void polilinea_destruir(polilinea_t *polilinea){
   free(polilinea->puntos);
