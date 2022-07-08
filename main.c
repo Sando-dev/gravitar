@@ -3,7 +3,15 @@
 
 #include "config.h"
 
+//calcular velocidad
+double computar_velocidad(double vi, double a, double dt){
+  return dt*a+vi;
+}
 
+//calcular posicion
+double computar_posicion(double pi, double vi, double dt){
+  return dt*vi+pi;
+}
 
 
 void trasladar(float polilinea[][2], size_t n, float dx, float dy){
@@ -42,13 +50,11 @@ int main() {
     float nave[][2] = {{8, 0}, {-1, 6}, {-4, 4}, {-4, 2}, {-2, 0}, {-4, -2}, {-4, -4}, {-1, -6}, {8, 0}};
     size_t nave_tam = 9;
 
-    float nave_clon[9][2];
 
     // El chorro de la nave:
     float chorro[][2] = {{-4, 2}, {-8, 0}, {-4, -2}};
     size_t chorro_tam = 3;
-    
-    float chorro_clon[3][2];
+
 
     bool chorro_prendido = false;
 
@@ -56,7 +62,11 @@ int main() {
     // Queremos que todo se dibuje escalado por f:
     float f = 5;
     // END código del alumno
-    float posicion = 0;
+    float a=0;
+    float posx = 0;
+    float posy = 0;
+    float vx=0;
+    float vy=0;
     float angulo = NAVE_ANGULO_INICIAL;
     unsigned int ticks = SDL_GetTicks();
     while(1) {
@@ -70,10 +80,10 @@ int main() {
                     case SDLK_UP:
                         // Prendemos el chorro:
                         chorro_prendido = true;
-                        posicion += 1;
+                        a=NAVE_ACELERACION;
                         break;
                     case SDLK_DOWN:
-                        posicion -= 1;
+
                         break;
                     case SDLK_RIGHT:
                         angulo -= NAVE_ROTACION_PASO;
@@ -89,6 +99,7 @@ int main() {
                     case SDLK_UP:
                         // Apagamos el chorro:
                         chorro_prendido = false;
+                        a=0;
                         break;
                 }
             }
@@ -101,8 +112,14 @@ int main() {
         SDL_SetRenderDrawColor(renderer, 0xFF, 0xFF, 0xFF, 0x00);
 
 
-        
+
         // BEGIN código del alumno
+        vx=computar_velocidad(vx,a*cos(angulo),(float)1/JUEGO_FPS);
+        vy=computar_velocidad(vy,a*sin(angulo)-G,(float)1/JUEGO_FPS);
+        posx=computar_posicion(posx,vx,(float)1/JUEGO_FPS);
+        posy=computar_posicion(posy,vy,(float)1/JUEGO_FPS);
+        float nave_clon[9][2];
+        float chorro_clon[3][2];
         for(size_t i=0; i < nave_tam; i++) {
             nave_clon[i][0] = nave[i][0];
             nave_clon[i][1] = nave[i][1];
@@ -117,8 +134,8 @@ int main() {
         rotar(chorro_clon, chorro_tam, angulo);
 
 
-        trasladar(nave_clon, nave_tam, posicion*cos(angulo), posicion*sin(angulo));
-        trasladar(chorro_clon, chorro_tam, posicion*cos(angulo), posicion*sin(angulo));
+        trasladar(nave_clon, nave_tam, posx, posy);
+        trasladar(chorro_clon, chorro_tam, posx, posy);
 
 
 
@@ -146,10 +163,6 @@ int main() {
                 );
         }
 
-        for(size_t i=0; i < nave_tam; i++) {
-            nave_clon[i][0] = 0;
-            nave_clon[i][1] = 0;
-        }  
 
 
         // END código del alumno
@@ -175,5 +188,3 @@ int main() {
     SDL_Quit();
     return 0;
 }
-
-
