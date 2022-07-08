@@ -1,17 +1,7 @@
 #include <SDL2/SDL.h>
 #include <stdbool.h>
-#include <stdio.h>
+
 #include "config.h"
-
-
-double computar_velocidad(double vi, double a, double dt){
-  return dt*a+vi;
-}
-
-
-double computar_posicion(double pi, double vi, double dt){
-  return dt*vi+pi;
-}
 
 
 
@@ -52,23 +42,22 @@ int main() {
     float nave[][2] = {{8, 0}, {-1, 6}, {-4, 4}, {-4, 2}, {-2, 0}, {-4, -2}, {-4, -4}, {-1, -6}, {8, 0}};
     size_t nave_tam = 9;
 
+    float nave_clon[9][2];
+
     // El chorro de la nave:
     float chorro[][2] = {{-4, 2}, {-8, 0}, {-4, -2}};
     size_t chorro_tam = 3;
+    
+    float chorro_clon[3][2];
 
     bool chorro_prendido = false;
 
-    rotar(nave, nave_tam, PI/2);
-    rotar(chorro, chorro_tam, PI/2);
-    double vi = 0;
-    double pi = 0;
-    double a_chorro = 0;
-    double rotacion=0;
 
     // Queremos que todo se dibuje escalado por f:
-    float f = 1;
+    float f = 5;
     // END código del alumno
-
+    float posicion = 0;
+    float angulo = NAVE_ANGULO_INICIAL;
     unsigned int ticks = SDL_GetTicks();
     while(1) {
         if(SDL_PollEvent(&event)) {
@@ -81,15 +70,16 @@ int main() {
                     case SDLK_UP:
                         // Prendemos el chorro:
                         chorro_prendido = true;
-                        a_chorro = NAVE_ACELERACION;
+                        posicion += 1;
                         break;
                     case SDLK_DOWN:
+                        posicion -= 1;
                         break;
                     case SDLK_RIGHT:
-                        rotacion=-NAVE_ROTACION_PASO;
+                        angulo -= NAVE_ROTACION_PASO;
                         break;
                     case SDLK_LEFT:
-                        rotacion=NAVE_ROTACION_PASO;
+                        angulo += NAVE_ROTACION_PASO;
                         break;
                 }
             }
@@ -99,15 +89,6 @@ int main() {
                     case SDLK_UP:
                         // Apagamos el chorro:
                         chorro_prendido = false;
-                        a_chorro = 0;
-                        break;
-                    case SDLK_DOWN:
-                        break;
-                    case SDLK_RIGHT:
-                        rotacion=0;
-                        break;
-                    case SDLK_LEFT:
-                        rotacion=0;
                         break;
                 }
             }
@@ -120,23 +101,36 @@ int main() {
         SDL_SetRenderDrawColor(renderer, 0xFF, 0xFF, 0xFF, 0x00);
 
 
-
+        
         // BEGIN código del alumno
+        for(size_t i=0; i < nave_tam; i++) {
+            nave_clon[i][0] = nave[i][0];
+            nave_clon[i][1] = nave[i][1];
+        }
 
-        vi = computar_velocidad(vi, -G+a_chorro, (float)1/JUEGO_FPS);
-        pi = computar_posicion(pi, vi, (float)1/JUEGO_FPS);
-        rotar(nave, nave_tam, rotacion);
-        trasladar(nave, nave_tam, 0, pi);
-        trasladar(chorro, chorro_tam, 0, pi);
+        for(size_t j=0; j < chorro_tam; j++) {
+            chorro_clon[j][0] = chorro[j][0];
+            chorro_clon[j][1] = chorro[j][1];
+        }
+
+        rotar(nave_clon, nave_tam, angulo);
+        rotar(chorro_clon, chorro_tam, angulo);
+
+
+        trasladar(nave_clon, nave_tam, posicion*cos(angulo), posicion*sin(angulo));
+        trasladar(chorro_clon, chorro_tam, posicion*cos(angulo), posicion*sin(angulo));
+
+
+
         // Dibujamos la nave escalada por f en el centro de la pantalla:
         SDL_SetRenderDrawColor(renderer, 0xFF, 0xFF, 0xFF, 0x00);
         for(int i = 0; i < nave_tam - 1; i++)
             SDL_RenderDrawLine(
                 renderer,
-                nave[i][0] * f + VENTANA_ANCHO / 2,
-                -nave[i][1] * f + VENTANA_ALTO / 2,
-                nave[i+1][0] * f + VENTANA_ANCHO / 2,
-                -nave[i+1][1] * f + VENTANA_ALTO / 2
+                nave_clon[i][0] * f + VENTANA_ANCHO / 2,
+                -nave_clon[i][1] * f + VENTANA_ALTO / 2,
+                nave_clon[i+1][0] * f + VENTANA_ANCHO / 2,
+                -nave_clon[i+1][1] * f + VENTANA_ALTO / 2
             );
 
         if(chorro_prendido) {
@@ -145,12 +139,19 @@ int main() {
             for(int i = 0; i < chorro_tam - 1; i++)
                 SDL_RenderDrawLine(
                     renderer,
-                    chorro[i][0] * f + VENTANA_ANCHO / 2,
-                    -chorro[i][1] * f + VENTANA_ALTO / 2,
-                    chorro[i+1][0] * f + VENTANA_ANCHO / 2,
-                    -chorro[i+1][1] * f + VENTANA_ALTO / 2
+                    chorro_clon[i][0] * f + VENTANA_ANCHO / 2,
+                    -chorro_clon[i][1] * f + VENTANA_ALTO / 2,
+                    chorro_clon[i+1][0] * f + VENTANA_ANCHO / 2,
+                    -chorro_clon[i+1][1] * f + VENTANA_ALTO / 2
                 );
         }
+
+        for(size_t i=0; i < nave_tam; i++) {
+            nave_clon[i][0] = 0;
+            nave_clon[i][1] = 0;
+        }  
+
+
         // END código del alumno
 
         SDL_RenderPresent(renderer);
@@ -174,3 +175,5 @@ int main() {
     SDL_Quit();
     return 0;
 }
+
+
