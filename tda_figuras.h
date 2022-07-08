@@ -1,8 +1,13 @@
 #ifndef FIGURAS_H
 #define FIGURAS_H
 
-typedef struct figura figura_t;
+
 typedef enum tipos figura_tipo_t;
+typedef struct figura figura_t;
+
+
+
+bool figura_leer_archivo(void);
 
 figura_t *crear_figura_vacia();
 figura_t *figura_crear(FILE *f);

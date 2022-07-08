@@ -2,38 +2,16 @@
 #include <stdbool.h>
 
 #include "config.h"
+#include "tda_fisicaymatematica.h"
+#include "tda_polilineas.h"
+#include "tda_figuras.h"
 
-//calcular velocidad
-double computar_velocidad(double vi, double a, double dt){
-  return dt*a+vi;
-}
-
-//calcular posicion
-double computar_posicion(double pi, double vi, double dt){
-  return dt*vi+pi;
-}
-
-
-void trasladar(float polilinea[][2], size_t n, float dx, float dy){
-  for(int i=0;i<n;i++){
-    polilinea[i][0]+=dx;
-    polilinea[i][1]+=dy;
-  }
-}
-
-
-void rotar(float polilinea[][2], size_t n, double rad){
-  double co=cos(rad);
-  double si=sin(rad);
-  for(int i=0;i<n;i++){
-    float xp=polilinea[i][0]*co-polilinea[i][1]*si;
-    float yp=polilinea[i][0]*si+polilinea[i][1]*co;
-    polilinea[i][0]=xp;
-    polilinea[i][1]=yp;
-  }
-}
 
 int main() {
+
+    if(!(figura_leer_archivo()))
+        return 1;
+
     SDL_Init(SDL_INIT_VIDEO);
 
     SDL_Window *window;

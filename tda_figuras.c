@@ -105,3 +105,41 @@ bool leer_encabezado_figura(FILE *f, char nombre[], figura_tipo_t *tipo, bool *i
 const char* figura_tipo_a_cadena(figura_tipo_t figura){
   return tipos_figuras[figura];
 }
+
+
+bool figura_leer_archivo(void){
+  FILE *f = fopen("figuras.bin", "rb");
+    if(f == NULL) {
+        fprintf(stderr, "No pudo abrirse \"%s\"\n", "figuras.bin");
+        return 1;
+    }
+  
+  int figura = 0;
+  while(1) {
+      figura++;
+
+      char nombre[20];
+      bool infinito;
+      figura_tipo_t tipo;
+      size_t cantidad_polilineas;
+
+      if(! leer_encabezado_figura(f, nombre, &tipo, &infinito, &cantidad_polilineas))
+         break;
+
+
+      printf("FIGURA \"%s\", TIPO: %s, INFINITO: %d, POLILINEAS: %zd\n", nombre, figura_tipo_a_cadena(tipo), infinito, cantidad_polilineas);
+
+      for(size_t i = 0; i < cantidad_polilineas; i++) {
+          polilinea_t *p = leer_polilinea(f);
+          if(p == NULL) {
+              fprintf(stderr, "Error en el archivo");
+              fclose(f);
+              return false;
+          }
+          polilinea_destruir(p);
+        }
+    }
+
+  fclose(f);
+  return true;
+}
