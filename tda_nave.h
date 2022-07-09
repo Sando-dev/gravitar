@@ -1,5 +1,5 @@
-#ifndef FIGURAS_H
-#define FIGURAS_H
+#ifndef NAVE_H
+#define NAVE_H
 
 nave_t nave_crear(double px_inicial, double py_inicial, double angulo_inicial);
 void nave_destruir(nave_t *nave);
