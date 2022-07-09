@@ -2,7 +2,13 @@
 #define FIGURAS_H
 
 
-typedef struct figura figura_t;
+#define TAMANIO_NOMBRE 20
+
+#define MSK_INF 0x80
+
+#define MSK_TIPO 0x0E
+#define SHIFT_TIPO 1
+
 
 typedef enum {
     FIGURA_ICONO,
@@ -14,6 +20,16 @@ typedef enum {
     FIGURA_TORRETA,
     FIGURA_REACTOR,
 }figura_tipo_t;
+
+
+typedef struct {
+    char nombre[TAMANIO_NOMBRE];
+    figura_tipo_t tipo;
+    bool infinito;
+    size_t cantidad_polilineas;
+    polilinea_t **polilineas;
+}figura_t;
+
 
 figura_t **figura_leer_archivo(size_t *n);
 

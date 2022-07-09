@@ -6,12 +6,6 @@
 #include "tda_polilineas.h"
 #include "tda_figuras.h"
 
-#define TAMANIO_NOMBRE 20
-
-#define MSK_INF 0x80
-
-#define MSK_TIPO 0x0E
-#define SHIFT_TIPO 1
 
 
 struct figura{
@@ -36,7 +30,7 @@ const char *tipos_figuras[]={
 };
 
 figura_t *crear_figura_vacia(){
-  figura_t *figura=malloc(sizeof(figura_t));
+  figura_t *figura=calloc(1,sizeof(figura_t));
   if(figura==NULL){
     return NULL;
   }
@@ -53,7 +47,7 @@ figura_t *figura_crear(FILE *f){
     figura_destruir(figura,0,polilinea_destruir);
     return NULL;
   }
-  printf("FIGURA \"%s\", TIPO: %s, INFINITO: %d, POLILINEAS: %zd\n", figura->nombre, figura_tipo_a_cadena(figura->tipo), figura->infinito, figura->cantidad_polilineas);
+
   figura->polilineas=malloc(figura->cantidad_polilineas*(sizeof(polilinea_t)));
   if(figura->polilineas==NULL){
     figura_destruir(figura,0,polilinea_destruir);
@@ -117,18 +111,19 @@ figura_t **figura_leer_archivo(size_t *n){
       n_figura++;
 
       figura_t **aux = realloc(figura_vector, (n_figura)*sizeof(figura_t *));
-      if(aux==NULL)
-        return NULL;
+      if(aux==NULL) {
+        break;
+      }
       figura_vector = aux;
       figura_t *figura = figura_crear(f);
       if(figura==NULL)
-        return NULL;
+        break;
       figura_vector[n_figura-1] = figura;
   }
+  printf("hola\n");
+  *n = n_figura-1;
 
-  *n = n_figura;
-
-  printf("%ld\n", n_figura);
+  
   fclose(f);
   return figura_vector;
 }
