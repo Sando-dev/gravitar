@@ -16,22 +16,13 @@
 
 struct figura{
   char nombre[TAMANIO_NOMBRE];
-  figura_tipo_t *tipo;
+  figura_tipo_t tipo;
   bool infinito;
   size_t cantidad_polilineas;
   polilinea_t **polilineas;
 };
 
-enum tipos{
-  FIGURA_ICONO,
-  FIGURA_NIVEL,
-  FIGURA_SPRITE,
-  FIGURA_PLANETA,
-  FIGURA_BASE,
-  FIGURA_COMBUSTIBLE,
-  FIGURA_TORRETA,
-  FIGURA_REACTOR,
-};
+
 
 const char *tipos_figuras[]={
   [FIGURA_ICONO]="Icono",
@@ -52,7 +43,7 @@ figura_t *crear_figura_vacia(){
   return figura;
 }
 
-figura_t *figura_crear(FILE *f){
+/*figura_t *figura_crear(FILE *f){
   figura_t *figura=crear_figura_vacia();
   if(figura==NULL){
     return NULL;
@@ -75,7 +66,34 @@ figura_t *figura_crear(FILE *f){
     figura->polilineas[i]=polilinea;
   }
   return figura;
+}*/
+
+figura_t *figura_crear(FILE *f){
+  figura_t *figura=crear_figura_vacia();
+  if(figura==NULL){
+    return NULL;
+  }
+  if(!leer_encabezado_figura(f,figura->nombre,&(figura->tipo),&(figura->infinito),&(figura->cantidad_polilineas))){
+    figura_destruir(figura,0,polilinea_destruir);
+    return NULL;
+  }
+  polilinea_t **polilineas=malloc(figura->cantidad_polilineas*(sizeof(polilinea_t*)));
+  if(polilineas==NULL){
+    figura_destruir(figura,0,polilinea_destruir);
+    return NULL;
+  }
+  printf("antes de polilineas\n");
+  for(size_t i=0; i<figura->cantidad_polilineas; i++){
+    polilinea_t *polilinea=leer_polilinea(f);
+    if(polilinea==NULL){
+      figura_destruir(figura,i,polilinea_destruir);
+      return NULL;
+    }
+    figura->polilineas[i]=polilinea;
+  }
+  return figura;
 }
+
 
 void figura_destruir(figura_t *figura, size_t i, void (*destruir)(polilinea_t*)){
   free(figura->nombre);
@@ -94,8 +112,9 @@ bool leer_encabezado_figura(FILE *f, char nombre[], figura_tipo_t *tipo, bool *i
   if(fread(&caracteristicas,sizeof(uint8_t),1,f)!=1){
     return false;
   }
-  *tipo=((caracteristicas)&MSK_TIPO)>>SHIFT_TIPO;
-  *infinito=(caracteristicas)&MSK_INF;
+   
+  *tipo = ((caracteristicas)&MSK_TIPO)>>SHIFT_TIPO;
+  *infinito =(caracteristicas)&MSK_INF;
   if(fread(cantidad_polilineas,sizeof(uint16_t),1,f)!=1){
     return false;
   }
@@ -107,39 +126,35 @@ const char* figura_tipo_a_cadena(figura_tipo_t figura){
 }
 
 
-bool figura_leer_archivo(void){
+figura_t **figura_leer_archivo(size_t *n){
   FILE *f = fopen("figuras.bin", "rb");
     if(f == NULL) {
         fprintf(stderr, "No pudo abrirse \"%s\"\n", "figuras.bin");
-        return 1;
+        return NULL;
     }
-  
-  int figura = 0;
+  figura_t **figura_vector = malloc((sizeof(figura_t*)));
+  if(figura_vector == NULL)
+    return NULL;
+
+
+  size_t n_figura = 0;
   while(1) {
-      figura++;
+      n_figura++;
 
-      char nombre[20];
-      bool infinito;
-      figura_tipo_t tipo;
-      size_t cantidad_polilineas;
+      printf("llega al while\n");
+      figura_t **aux = realloc(figura_vector, (1+n_figura)*sizeof(figura_t *));
+      if(aux==NULL)
+        return NULL;
+      figura_vector = aux;
+      printf("reservo memoria para vector\n");
+      figura_t *figura = figura_crear(f);
+      if(figura==NULL)
+        return NULL;
+      figura_vector[n_figura-1] = figura;
+  }
 
-      if(! leer_encabezado_figura(f, nombre, &tipo, &infinito, &cantidad_polilineas))
-         break;
-
-
-      printf("FIGURA \"%s\", TIPO: %s, INFINITO: %d, POLILINEAS: %zd\n", nombre, figura_tipo_a_cadena(tipo), infinito, cantidad_polilineas);
-
-      for(size_t i = 0; i < cantidad_polilineas; i++) {
-          polilinea_t *p = leer_polilinea(f);
-          if(p == NULL) {
-              fprintf(stderr, "Error en el archivo");
-              fclose(f);
-              return false;
-          }
-          polilinea_destruir(p);
-        }
-    }
+  *n = n_figura;
 
   fclose(f);
-  return true;
+  return figura_vector;
 }

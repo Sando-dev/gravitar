@@ -9,8 +9,9 @@
 
 int main() {
 
-    if(!(figura_leer_archivo()))
-        return 1;
+    size_t n_figura;
+    figura_t **figura_vector = figura_leer_archivo(&n_figura);
+    printf("%ld\n", n_figura);
 
     SDL_Init(SDL_INIT_VIDEO);
 

@@ -122,9 +122,9 @@ polilinea_t *leer_polilinea(FILE *f){
       polilinea_destruir(p);
       return NULL;
     }
-
     polilinea_setear_punto(p,i,v[0],v[1]);
   }
+  printf("%d\n",p->g);
   return p;
 }
 

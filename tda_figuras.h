@@ -2,12 +2,20 @@
 #define FIGURAS_H
 
 
-typedef enum tipos figura_tipo_t;
 typedef struct figura figura_t;
 
+typedef enum {
+    FIGURA_ICONO,
+    FIGURA_NIVEL,
+    FIGURA_SPRITE,
+    FIGURA_PLANETA,
+    FIGURA_BASE,
+    FIGURA_COMBUSTIBLE,
+    FIGURA_TORRETA,
+    FIGURA_REACTOR,
+}figura_tipo_t;
 
-
-bool figura_leer_archivo(void);
+figura_t **figura_leer_archivo(size_t *n);
 
 figura_t *crear_figura_vacia();
 figura_t *figura_crear(FILE *f);
