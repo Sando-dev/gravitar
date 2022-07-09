@@ -9,7 +9,7 @@
 
 int main() {
 
-    
+
     size_t n_figura;
     figura_t **figura_vector = figura_leer_archivo(&n_figura);
     if(figura_vector == NULL)
@@ -37,18 +37,24 @@ int main() {
     size_t chorro_tam = 3;
 
 
-    bool chorro_prendido = false;
+    //bool chorro_prendido = false;
 
+    nave_t *nave=nave_crear();
+    if(nave==NULL){
+      return 1;
+    }
 
     // Queremos que todo se dibuje escalado por f:
     float f = 5;
     // END código del alumno
+    /*
     float a=0;
     float posx = 0;
     float posy = 0;
     float vx=0;
     float vy=0;
     float angulo = NAVE_ANGULO_INICIAL;
+    */
     unsigned int ticks = SDL_GetTicks();
     while(1) {
         if(SDL_PollEvent(&event)) {
@@ -60,7 +66,8 @@ int main() {
                 switch(event.key.keysym.sym) {
                     case SDLK_UP:
                         // Prendemos el chorro:
-                        chorro_prendido = true;
+                        nave_prender_chorro(nave);
+                        //chorro_prendido = true;
                         a=NAVE_ACELERACION;
                         break;
                     case SDLK_DOWN:
@@ -79,7 +86,8 @@ int main() {
                 switch(event.key.keysym.sym) {
                     case SDLK_UP:
                         // Apagamos el chorro:
-                        chorro_prendido = false;
+                        nave_apagar_chorro(nave);
+                        //chorro_prendido = false;
                         a=0;
                         break;
                 }
@@ -93,14 +101,16 @@ int main() {
         SDL_SetRenderDrawColor(renderer, 0xFF, 0xFF, 0xFF, 0x00);
 
 
-
+        //ACA SE REALIZAN COMPARACIONES Y SE ANALIZAN CASOS PARA NIVELES ETC
         // BEGIN código del alumno
+        /*
         vx=computar_velocidad(vx,a*cos(angulo),(float)1/JUEGO_FPS);
         vy=computar_velocidad(vy,a*sin(angulo)-G,(float)1/JUEGO_FPS);
         posx=computar_posicion(posx,vx,(float)1/JUEGO_FPS);
         posy=computar_posicion(posy,vy,(float)1/JUEGO_FPS);
         float nave_clon[9][2];
         float chorro_clon[3][2];
+
         for(size_t i=0; i < nave_tam; i++) {
             nave_clon[i][0] = nave[i][0];
             nave_clon[i][1] = nave[i][1];
@@ -110,14 +120,31 @@ int main() {
             chorro_clon[j][0] = chorro[j][0];
             chorro_clon[j][1] = chorro[j][1];
         }
+        */
+        nave_mover(nave,a*cos(angulo),a*sin(angulo)-G,angulo);
 
+        if(nave_chorro_esta_prendido(nave)){
+          //buscar y copiar nave con chorro prendido
+        }
+        else{
+          //buscar y copiar con el chorro apagado
+        }
+        if(nave_escudo_esta_prendido(nave)){
+
+        }
+        else{
+
+        }
+        /*
         rotar(nave_clon, nave_tam, angulo);
         rotar(chorro_clon, chorro_tam, angulo);
 
 
         trasladar(nave_clon, nave_tam, posx, posy);
         trasladar(chorro_clon, chorro_tam, posx, posy);
-
+        */
+        rotar(nave_clon,nave_tam,nave_get_angulo(nave));
+        trasladar(nave_clon,nave_tam,nave_get_posx(nave),nave_get_posy(nave));
 
 
         // Dibujamos la nave escalada por f en el centro de la pantalla:
@@ -160,6 +187,7 @@ int main() {
     }
 
     // BEGIN código del alumno
+    nave_destruir(nave);
     // No tengo nada que destruir.
     // END código del alumno
 
