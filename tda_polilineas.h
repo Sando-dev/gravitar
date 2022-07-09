@@ -2,7 +2,18 @@
 #define POLILINEAS_H
 
 typedef uint8_t color_t;
+
+struct polilinea{
+    float (*puntos)[2];
+    size_t n;
+    uint8_t r;
+    uint8_t g;
+    uint8_t b;
+};
+
 typedef struct polilinea polilinea_t;
+
+
 
 polilinea_t *polilinea_crear(const float puntos[][2], size_t n);
 void polilinea_destruir(polilinea_t *polilinea);
