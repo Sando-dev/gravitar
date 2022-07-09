@@ -1,7 +1,8 @@
 #include <stdbool.h>
 #include <stdlib.h>
 #include "tda_fisicaymatematica.h"
-
+#include "tda_nave.h"
+#include "config.h"
 
 struct nave{
   bool chorro;
@@ -15,9 +16,9 @@ struct nave{
   double angulo;
 };
 
-typedef struct nave nave_t;
 
-nave_t *nave_crear(double px_inicial, double py_inicial, double angulo_inicial){
+
+nave_t *nave_crear(double px_inicial, double py_inicial){
   nave_t *nave=malloc(sizeof(nave_t));
   if(nave==NULL){
     return NULL;
@@ -30,7 +31,7 @@ nave_t *nave_crear(double px_inicial, double py_inicial, double angulo_inicial){
   nave->vy=0;
   nave->posx=px_inicial;
   nave->posy=py_inicial;
-  nave->angulo=angulo_inicial;
+  nave->angulo=NAVE_ANGULO_INICIAL;
   return nave;
 }
 
@@ -38,7 +39,7 @@ void nave_destruir(nave_t *nave){
   free(nave);
 }
 
-void nave_matar(nave_t *nave, double px_inicial, double py_inicial, double angulo_inicial){
+void nave_matar(nave_t *nave, double px_inicial, double py_inicial){
   nave->vidas--;
   nave->chorro=false;
   nave->escudo=false;
@@ -46,11 +47,11 @@ void nave_matar(nave_t *nave, double px_inicial, double py_inicial, double angul
   nave->vy=0;
   nave->posx=px_inicial;
   nave->posy=py_inicial;
-  nave->angulo=angulo_inicial;
+  nave->angulo=NAVE_ANGULO_INICIAL;
 }
 
-void nave_prender_chorro(nave_t *nave, double gasto){
-  nave->combustible-=gasto;
+void nave_prender_chorro(nave_t *nave){
+  nave->combustible-=JUEGO_COMBUSTIBLE_POT_X_SEG*((float)1/JUEGO_FPS);
   nave->chorro=true;
 }
 
@@ -58,8 +59,8 @@ void nave_apagar_chorro(nave_t *nave){
   nave->chorro=false;
 }
 
-void nave_prender_escudo(nave_t *nave, double gasto){
-  nave->combustible-=gasto;
+void nave_prender_escudo(nave_t *nave){
+  nave->combustible-=JUEGO_COMBUSTIBLE_ESC_X_SEG*((float)1/JUEGO_FPS);
   nave->escudo=true;
 }
 
@@ -75,11 +76,11 @@ bool nave_escudo_esta_prendido(nave_t *nave){
   return nave->escudo;
 }
 
-void nave_mover(nave_t *nave, double ax,double ay, double dt, double angulo){
-  nave->vx=computar_velocidad(nave->vx,ax,dt);
-  nave->vy=computar_velocidad(nave->vx,ax,dt);
-  nave->posx=computar_posicion(nave->posx, nave->vx, dt);
-  nave->posy=computar_posicion(nave->posy, nave->vy, dt);
+void nave_mover(nave_t *nave, double ax,double ay, double angulo){
+  nave->vx=computar_velocidad(nave->vx,ax,(float)1/JUEGO_FPS);
+  nave->vy=computar_velocidad(nave->vx,ax,(float)1/JUEGO_FPS);
+  nave->posx=computar_posicion(nave->posx, nave->vx, (float)1/JUEGO_FPS);
+  nave->posy=computar_posicion(nave->posy, nave->vy, (float)1/JUEGO_FPS);
   nave->angulo+=angulo;
 }
 

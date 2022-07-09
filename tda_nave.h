@@ -1,15 +1,17 @@
 #ifndef NAVE_H
 #define NAVE_H
 
-nave_t nave_crear(double px_inicial, double py_inicial, double angulo_inicial);
+typedef struct nave nave_t;
+
+nave_t *nave_crear(double px_inicial, double py_inicial);
 void nave_destruir(nave_t *nave);
 
-void nave_matar(nave_t *nave, double px_inicial, double py_inicial, double angulo_inicial);
+void nave_matar(nave_t *nave, double px_inicial, double py_inicial);
 
-void nave_prender_chorro(nave_t *nave, double gasto);
+void nave_prender_chorro(nave_t *nave);
 void nave_apagar_chorro(nave_t *nave);
-void nave_prender_escudo(nave_t *nave, double gasto);
 void nave_prender_escudo(nave_t *nave);
+void nave_apagar_escudo(nave_t *nave);
 
 bool nave_chorro_esta_prendido(nave_t *nave);
 bool nave_escudo_esta_prendido(nave_t *nave);
