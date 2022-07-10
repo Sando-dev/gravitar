@@ -14,12 +14,11 @@ int main() {
     figura_t **figura_vector = figura_leer_archivo(&n_figura);
     if(figura_vector == NULL)
         return 1;
-
-    /*for(size_t i=0; i < n_figura; i++){
-        printf("%ld\n",i);
+      
+    for(size_t i=0; i < n_figura; i++){
         figura_destruir(figura_vector[i],figura_cant_polilineas(figura_vector[i]),polilinea_destruir);
-    }*/
-
+    }
+    free(figura_vector);
     SDL_Init(SDL_INIT_VIDEO);
 
     SDL_Window *window;

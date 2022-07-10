@@ -65,8 +65,8 @@ figura_t *figura_crear(FILE *f){
 
 
 void figura_destruir(figura_t *figura, size_t i, void (*destruir)(polilinea_t*)){
-  for(size_t j=0;j<i;i++){
-    destruir(figura->polilineas[i]);
+  for(size_t j=0;j<i;j++){
+    destruir(figura->polilineas[j]);
   }
   free(figura->polilineas);
   free(figura);
