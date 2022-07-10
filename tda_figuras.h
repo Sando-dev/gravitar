@@ -4,7 +4,7 @@
 
 #define TAMANIO_NOMBRE 20
 
-#define MSK_INF 0x80
+#define MSK_INF 0x40
 
 #define MSK_TIPO 0x0E
 #define SHIFT_TIPO 1

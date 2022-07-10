@@ -15,6 +15,11 @@ int main() {
     if(figura_vector == NULL)
         return 1;
 
+    /*for(size_t i=0; i < n_figura; i++){
+        printf("%ld\n",i);
+        figura_destruir(figura_vector[i],figura_cant_polilineas(figura_vector[i]),polilinea_destruir);
+    }*/
+
     SDL_Init(SDL_INIT_VIDEO);
 
     SDL_Window *window;
@@ -176,6 +181,6 @@ int main() {
     SDL_DestroyRenderer(renderer);
     SDL_DestroyWindow(window);
 
-    SDL_Quit();*/
+    SDL_Quit();
     return 0;
 }
