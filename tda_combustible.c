@@ -1,5 +1,6 @@
 #include <stdlib.h>
 #include <stdbool.h>
+#include "tda_combustible.h"
 
 struct combustible{
   bool vive;
@@ -10,7 +11,7 @@ struct combustible{
   double angulo;
 };
 
-typedef struct combustible combustible_t;
+
 
 combustible_t *combustible_crear(double posx, double posy, double ang){
   combustible_t *combustible=malloc(sizeof(combustible_t));
