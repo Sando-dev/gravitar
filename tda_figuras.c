@@ -47,8 +47,7 @@ figura_t *figura_crear(FILE *f){
     figura_destruir(figura,0,polilinea_destruir);
     return NULL;
   }
-
-  figura->polilineas=malloc(figura->cantidad_polilineas*(sizeof(polilinea_t)));
+  figura->polilineas=malloc(figura->cantidad_polilineas*(polilinea_sizeof()));
   if(figura->polilineas==NULL){
     figura_destruir(figura,0,polilinea_destruir);
     return NULL;
@@ -94,6 +93,9 @@ const char* figura_tipo_a_cadena(figura_tipo_t figura){
   return tipos_figuras[figura];
 }
 
+size_t figura_cant_polilineas(figura_t *f) {
+  return f->cantidad_polilineas;
+}
 
 figura_t **figura_leer_archivo(size_t *n){
   FILE *f = fopen("figuras.bin", "rb");
@@ -120,7 +122,6 @@ figura_t **figura_leer_archivo(size_t *n){
         break;
       figura_vector[n_figura-1] = figura;
   }
-  printf("hola\n");
   *n = n_figura-1;
 
   

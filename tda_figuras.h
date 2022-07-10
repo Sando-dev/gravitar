@@ -22,16 +22,12 @@ typedef enum {
 }figura_tipo_t;
 
 
-typedef struct {
-    char nombre[TAMANIO_NOMBRE];
-    figura_tipo_t tipo;
-    bool infinito;
-    size_t cantidad_polilineas;
-    polilinea_t **polilineas;
-}figura_t;
+typedef struct figura figura_t;
 
 
 figura_t **figura_leer_archivo(size_t *n);
+
+size_t figura_cant_polilineas(figura_t *f);
 
 figura_t *crear_figura_vacia();
 figura_t *figura_crear(FILE *f);

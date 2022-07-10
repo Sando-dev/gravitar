@@ -3,14 +3,6 @@
 
 typedef uint8_t color_t;
 
-struct polilinea{
-    float (*puntos)[2];
-    size_t n;
-    uint8_t r;
-    uint8_t g;
-    uint8_t b;
-};
-
 typedef struct polilinea polilinea_t;
 
 
@@ -26,7 +18,7 @@ polilinea_t *polilinea_clonar(const polilinea_t *polilinea);
 
 bool polilinea_setear_color(polilinea_t *polilinea, color_t color);
 
-
+size_t polilinea_sizeof(void);
 
 void trasladar(float polilinea[][2], size_t n, float dx, float dy);
 void rotar(float polilinea[][2], size_t n, double rad);

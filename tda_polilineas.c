@@ -16,13 +16,13 @@
 
 #define MSK_CANT_PUNTOS 0x3FF
 
-// struct polilinea{
-//     float (*puntos)[2];
-//     size_t n;
-//     uint8_t r;
-//     uint8_t g;
-//     uint8_t b;
-// };
+struct polilinea{
+  float (*puntos)[2];
+  size_t n;
+  uint8_t r;
+  uint8_t g;
+  uint8_t b;
+};
 
 /*libera la memoria de la polilina*/
 void polilinea_destruir(polilinea_t *polilinea){
@@ -171,4 +171,9 @@ void rotar(float polilinea[][2], size_t n, double rad){
     polilinea[i][0]=xp;
     polilinea[i][1]=yp;
   }
+}
+
+
+size_t polilinea_sizeof(void) {
+  return sizeof(polilinea_t);
 }
