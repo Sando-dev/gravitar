@@ -10,7 +10,7 @@ uint8_t polilinea_get_green(polilinea_t *p);
 uint8_t polilinea_get_blue(polilinea_t *p);
 
 
-polilinea_t *polilinea_crear(const float puntos[][2], size_t n);
+polilinea_t *polilinea_crear(const float puntos[][2], size_t n, uint8_t r, uint8_t g, uint8_t b);
 void polilinea_destruir(polilinea_t *polilinea);
 
 size_t polilinea_cantidad_puntos(const polilinea_t *polilinea);
@@ -23,8 +23,8 @@ bool polilinea_setear_color(polilinea_t *polilinea, color_t color);
 
 size_t polilinea_sizeof(void);
 
-void trasladar(float polilinea[][2], size_t n, float dx, float dy);
-void rotar(float polilinea[][2], size_t n, double rad);
+void trasladar(polilinea_t *polilinea, float dx, float dy);
+void rotar(polilinea_t *polilinea, double rad);
 
 polilinea_t *leer_polilinea(FILE *f);
 

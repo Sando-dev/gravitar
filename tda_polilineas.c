@@ -61,12 +61,15 @@ static polilinea_t *polilinea_crear_vacia(size_t n){
 }
 
 /*recibe matriz dinamica y tamaño, crea completa la polilinea*/
-polilinea_t *polilinea_crear(const float puntos[][2], size_t n){
+polilinea_t *polilinea_crear(const float puntos[][2], size_t n, uint8_t r, uint8_t g, uint8_t b){
   polilinea_t *polilinea=polilinea_crear_vacia(n);
   if(polilinea==NULL){
     return NULL;
   }
   memcpy(polilinea->puntos,puntos,n*sizeof(float[2]));
+  polilinea->r=r;
+  polilinea->g=g;
+  polilinea->b=b;
   return polilinea;
 }
 /*recibe polilinea, devuelve n*/
@@ -94,7 +97,7 @@ bool polilinea_setear_punto(polilinea_t *polilinea, size_t pos, float x, float y
 }
 
 polilinea_t *polilinea_clonar(const polilinea_t *polilinea){
-  return polilinea_crear((const float (*)[2])polilinea->puntos,polilinea->n);
+  return polilinea_crear((const float (*)[2])polilinea->puntos,polilinea->n,polilinea->r,polilinea->g,polilinea->b);
 }
 
 
@@ -169,21 +172,25 @@ double distancia_punto_a_polilinea(const float polilinea[][2], size_t n, float p
   return distmin;
 }
 
-void trasladar(float polilinea[][2], size_t n, float dx, float dy){
-  for(int i=0;i<n;i++){
+void trasladar(polilinea_t *polilinea, float dx, float dy){
+  for(int i=0;i<polilinea->n;i++){
+    polilinea->puntos[i][0]+=dx;
+    polilinea->puntos[i][1]+=dy;
+    /*
     polilinea[i][0]+=dx;
     polilinea[i][1]+=dy;
+    */
   }
 }
 
-void rotar(float polilinea[][2], size_t n, double rad){
+void rotar(polilinea_t *polilinea, double rad){
   double co=cos(rad);
   double si=sin(rad);
-  for(int i=0;i<n;i++){
-    float xp=polilinea[i][0]*co-polilinea[i][1]*si;
-    float yp=polilinea[i][0]*si+polilinea[i][1]*co;
-    polilinea[i][0]=xp;
-    polilinea[i][1]=yp;
+  for(int i=0;i<polilinea->n;i++){
+    float xp=polilinea->puntos[i][0]*co-polilinea->puntos[i][1]*si;
+    float yp=polilinea->puntos[i][0]*si+polilinea->puntos[i][1]*co;
+    polilinea->puntos[i][0]=xp;
+    polilinea->puntos[i][1]=yp;
   }
 }
 

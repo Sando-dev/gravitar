@@ -1,0 +1,7 @@
+==30563== Memcheck, a memory error detector
+==30563== Copyright (C) 2002-2017, and GNU GPL'd, by Julian Seward et al.
+==30563== Using Valgrind-3.15.0 and LibVEX; rerun with -h for copyright info
+==30563== Command: ./gravitar
+==30563== Parent PID: 30496
+==30563== 
+==30563== FATAL: can't open suppressions file "suppressions.supp"
