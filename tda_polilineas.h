@@ -5,6 +5,9 @@ typedef uint8_t color_t;
 
 typedef struct polilinea polilinea_t;
 
+uint8_t polilinea_get_red(polilinea_t *p);
+uint8_t polilinea_get_green(polilinea_t *p);
+uint8_t polilinea_get_blue(polilinea_t *p);
 
 
 polilinea_t *polilinea_crear(const float puntos[][2], size_t n);

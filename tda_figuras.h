@@ -24,6 +24,7 @@ typedef enum {
 
 typedef struct figura figura_t;
 
+polilinea_t *figura_return_polilinea(figura_t *f, size_t i);
 
 figura_t **figura_leer_archivo(size_t *n);
 

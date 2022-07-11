@@ -7,6 +7,25 @@
 #include "tda_figuras.h"
 
 
+
+void graficar_polilinea(SDL_Renderer *renderer, polilinea_t *p, int f){
+    SDL_SetRenderDrawColor(renderer, polilinea_get_red(p), polilinea_get_green(p), polilinea_get_blue(p), 0x00);
+    float x1,x2,y1,y2;
+    for(int i = 0; i < polilinea_cantidad_puntos(p)-1; i++) {
+        polilinea_obtener_punto(p,i,&x1,&y1);
+        polilinea_obtener_punto(p,i+1,&x2,&y2);
+        SDL_RenderDrawLine(
+            renderer,
+            x1 * f,
+            VENTANA_ALTO-(y1 * f),
+            x2 * f,
+            VENTANA_ALTO-(y2 * f)
+        );
+    }
+}
+
+
+
 int main() {
 
 
@@ -15,10 +34,6 @@ int main() {
     if(figura_vector == NULL)
         return 1;
       
-    for(size_t i=0; i < n_figura; i++){
-        figura_destruir(figura_vector[i],figura_cant_polilineas(figura_vector[i]),polilinea_destruir);
-    }
-    free(figura_vector);
     SDL_Init(SDL_INIT_VIDEO);
 
     SDL_Window *window;
@@ -34,7 +49,14 @@ int main() {
     // Mi nave:
     float nave[][2] = {{8, 0}, {-1, 6}, {-4, 4}, {-4, 2}, {-2, 0}, {-4, -2}, {-4, -4}, {-1, -6}, {8, 0}};
     size_t nave_tam = 9;
-
+    for(size_t i=0; i<figura_cant_polilineas(figura_vector[8]); i++){
+        polilinea_t *p = figura_return_polilinea(figura_vector[8],i);
+        for(size_t j=0; j<polilinea_cantidad_puntos(p); j++){
+            float x,y;
+            polilinea_obtener_punto(p,j,&x,&y);
+            //printf("%f,%f\n",x,y);
+        }
+    }
 
     // El chorro de la nave:
     float chorro[][2] = {{-4, 2}, {-8, 0}, {-4, -2}};
@@ -46,7 +68,7 @@ int main() {
 
 
     // Queremos que todo se dibuje escalado por f:
-    float f = 5;
+    float f = 1;
     // END código del alumno
 
     float a=0;
@@ -144,6 +166,9 @@ int main() {
                 -nave_clon[i+1][1] * f + VENTANA_ALTO / 2
             );
 
+        for(size_t i=0; i<figura_cant_polilineas(figura_vector[14]); i++)
+            graficar_polilinea(renderer, figura_return_polilinea(figura_vector[14],i),f);
+
         if(chorro_prendido) {
             // Dibujamos el chorro escalado por f en el centro de la pantalla:
             SDL_SetRenderDrawColor(renderer, 0xFF, 0x00, 0x00, 0x00);
@@ -181,5 +206,10 @@ int main() {
     SDL_DestroyWindow(window);
 
     SDL_Quit();
+
+    for(size_t i=0; i < n_figura; i++){
+        figura_destruir(figura_vector[i],figura_cant_polilineas(figura_vector[i]),polilinea_destruir);
+    }
+    free(figura_vector);
     return 0;
 }

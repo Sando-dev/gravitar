@@ -24,6 +24,20 @@ struct polilinea{
   uint8_t b;
 };
 
+uint8_t polilinea_get_red(polilinea_t *p) {
+  return p->r;
+}
+
+uint8_t polilinea_get_green(polilinea_t *p) {
+  return p->g;
+}
+
+uint8_t polilinea_get_blue(polilinea_t *p) {
+  return p->b;
+}
+
+
+
 /*libera la memoria de la polilina*/
 void polilinea_destruir(polilinea_t *polilinea){
   free(polilinea->puntos);

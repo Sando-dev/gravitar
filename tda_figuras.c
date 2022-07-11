@@ -128,3 +128,7 @@ figura_t **figura_leer_archivo(size_t *n){
   fclose(f);
   return figura_vector;
 }
+
+polilinea_t *figura_return_polilinea(figura_t *f, size_t i) {
+  return f->polilineas[i];
+}
