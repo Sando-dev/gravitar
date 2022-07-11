@@ -132,3 +132,12 @@ figura_t **figura_leer_archivo(size_t *n){
 polilinea_t *figura_return_polilinea(figura_t *f, size_t i) {
   return f->polilineas[i];
 }
+
+size_t figura_buscar(figura_t **f_vector, size_t n_f, char nombre[TAMANIO_NOMBRE]){
+  size_t n;
+  for(size_t i=0; i<n_f; i++){
+    if(!(strcmp(f_vector[i]->nombre,nombre)))
+      n=i;
+  }
+  return n;
+}

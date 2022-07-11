@@ -83,7 +83,24 @@ int main() {
     nivel_t *nivel5=crear_nivel();
 
     float a=0;
-    float angulo = NAVE_ANGULO_INICIAL;
+    float angulo = 0;
+
+    size_t base_en_vector = figura_buscar(figura_vector,n_figura,"BASE");
+    size_t estrella_en_vector = figura_buscar(figura_vector,n_figura,"ESTRELLA");
+    size_t planeta1_en_vector = figura_buscar(figura_vector,n_figura,"PLANETA1");
+    size_t planeta2_en_vector = figura_buscar(figura_vector,n_figura,"PLANETA2");
+    size_t planeta3_en_vector = figura_buscar(figura_vector,n_figura,"PLANETA3");
+    size_t planeta4_en_vector = figura_buscar(figura_vector,n_figura,"PLANETA4");
+    size_t planeta5_en_vector = figura_buscar(figura_vector,n_figura,"PLANETA5");
+    size_t nave_en_vector = figura_buscar(figura_vector,n_figura,"NAVE");
+    size_t chorro_en_vector = figura_buscar(figura_vector,n_figura,"NAVE+CHORRO");
+    size_t escudo_en_vector = figura_buscar(figura_vector,n_figura,"ESCUDO2");
+    size_t nivel1_en_vector = figura_buscar(figura_vector,n_figura,"NIVEL1NE");
+    size_t nivel2_en_vector = figura_buscar(figura_vector,n_figura,"NIVEL1SE");
+    size_t nivel3_en_vector = figura_buscar(figura_vector,n_figura,"NIVEL1SW");
+    size_t nivel4_en_vector = figura_buscar(figura_vector,n_figura,"NIVEL1NW");
+    size_t nivel5_en_vector = figura_buscar(figura_vector,n_figura,"NIVEL1R");
+    
 
 
     unsigned int ticks = SDL_GetTicks();
@@ -148,58 +165,60 @@ int main() {
         size_t n_nave;
         polilinea_t **nave;
         if(nave_chorro_esta_prendido(navei)){
-          nave=copiar_figura(figura_vector[1],nave_get_posx(navei),nave_get_posy(navei),nave_get_angulo(navei));
-          n_nave=figura_cant_polilineas(figura_vector[1]);
+          nave=copiar_figura(figura_vector[chorro_en_vector],nave_get_posx(navei),nave_get_posy(navei),nave_get_angulo(navei));
+          n_nave=figura_cant_polilineas(figura_vector[chorro_en_vector]);
         }
         else{
-          nave=copiar_figura(figura_vector[0],nave_get_posx(navei),nave_get_posy(navei),nave_get_angulo(navei));
-          n_nave=figura_cant_polilineas(figura_vector[0]);
+          nave=copiar_figura(figura_vector[nave_en_vector],nave_get_posx(navei),nave_get_posy(navei),nave_get_angulo(navei));
+          n_nave=figura_cant_polilineas(figura_vector[nave_en_vector]);
         }
 
         if(nave_escudo_esta_prendido(navei)){
-          polilinea_t **escudo=copiar_figura(figura_vector[18],nave_get_posx(navei),nave_get_posy(navei),nave_get_angulo(navei));
-          for(size_t i=0; i<figura_cant_polilineas(figura_vector[18]);i++){
+          polilinea_t **escudo=copiar_figura(figura_vector[escudo_en_vector],nave_get_posx(navei),nave_get_posy(navei),nave_get_angulo(navei));
+          for(size_t i=0; i<figura_cant_polilineas(figura_vector[escudo_en_vector]);i++){
             graficar_polilinea(renderer,escudo[i],f);
           }
           destruir_figura(escudo,figura_cant_polilineas(figura_vector[18]));
         }
 
-        size_t n_base=figura_cant_polilineas(figura_vector[2]);
-        polilinea_t **base=copiar_figura(figura_vector[2],388,218,0);
+        
 
-        size_t n_estrella=figura_cant_polilineas(figura_vector[3]);
-        polilinea_t **estrella=copiar_figura(figura_vector[3],457,364,0);
+        size_t n_base=figura_cant_polilineas(figura_vector[base_en_vector]);
+        polilinea_t **base=copiar_figura(figura_vector[base_en_vector],388,218,0);
 
-        size_t n_planeta1=figura_cant_polilineas(figura_vector[4]);
-        polilinea_t **planeta1=copiar_figura(figura_vector[4],663,473,0);
+        size_t n_estrella=figura_cant_polilineas(figura_vector[estrella_en_vector]);
+        polilinea_t **estrella=copiar_figura(figura_vector[estrella_en_vector],457,364,0);
 
-        size_t n_planeta2=figura_cant_polilineas(figura_vector[5]);
-        polilinea_t **planeta2=copiar_figura(figura_vector[5],671,145,0);
+        size_t n_planeta1=figura_cant_polilineas(figura_vector[planeta1_en_vector]);
+        polilinea_t **planeta1=copiar_figura(figura_vector[planeta1_en_vector],663,473,0);
 
-        size_t n_planeta3=figura_cant_polilineas(figura_vector[6]);
-        polilinea_t **planeta3=copiar_figura(figura_vector[6],110,79,0);
+        size_t n_planeta2=figura_cant_polilineas(figura_vector[planeta2_en_vector]);
+        polilinea_t **planeta2=copiar_figura(figura_vector[planeta2_en_vector],671,145,0);
 
-        size_t n_planeta4=figura_cant_polilineas(figura_vector[7]);
-        polilinea_t **planeta4=copiar_figura(figura_vector[7],204,455,0);
+        size_t n_planeta3=figura_cant_polilineas(figura_vector[planeta3_en_vector]);
+        polilinea_t **planeta3=copiar_figura(figura_vector[planeta3_en_vector],110,79,0);
 
-        size_t n_planeta5=figura_cant_polilineas(figura_vector[8]);
-        polilinea_t **planeta5=copiar_figura(figura_vector[8],111,307,0);
+        size_t n_planeta4=figura_cant_polilineas(figura_vector[planeta4_en_vector]);
+        polilinea_t **planeta4=copiar_figura(figura_vector[planeta4_en_vector],204,455,0);
+
+        size_t n_planeta5=figura_cant_polilineas(figura_vector[planeta5_en_vector]);
+        polilinea_t **planeta5=copiar_figura(figura_vector[planeta5_en_vector],111,307,0);
 
 
-        size_t n_nivel1=figura_cant_polilineas(figura_vector[12]);
-        polilinea_t **nivel1p=copiar_figura(figura_vector[12],0,0,0);
+        size_t n_nivel1=figura_cant_polilineas(figura_vector[nivel1_en_vector]);
+        polilinea_t **nivel1p=copiar_figura(figura_vector[nivel1_en_vector],0,0,0);
 
-        size_t n_nivel2=figura_cant_polilineas(figura_vector[13]);
-        polilinea_t **nivel2p=copiar_figura(figura_vector[13],0,0,0);
+        size_t n_nivel2=figura_cant_polilineas(figura_vector[nivel2_en_vector]);
+        polilinea_t **nivel2p=copiar_figura(figura_vector[nivel2_en_vector],0,0,0);
 
-        size_t n_nivel3=figura_cant_polilineas(figura_vector[14]);
-        polilinea_t **nivel3p=copiar_figura(figura_vector[14],0,0,0);
+        size_t n_nivel3=figura_cant_polilineas(figura_vector[nivel3_en_vector]);
+        polilinea_t **nivel3p=copiar_figura(figura_vector[nivel3_en_vector],0,0,0);
 
-        size_t n_nivel4=figura_cant_polilineas(figura_vector[22]);
-        polilinea_t **nivel4p=copiar_figura(figura_vector[22],0,0,0);
+        size_t n_nivel4=figura_cant_polilineas(figura_vector[nivel4_en_vector]);
+        polilinea_t **nivel4p=copiar_figura(figura_vector[nivel4_en_vector],0,0,0);
 
-        size_t n_nivel5=figura_cant_polilineas(figura_vector[23]);
-        polilinea_t **nivel5p=copiar_figura(figura_vector[23],0,0,0);
+        size_t n_nivel5=figura_cant_polilineas(figura_vector[nivel5_en_vector]);
+        polilinea_t **nivel5p=copiar_figura(figura_vector[nivel5_en_vector],0,0,0);
 
 
         if(nivel_esta_activo(nivel1)){
@@ -224,7 +243,7 @@ int main() {
           destruir_figura(nivel3p,n_nivel3);
         }
         else if(nivel_esta_activo(nivel4)){
-          f=0.62;
+          f=0.63;
 
           for(size_t i=0; i<n_nivel4;i++){
             graficar_polilinea(renderer,nivel4p[i],f);
