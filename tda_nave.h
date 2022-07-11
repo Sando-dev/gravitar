@@ -9,6 +9,8 @@ void nave_destruir(nave_t *nave);
 void nave_matar(nave_t *nave, double px_inicial, double py_inicial);
 
 void nave_mover(nave_t *nave, double a, double angulo, double angulo_estrella);
+void nave_rebotar_x(nave_t *nave);
+void nave_rebotar_y(nave_t *nave);
 
 void nave_prender_chorro(nave_t *nave);
 void nave_apagar_chorro(nave_t *nave);

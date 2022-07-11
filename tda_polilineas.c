@@ -144,23 +144,23 @@ polilinea_t *leer_polilinea(FILE *f){
   return p;
 }
 
-double distancia_punto_a_polilinea(const float polilinea[][2], size_t n, float px, float py){
+double distancia_punto_a_polilinea(polilinea_t *polilinea, float px, float py){
   //double dist[n-1];
   double distmin=1000;
-  for(int i=0;i<n-1;i++){
+  for(int i=0;i<polilinea->n-1;i++){
     double dist;
-    double alf=alfa(px,py,polilinea[i][0],polilinea[i][1],polilinea[i+1][0],polilinea[i+1][1]);
+    double alf=alfa(px,py,polilinea->puntos[i][0],polilinea->puntos[i][1],polilinea->puntos[i+1][0],polilinea->puntos[i+1][1]);
     if(alf<=0){
       //dist[i]=norma(px-polilinea[i][0],py-polilinea[i][1]);
-      dist=norma(px-polilinea[i][0],py-polilinea[i][1]);
+      dist=norma(px-polilinea->puntos[i][0],py-polilinea->puntos[i][1]);
     }
     else if(alf>=1){
       //dist[i]=norma(px-polilinea[i+1][0],py-polilinea[i+1][1]);
-      dist=norma(px-polilinea[i+1][0],py-polilinea[i+1][1]);
+      dist=norma(px-polilinea->puntos[i+1][0],py-polilinea->puntos[i+1][1]);
     }
     else{
-      double cx=punto_del_segmento(polilinea[i][0],polilinea[i+1][0],alf);
-      double cy=punto_del_segmento(polilinea[i][1],polilinea[i+1][1],alf);
+      double cx=punto_del_segmento(polilinea->puntos[i][0],polilinea->puntos[i+1][0],alf);
+      double cy=punto_del_segmento(polilinea->puntos[i][1],polilinea->puntos[i+1][1],alf);
       //dist[i]=norma(px-cx,py-cy);
       dist=norma(px-cx,py-cy);
     }

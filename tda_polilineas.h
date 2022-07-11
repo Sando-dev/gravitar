@@ -26,6 +26,8 @@ size_t polilinea_sizeof(void);
 void trasladar(polilinea_t *polilinea, float dx, float dy);
 void rotar(polilinea_t *polilinea, double rad);
 
+double distancia_punto_a_polilinea(polilinea_t *polilinea, float px, float py);
+
 polilinea_t *leer_polilinea(FILE *f);
 
 #endif
