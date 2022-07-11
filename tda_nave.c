@@ -1,5 +1,6 @@
 #include <stdbool.h>
 #include <stdlib.h>
+#include <math.h>
 #include "tda_fisicaymatematica.h"
 #include "tda_nave.h"
 #include "config.h"
@@ -76,12 +77,12 @@ bool nave_escudo_esta_prendido(nave_t *nave){
   return nave->escudo;
 }
 
-void nave_mover(nave_t *nave, double ax,double ay, double angulo){
-  nave->vx=computar_velocidad(nave->vx,ax,(float)1/JUEGO_FPS);
-  nave->vy=computar_velocidad(nave->vx,ax,(float)1/JUEGO_FPS);
+void nave_mover(nave_t *nave, double a, double angulo,double angulo_estrella){
+  nave->angulo+=angulo;
+  nave->vx=computar_velocidad(nave->vx,a*cos(nave->angulo)+G*sin(angulo_estrella),(float)1/JUEGO_FPS);
+  nave->vy=computar_velocidad(nave->vy,a*sin(nave->angulo)+G*cos(angulo_estrella),(float)1/JUEGO_FPS);
   nave->posx=computar_posicion(nave->posx, nave->vx, (float)1/JUEGO_FPS);
   nave->posy=computar_posicion(nave->posy, nave->vy, (float)1/JUEGO_FPS);
-  nave->angulo+=angulo;
 }
 
 

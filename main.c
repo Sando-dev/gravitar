@@ -5,6 +5,7 @@
 #include "tda_fisicaymatematica.h"
 #include "tda_polilineas.h"
 #include "tda_figuras.h"
+#include "tda_nave.h"
 
 polilinea_t **copiar_figura(figura_t *figura, double x, double y, double ang){
   polilinea_t **polilineas=malloc(figura_cant_polilineas(figura)*sizeof(polilinea_t*));
@@ -68,36 +69,25 @@ int main() {
 
     // BEGIN código del alumno
     // Mi nave:
-    float nave[][2] = {{8, 0}, {-1, 6}, {-4, 4}, {-4, 2}, {-2, 0}, {-4, -2}, {-4, -4}, {-1, -6}, {8, 0}};
-    size_t nave_tam = 9;
-    for(size_t i=0; i<figura_cant_polilineas(figura_vector[8]); i++){
-        polilinea_t *p = figura_return_polilinea(figura_vector[8],i);
-        for(size_t j=0; j<polilinea_cantidad_puntos(p); j++){
-            float x,y;
-            polilinea_obtener_punto(p,j,&x,&y);
-            //printf("%f,%f\n",x,y);
-        }
-    }
 
     // El chorro de la nave:
-    float chorro[][2] = {{-4, 2}, {-8, 0}, {-4, -2}};
-    size_t chorro_tam = 3;
 
-
-    bool chorro_prendido = false;
 
 
 
     // Queremos que todo se dibuje escalado por f:
-    float f = 0.62;
+    float f = 1;
     // END código del alumno
-
+    nave_t *navei=nave_crear(388,218);
     float a=0;
-    float posx = 0;
-    float posy = 0;
+    /*
+    float posx = 388;
+    float posy = 218;
     float vx=0;
     float vy=0;
+    */
     float angulo = NAVE_ANGULO_INICIAL;
+
 
     unsigned int ticks = SDL_GetTicks();
     while(1) {
@@ -110,18 +100,17 @@ int main() {
                 switch(event.key.keysym.sym) {
                     case SDLK_UP:
                         // Prendemos el chorro:
-
-                        chorro_prendido = true;
+                        nave_prender_chorro(navei);
                         a=NAVE_ACELERACION;
                         break;
                     case SDLK_DOWN:
-
+                        nave_prender_escudo(navei);
                         break;
                     case SDLK_RIGHT:
-                        angulo -= NAVE_ROTACION_PASO;
+                        angulo = -NAVE_ROTACION_PASO;
                         break;
                     case SDLK_LEFT:
-                        angulo += NAVE_ROTACION_PASO;
+                        angulo = NAVE_ROTACION_PASO;
                         break;
                 }
             }
@@ -130,9 +119,17 @@ int main() {
                 switch(event.key.keysym.sym) {
                     case SDLK_UP:
                         // Apagamos el chorro:
-
-                        chorro_prendido = false;
+                        nave_apagar_chorro(navei);
                         a=0;
+                        break;
+                    case SDLK_DOWN:
+                        nave_apagar_escudo(navei);
+                        break;
+                    case SDLK_RIGHT:
+                        angulo = 0;
+                        break;
+                    case SDLK_LEFT:
+                        angulo = 0;
                         break;
                 }
             }
@@ -147,72 +144,74 @@ int main() {
 
         //ACA SE REALIZAN COMPARACIONES Y SE ANALIZAN CASOS PARA NIVELES ETC
         // BEGIN código del alumno
+        float angulo_estrella=atan2(457-nave_get_posx(navei),364-nave_get_posy(navei));
+        nave_mover(navei,a,angulo,angulo_estrella);
 
-        vx=computar_velocidad(vx,a*cos(angulo),(float)1/JUEGO_FPS);
-        vy=computar_velocidad(vy,a*sin(angulo)-G,(float)1/JUEGO_FPS);
-        posx=computar_posicion(posx,vx,(float)1/JUEGO_FPS);
-        posy=computar_posicion(posy,vy,(float)1/JUEGO_FPS);
+        if(nave_chorro_esta_prendido(navei)){
+          polilinea_t **nave=copiar_figura(figura_vector[1],nave_get_posx(navei),nave_get_posy(navei),nave_get_angulo(navei));
+          for(size_t i=0; i<figura_cant_polilineas(figura_vector[1]);i++){
+            graficar_polilinea(renderer,nave[i],f);
+          }
+          destruir_figura(nave,figura_cant_polilineas(figura_vector[1]));
+        }
+        else{
+          polilinea_t **nave=copiar_figura(figura_vector[0],nave_get_posx(navei),nave_get_posy(navei),nave_get_angulo(navei));
+          for(size_t i=0; i<figura_cant_polilineas(figura_vector[0]);i++){
+            graficar_polilinea(renderer,nave[i],f);
+          }
+          destruir_figura(nave,figura_cant_polilineas(figura_vector[0]));
+        }
+
+        if(nave_escudo_esta_prendido(navei)){
+          polilinea_t **escudo=copiar_figura(figura_vector[18],nave_get_posx(navei),nave_get_posy(navei),nave_get_angulo(navei));
+          for(size_t i=0; i<figura_cant_polilineas(figura_vector[18]);i++){
+            graficar_polilinea(renderer,escudo[i],f);
+          }
+          destruir_figura(escudo,figura_cant_polilineas(figura_vector[18]));
+        }
+
+        polilinea_t **base=copiar_figura(figura_vector[2],388,218,0);
+        for(size_t i=0; i<figura_cant_polilineas(figura_vector[2]);i++){
+          graficar_polilinea(renderer,base[i],f);
+        }
+        destruir_figura(base,figura_cant_polilineas(figura_vector[2]));
 
         polilinea_t **estrella=copiar_figura(figura_vector[3],457,364,0);
         for(size_t i=0; i<figura_cant_polilineas(figura_vector[3]);i++){
           graficar_polilinea(renderer,estrella[i],f);
         }
         destruir_figura(estrella,figura_cant_polilineas(figura_vector[3]));
-/*
-        float nave_clon[9][2];
-        float chorro_clon[3][2];
 
-        for(size_t i=0; i < nave_tam; i++) {
-            nave_clon[i][0] = nave[i][0];
-            nave_clon[i][1] = nave[i][1];
+        polilinea_t **planeta1=copiar_figura(figura_vector[4],663,473,0);
+        for(size_t i=0; i<figura_cant_polilineas(figura_vector[4]);i++){
+          graficar_polilinea(renderer,planeta1[i],f);
         }
+        destruir_figura(planeta1,figura_cant_polilineas(figura_vector[4]));
 
-        for(size_t j=0; j < chorro_tam; j++) {
-            chorro_clon[j][0] = chorro[j][0];
-            chorro_clon[j][1] = chorro[j][1];
+        polilinea_t **planeta2=copiar_figura(figura_vector[5],671,145,0);
+        for(size_t i=0; i<figura_cant_polilineas(figura_vector[5]);i++){
+          graficar_polilinea(renderer,planeta2[i],f);
         }
+        destruir_figura(planeta2,figura_cant_polilineas(figura_vector[5]));
 
-
-        rotar(nave_clon, nave_tam, angulo);
-        rotar(chorro_clon, chorro_tam, angulo);
-
-
-        trasladar(nave_clon, nave_tam, posx, posy);
-        trasladar(chorro_clon, chorro_tam, posx, posy);
-*/
-
-/*
-        // Dibujamos la nave escalada por f en el centro de la pantalla:
-        SDL_SetRenderDrawColor(renderer, 0xFF, 0xFF, 0xFF, 0x00);
-        for(int i = 0; i < nave_tam - 1; i++)
-            SDL_RenderDrawLine(
-                renderer,
-                nave_clon[i][0] * f + VENTANA_ANCHO / 2,
-                -nave_clon[i][1] * f + VENTANA_ALTO / 2,
-                nave_clon[i+1][0] * f + VENTANA_ANCHO / 2,
-                -nave_clon[i+1][1] * f + VENTANA_ALTO / 2
-            );
-*/
-/*
-        for(size_t i=0; i<figura_cant_polilineas(figura_vector[14]); i++)
-            graficar_polilinea(renderer, figura_return_polilinea(figura_vector[14],i),f);
-
-*/
-/*
-        if(chorro_prendido) {
-            // Dibujamos el chorro escalado por f en el centro de la pantalla:
-            SDL_SetRenderDrawColor(renderer, 0xFF, 0x00, 0x00, 0x00);
-            for(int i = 0; i < chorro_tam - 1; i++)
-                SDL_RenderDrawLine(
-                    renderer,
-                    chorro_clon[i][0] * f + VENTANA_ANCHO / 2,
-                    -chorro_clon[i][1] * f + VENTANA_ALTO / 2,
-                    chorro_clon[i+1][0] * f + VENTANA_ANCHO / 2,
-                    -chorro_clon[i+1][1] * f + VENTANA_ALTO / 2
-                );
+        polilinea_t **planeta3=copiar_figura(figura_vector[6],110,79,0);
+        for(size_t i=0; i<figura_cant_polilineas(figura_vector[6]);i++){
+          graficar_polilinea(renderer,planeta3[i],f);
         }
+        destruir_figura(planeta3,figura_cant_polilineas(figura_vector[6]));
 
-*/
+        polilinea_t **planeta4=copiar_figura(figura_vector[7],204,455,0);
+        for(size_t i=0; i<figura_cant_polilineas(figura_vector[7]);i++){
+          graficar_polilinea(renderer,planeta4[i],f);
+        }
+        destruir_figura(planeta4,figura_cant_polilineas(figura_vector[7]));
+
+        polilinea_t **planeta5=copiar_figura(figura_vector[8],111,307,0);
+        for(size_t i=0; i<figura_cant_polilineas(figura_vector[8]);i++){
+          graficar_polilinea(renderer,planeta5[i],f);
+        }
+        destruir_figura(planeta5,figura_cant_polilineas(figura_vector[8]));
+
 
         // END código del alumno
 
@@ -236,6 +235,8 @@ int main() {
     SDL_DestroyWindow(window);
 
     SDL_Quit();
+
+    nave_destruir(navei);
 
     for(size_t i=0; i < n_figura; i++){
         figura_destruir(figura_vector[i],figura_cant_polilineas(figura_vector[i]),polilinea_destruir);
