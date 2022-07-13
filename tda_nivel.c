@@ -1,19 +1,22 @@
 #include <stdbool.h>
 #include <stdio.h>
 #include <stdlib.h>
+#include <string.h>
 #include "tda_nivel.h"
 
 struct nivel{
+  char nombre[TAMANIO_NOMBRE];
   bool activo;
   int puntos;
 };
 
 
-nivel_t *crear_nivel(){
+nivel_t *nivel_crear(char nombre[]){
   nivel_t *nivel=malloc(sizeof(nivel_t));
   if(nivel==NULL){
     return NULL;
   }
+  strcpy(nivel->nombre,nombre);
   nivel->activo=false;
   //nivel->puntos=0;
   return nivel;
@@ -21,6 +24,19 @@ nivel_t *crear_nivel(){
 
 void nivel_destruir(nivel_t *nivel){
   free(nivel);
+}
+
+char *nivel_nombre(nivel_t *nivel){
+  return nivel->nombre;
+}
+
+size_t nivel_buscar(nivel_t **n_vector, size_t n_n, char nombre[TAMANIO_NOMBRE]){
+  size_t n;
+  for(size_t i=0; i<n_n; i++){
+    if(!(strcmp(n_vector[i]->nombre,nombre)))
+      n=i;
+  }
+  return n;
 }
 
 void nivel_activar(nivel_t *nivel){

@@ -80,7 +80,7 @@ bool leer_encabezado_figura(FILE *f, char nombre[], figura_tipo_t *tipo, bool *i
   if(fread(&caracteristicas,sizeof(uint8_t),1,f)!=1){
     return false;
   }
-   
+
   *tipo = ((caracteristicas)&MSK_TIPO)>>SHIFT_TIPO;
   *infinito =(caracteristicas)&MSK_INF;
   if(fread(cantidad_polilineas,sizeof(uint16_t),1,f)!=1){
@@ -91,6 +91,10 @@ bool leer_encabezado_figura(FILE *f, char nombre[], figura_tipo_t *tipo, bool *i
 
 const char* figura_tipo_a_cadena(figura_tipo_t figura){
   return tipos_figuras[figura];
+}
+
+const char* figura_return_tipo(figura_t *f){
+  return figura_tipo_a_cadena(f->tipo);
 }
 
 size_t figura_cant_polilineas(figura_t *f) {
@@ -124,13 +128,17 @@ figura_t **figura_leer_archivo(size_t *n){
   }
   *n = n_figura-1;
 
-  
+
   fclose(f);
   return figura_vector;
 }
 
 polilinea_t *figura_return_polilinea(figura_t *f, size_t i) {
   return f->polilineas[i];
+}
+
+char *figura_return_nombre(figura_t *f){
+  return f->nombre;
 }
 
 size_t figura_buscar(figura_t **f_vector, size_t n_f, char nombre[TAMANIO_NOMBRE]){
