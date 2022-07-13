@@ -81,7 +81,7 @@ int main() {
     nivel_t *nivel4=crear_nivel();
     nivel_t *nivel5=crear_nivel();
 
-<<<<<<< HEAD
+
     float a=0;
     float angulo = 0;
 
@@ -101,11 +101,8 @@ int main() {
     size_t nivel4_en_vector = figura_buscar(figura_vector,n_figura,"NIVEL1NW");
     size_t nivel5_en_vector = figura_buscar(figura_vector,n_figura,"NIVEL1R");
 
-=======
->>>>>>> 738830f (add)
 
-    float a=0;
-    float angulo = 0;
+
 
     // Queremos que todo se dibuje escalado por f:
     float f = 1;
@@ -254,7 +251,7 @@ int main() {
           for(size_t i=0; i<n_nivel3;i++){
             graficar_polilinea(renderer,nivel3p[i],f);
           }
-          destruir_figura(nivel3p,n_nivel3);
+          
         }
         else if(nivel_esta_activo(nivel4)){
           f=0.63;
