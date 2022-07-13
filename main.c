@@ -4,9 +4,14 @@
 #include "config.h"
 #include "tda_fisicaymatematica.h"
 #include "tda_polilineas.h"
+
 #include "tda_figuras.h"
 #include "tda_nave.h"
 #include "tda_nivel.h"
+#include "tda_disparos.h"
+
+#include "tda_lista.h"
+
 
 
 polilinea_t **copiar_figura(figura_t *figura, double x, double y, double ang){
@@ -49,7 +54,6 @@ void graficar_polilinea(SDL_Renderer *renderer, polilinea_t *p, float f){
 }
 
 
-
 int main() {
 
 
@@ -70,11 +74,6 @@ int main() {
     int dormir = 0;
 
     // BEGIN código del alumno
-
-
-    // Queremos que todo se dibuje escalado por f:
-    float f = 1;
-    // END código del alumno
     nave_t *navei=nave_crear(388,218);
     nivel_t *nivel1=crear_nivel();
     nivel_t *nivel2=crear_nivel();
@@ -82,6 +81,7 @@ int main() {
     nivel_t *nivel4=crear_nivel();
     nivel_t *nivel5=crear_nivel();
 
+<<<<<<< HEAD
     float a=0;
     float angulo = 0;
 
@@ -100,8 +100,16 @@ int main() {
     size_t nivel3_en_vector = figura_buscar(figura_vector,n_figura,"NIVEL1SW");
     size_t nivel4_en_vector = figura_buscar(figura_vector,n_figura,"NIVEL1NW");
     size_t nivel5_en_vector = figura_buscar(figura_vector,n_figura,"NIVEL1R");
-    
 
+=======
+>>>>>>> 738830f (add)
+
+    float a=0;
+    float angulo = 0;
+
+    // Queremos que todo se dibuje escalado por f:
+    float f = 1;
+    // END código del alumno
 
     unsigned int ticks = SDL_GetTicks();
     while(1) {
@@ -126,6 +134,9 @@ int main() {
                     case SDLK_LEFT:
                         angulo = NAVE_ROTACION_PASO;
                         break;
+                    case SDLK_SPACE:
+
+                        break;
                 }
             }
             else if (event.type == SDL_KEYUP) {
@@ -145,11 +156,14 @@ int main() {
                     case SDLK_LEFT:
                         angulo = 0;
                         break;
+                    case SDLK_SPACE:
+                        break;
                 }
             }
             // END código del alumno
             continue;
         }
+
 
         SDL_SetRenderDrawColor(renderer, 0x00, 0x00, 0x00, 0x00);
         SDL_RenderClear(renderer);
@@ -181,7 +195,7 @@ int main() {
           destruir_figura(escudo,figura_cant_polilineas(figura_vector[18]));
         }
 
-        
+
 
         size_t n_base=figura_cant_polilineas(figura_vector[base_en_vector]);
         polilinea_t **base=copiar_figura(figura_vector[base_en_vector],388,218,0);
@@ -346,6 +360,8 @@ int main() {
         }
 
         //ZONA DESTRUIR
+
+
         destruir_figura(nivel1p,n_nivel1);
         destruir_figura(nivel2p,n_nivel2);
         destruir_figura(nivel3p,n_nivel3);
@@ -391,7 +407,6 @@ int main() {
     nivel_destruir(nivel3);
     nivel_destruir(nivel4);
     nivel_destruir(nivel5);
-
 
     for(size_t i=0; i < n_figura; i++){
         figura_destruir(figura_vector[i],figura_cant_polilineas(figura_vector[i]),polilinea_destruir);
