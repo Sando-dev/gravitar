@@ -28,6 +28,10 @@ void rotar(polilinea_t *polilinea, double rad);
 
 double distancia_punto_a_polilinea(polilinea_t *polilinea, float px, float py);
 
+float polilinea_buscar_xmax(polilinea_t *p);
+
+float polilinea_buscar_xmin(polilinea_t *p);
+
 polilinea_t *leer_polilinea(FILE *f);
 
 #endif

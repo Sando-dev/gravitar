@@ -198,3 +198,21 @@ void rotar(polilinea_t *polilinea, double rad){
 size_t polilinea_sizeof(void) {
   return sizeof(polilinea_t);
 }
+
+float polilinea_buscar_xmax(polilinea_t *p) {
+  float max = 0;
+  for(size_t i=0; i<p->n; i++){
+    if(max < p->puntos[i][0])
+      max = p->puntos[i][0];
+  }
+  return max;
+}
+
+float polilinea_buscar_xmin(polilinea_t *p) {
+  float min = 0;
+  for(size_t i=0; i<p->n; i++){
+    if(min > p->puntos[i][0])
+      min = p->puntos[i][0];
+  }
+  return min;
+}

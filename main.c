@@ -12,7 +12,9 @@
 
 #include "tda_lista.h"
 
-
+float calcular_escala(float xmax, float xmin) {
+  return VENTANA_ALTO / (xmax + xmin);
+}
 
 polilinea_t **copiar_figura(figura_t *figura, double x, double y, double ang){
   polilinea_t **polilineas=malloc(figura_cant_polilineas(figura)*sizeof(polilinea_t*));
@@ -262,7 +264,7 @@ int main() {
 
         }
         else if(nivel_esta_activo(nivel5)){
-
+          f=0.698;
           for(size_t i=0; i<n_nivel5;i++){
             graficar_polilinea(renderer,nivel5p[i],f);
           }
