@@ -10,7 +10,7 @@
 #include "tda_nave.h"
 #include "tda_nivel.h"
 #include "tda_disparos.h"
-
+#include "caracteres.h"
 #include "tda_lista.h"
 
 
@@ -330,6 +330,7 @@ int main() {
 
 
           //ZONA GRAFICAR
+
           for(size_t i=0; i<n_base;i++){
             graficar_polilinea(renderer,base[i],f);
           }
