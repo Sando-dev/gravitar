@@ -1,6 +1,6 @@
 #ifndef _LETRAS_H_
 #define _LETRAS_H_
-
+#include <stdlib.h>
 #define CARACTER_ANCHO 6
 #define CARACTER_ALTO 6
 
@@ -49,103 +49,10 @@ extern const int caracter_abajo[5][2];
 
 extern const int caracter_espacio[1][2];
 
-/*
+extern const int (*caracteres[])[2];
 
-const int *(*polilineas_letras)[2]={
-	['a']=caracter_a,
-	['b']=caracter_b,
-	['c']=caracter_c,
-	['d']=caracter_d,
-	['e']=caracter_e,
-	['f']=caracter_f,
-	['g']=caracter_g,
-	['h']=caracter_h,
-	['i']=caracter_i,
-	['j']=caracter_j,
-	['k']=caracter_k,
-	['l']=caracter_l,
-	['m']=caracter_m,
-	['n']=caracter_n,
-	['o']=caracter_o,
-	['p']=caracter_p,
-	['q']=caracter_q,
-	['r']=caracter_r,
-	['s']=caracter_s,
-	['t']=caracter_t,
-	['u']=caracter_u,
-	['v']=caracter_v,
-	['w']=caracter_w,
-	['x']=caracter_x,
-	['y']=caracter_y,
-	['z']=caracter_z,
+size_t pos_caracter_polilinea(char letra);
 
-	['0']=caracter_0,
-	['1']=caracter_1,
-	['2']=caracter_2,
-	['3']=caracter_3,
-	['4']=caracter_4,
-	['5']=caracter_5,
-	['6']=caracter_6,
-	['7']=caracter_7,
-	['8']=caracter_8,
-	['9']=caracter_9,
+size_t tamanio_polilinea(char letra);
 
-	['<']=caracter_izquierda,
-	['>']=caracter_derecha,
-	['^']=caracter_arriba,
-	['V']=caracter_abajo,
-
-	[' ']=caracter_espacio,
-
-};
-
-const size_t polilineas_letras_tamanios[]={
-	['a']=7,
-	['b']=12,
-	['c']=4,
-	['d']=7,
-	['e']=7,
-	['f']=6,
-	['g']=7,
-	['h']=6,
-	['i']=6,
-	['j']=4,
-	['k']=6,
-	['l']=3,
-	['m']=5,
-	['n']=4,
-	['o']=5,
-	['p']=5,
-	['q']=9,
-	['r']=7,
-	['s']=6,
-	['t']=4,
-	['u']=4,
-	['v']=3,
-	['w']=5,
-	['x']=5,
-	['y']=5,
-	['z']=4,
-
-	['0']=5,
-	['1']=2,
-	['2']=6,
-	['3']=7,
-	['4']=5,
-	['5']=6,
-	['6']=5,
-	['7']=3,
-	['8']=7,
-	['9']=5,
-
-	['<']=5,
-	['>']=5,
-	['^']=5,
-	['V']=5,
-
-	[' ']=1,
-
-};
-
-*/
 #endif // _LETRAS_H_
