@@ -119,7 +119,7 @@ int main() {
           }
           niveles=aux;
         }
-        nivel_t *nivel=nivel_crear(figura_return_nombre(figura_vector[i]));
+        nivel_t *nivel=nivel_crear(figura_return_nombre(figura_vector[i]),figura_return_inf(figura_vector[i]));
         if(nivel==NULL){
           return 1;
         }
@@ -230,7 +230,7 @@ int main() {
           for(size_t i=0; i<figura_cant_polilineas(figura_vector[escudo_en_vector]);i++){
             graficar_polilinea(renderer,escudo[i],f);
           }
-          destruir_vector_polilineas(escudo,figura_cant_polilineas(figura_vector[18]));
+          destruir_vector_polilineas(escudo,figura_cant_polilineas(figura_vector[escudo_en_vector]));
         }
 
         for(size_t i=0; i<n_nave;i++){
@@ -250,13 +250,18 @@ int main() {
 
         if(hay_nivel_activo){
           size_t nivel_en_figuras = figura_buscar(figura_vector,n_figura,nivel_nombre(niveles[indice_nivel]));
-
+          
           size_t n_nivel=figura_cant_polilineas(figura_vector[nivel_en_figuras]);
           polilinea_t **nivel_polilinea=copiar_polilineas(figura_vector[nivel_en_figuras],0,0,0);
 
-          f = nivel_calcular_escala(nivel_polilinea, n_nivel, 1, nave_get_posy(navei));
+          f = nivel_calcular_escala(nivel_polilinea, n_nivel, nivel_return_inf(niveles[indice_nivel]), nave_get_posy(navei));
           for(size_t i=0; i<n_nivel;i++){
             graficar_polilinea(renderer,nivel_polilinea[i],f);
+          }
+          if(nave_get_posy(navei) > VENTANA_ALTO/f) {
+            nave_matar(navei,388,218);
+            nivel_desactivar(niveles[indice_nivel]);
+            f = 1;
           }
           destruir_vector_polilineas(nivel_polilinea,n_nivel);
         }
@@ -293,6 +298,7 @@ int main() {
 
           for(size_t i=0;i<n_planeta1;i++){
             if(distancia_punto_a_polilinea(planeta1[i],nave_get_posx(navei),nave_get_posy(navei))<=10){
+              nave_matar(navei,300/f,700/f);
               nivel_activar(niveles[nivel_buscar(niveles, n_niveles, "NIVEL1NE")]);
             }
           }

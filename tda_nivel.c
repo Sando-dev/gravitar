@@ -7,17 +7,19 @@
 struct nivel{
   char nombre[TAMANIO_NOMBRE];
   bool activo;
+  bool infinito;
   int puntos;
 };
 
 
-nivel_t *nivel_crear(char nombre[]){
+nivel_t *nivel_crear(char nombre[], bool inf){
   nivel_t *nivel=malloc(sizeof(nivel_t));
   if(nivel==NULL){
     return NULL;
   }
   strcpy(nivel->nombre,nombre);
   nivel->activo=false;
+  nivel->infinito = inf;
   //nivel->puntos=0;
   return nivel;
 }
@@ -49,4 +51,8 @@ void nivel_desactivar(nivel_t *nivel){
 
 bool nivel_esta_activo(nivel_t *nivel){
   return nivel->activo;
+}
+
+bool nivel_return_inf(nivel_t *nivel) {
+  return nivel->infinito;
 }

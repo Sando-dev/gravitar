@@ -141,6 +141,10 @@ char *figura_return_nombre(figura_t *f){
   return f->nombre;
 }
 
+bool figura_return_inf(figura_t *f) {
+  return f->infinito;
+}
+
 size_t figura_buscar(figura_t **f_vector, size_t n_f, char nombre[TAMANIO_NOMBRE]){
   size_t n;
   for(size_t i=0; i<n_f; i++){

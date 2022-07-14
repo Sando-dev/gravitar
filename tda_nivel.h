@@ -5,7 +5,7 @@ typedef struct nivel nivel_t;
 
 #define TAMANIO_NOMBRE 20
 
-nivel_t *nivel_crear(char *nombre);
+nivel_t *nivel_crear(char *nombre, bool inf);
 void nivel_destruir(nivel_t *nivel);
 
 char *nivel_nombre(nivel_t *nivel);
@@ -15,5 +15,7 @@ void nivel_activar(nivel_t *nivel);
 void nivel_desactivar(nivel_t *nivel);
 
 bool nivel_esta_activo(nivel_t *nivel);
+
+bool nivel_return_inf(nivel_t *nivel);
 
 #endif
