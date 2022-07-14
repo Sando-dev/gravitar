@@ -5,6 +5,7 @@
 #include <string.h>
 #include <math.h>
 #include "tda_polilineas.h"
+#include "config.h"
 #include "tda_fisicaymatematica.h"
 
 #define MSK_ROJO 0x04
@@ -209,7 +210,7 @@ float polilinea_buscar_xmax(polilinea_t *p) {
 }
 
 float polilinea_buscar_xmin(polilinea_t *p) {
-  float min = 0;
+  float min = VENTANA_ALTO;
   for(size_t i=0; i<p->n; i++){
     if(min > p->puntos[i][0])
       min = p->puntos[i][0];

@@ -14,6 +14,24 @@
 #include "tda_lista.h"
 
 
+float nivel_calcular_escala(polilinea_t **p, size_t n){
+  float max = 0;
+  float min = VENTANA_ANCHO*100;
+  for(size_t i=0; i<n; i++){
+    if(max < polilinea_buscar_xmax(p[i]))
+      max = polilinea_buscar_xmax(p[i]);
+    if(min > polilinea_buscar_xmin(p[i]))
+      min = polilinea_buscar_xmin(p[i]);
+  }
+  return VENTANA_ANCHO / (max + min);
+}
+
+
+
+float calcular_escala(float xmax, float xmin) {
+  return VENTANA_ALTO / (xmax + xmin);
+}
+
 polilinea_t **copiar_polilineas(figura_t *figura, double x, double y, double ang){
   polilinea_t **polilineas=malloc(figura_cant_polilineas(figura)*sizeof(polilinea_t*));
   if(polilineas==NULL){
@@ -225,6 +243,7 @@ int main() {
           size_t n_nivel=figura_cant_polilineas(figura_vector[nivel_en_figuras]);
           polilinea_t **nivel_polilinea=copiar_polilineas(figura_vector[nivel_en_figuras],0,0,0);
 
+          f = nivel_calcular_escala(nivel_polilinea, n_nivel);
           for(size_t i=0; i<n_nivel;i++){
             graficar_polilinea(renderer,nivel_polilinea[i],f);
           }
