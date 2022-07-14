@@ -1,20 +1,20 @@
-==18453== Memcheck, a memory error detector
-==18453== Copyright (C) 2002-2017, and GNU GPL'd, by Julian Seward et al.
-==18453== Using Valgrind-3.15.0 and LibVEX; rerun with -h for copyright info
-==18453== Command: ./gravitar
-==18453== Parent PID: 4873
-==18453== 
-==18453== 
-==18453== HEAP SUMMARY:
-==18453==     in use at exit: 303,105 bytes in 2,855 blocks
-==18453==   total heap usage: 152,100 allocs, 149,245 frees, 26,700,347 bytes allocated
-==18453== 
-==18453== LEAK SUMMARY:
-==18453==    definitely lost: 0 bytes in 0 blocks
-==18453==    indirectly lost: 0 bytes in 0 blocks
-==18453==      possibly lost: 0 bytes in 0 blocks
-==18453==    still reachable: 0 bytes in 0 blocks
-==18453==         suppressed: 303,105 bytes in 2,855 blocks
-==18453== 
-==18453== For lists of detected and suppressed errors, rerun with: -s
-==18453== ERROR SUMMARY: 0 errors from 0 contexts (suppressed: 1703 from 7)
+==24707== Memcheck, a memory error detector
+==24707== Copyright (C) 2002-2017, and GNU GPL'd, by Julian Seward et al.
+==24707== Using Valgrind-3.15.0 and LibVEX; rerun with -h for copyright info
+==24707== Command: ./gravitar
+==24707== Parent PID: 24655
+==24707== 
+==24707== 
+==24707== HEAP SUMMARY:
+==24707==     in use at exit: 302,929 bytes in 2,855 blocks
+==24707==   total heap usage: 100,553 allocs, 97,698 frees, 24,315,166 bytes allocated
+==24707== 
+==24707== LEAK SUMMARY:
+==24707==    definitely lost: 0 bytes in 0 blocks
+==24707==    indirectly lost: 0 bytes in 0 blocks
+==24707==      possibly lost: 0 bytes in 0 blocks
+==24707==    still reachable: 0 bytes in 0 blocks
+==24707==         suppressed: 302,929 bytes in 2,855 blocks
+==24707== 
+==24707== For lists of detected and suppressed errors, rerun with: -s
+==24707== ERROR SUMMARY: 0 errors from 0 contexts (suppressed: 967 from 7)
