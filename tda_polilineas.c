@@ -217,3 +217,12 @@ float polilinea_buscar_xmin(polilinea_t *p) {
   }
   return min;
 }
+
+float polilinea_buscar_ymax(polilinea_t *p) {
+  float max = 0;
+  for(size_t i=0; i<p->n; i++){
+    if(max < p->puntos[i][1])
+      max = p->puntos[i][1];
+  }
+  return max;
+}

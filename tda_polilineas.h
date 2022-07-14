@@ -32,6 +32,8 @@ float polilinea_buscar_xmax(polilinea_t *p);
 
 float polilinea_buscar_xmin(polilinea_t *p);
 
+float polilinea_buscar_ymax(polilinea_t *p);
+
 polilinea_t *leer_polilinea(FILE *f);
 
 #endif

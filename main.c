@@ -14,23 +14,34 @@
 #include "tda_lista.h"
 
 
-float nivel_calcular_escala(polilinea_t **p, size_t n){
-  float max = 0;
-  float min = VENTANA_ANCHO*100;
+float nivel_calcular_escala(polilinea_t **p, size_t n, bool inf, float nave_pos_y){
+  float f = 1;
+  float x_max = 0;
+  float y_max = 0;
+  float x_min = VENTANA_ANCHO*100;
   for(size_t i=0; i<n; i++){
-    if(max < polilinea_buscar_xmax(p[i]))
-      max = polilinea_buscar_xmax(p[i]);
-    if(min > polilinea_buscar_xmin(p[i]))
-      min = polilinea_buscar_xmin(p[i]);
+    if(x_max < polilinea_buscar_xmax(p[i]))
+      x_max = polilinea_buscar_xmax(p[i]);
+    if(x_min > polilinea_buscar_xmin(p[i]))
+      x_min = polilinea_buscar_xmin(p[i]);
+    if(y_max < polilinea_buscar_ymax(p[i]))
+      y_max = polilinea_buscar_ymax(p[i]);
   }
-  return VENTANA_ANCHO / (max + min);
+  if(inf) {
+    if(nave_pos_y > VENTANA_ALTO * MARGEN_ALTURA)
+      f = VENTANA_ALTO * MARGEN_ALTURA / nave_pos_y;
+    if(f < ESCALA_MINIMA)
+      f = ESCALA_MINIMA;
+  }
+  else{
+    f = VENTANA_ALTO / y_max;
+    if(VENTANA_ANCHO / (x_max + x_min) < f)
+      f = VENTANA_ANCHO / (x_max + x_min);
+  }
+  return f;
 }
 
 
-
-float calcular_escala(float xmax, float xmin) {
-  return VENTANA_ALTO / (xmax + xmin);
-}
 
 polilinea_t **copiar_polilineas(figura_t *figura, double x, double y, double ang){
   polilinea_t **polilineas=malloc(figura_cant_polilineas(figura)*sizeof(polilinea_t*));
@@ -243,7 +254,7 @@ int main() {
           size_t n_nivel=figura_cant_polilineas(figura_vector[nivel_en_figuras]);
           polilinea_t **nivel_polilinea=copiar_polilineas(figura_vector[nivel_en_figuras],0,0,0);
 
-          f = nivel_calcular_escala(nivel_polilinea, n_nivel);
+          f = nivel_calcular_escala(nivel_polilinea, n_nivel, 1, nave_get_posy(navei));
           for(size_t i=0; i<n_nivel;i++){
             graficar_polilinea(renderer,nivel_polilinea[i],f);
           }
