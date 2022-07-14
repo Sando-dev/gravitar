@@ -263,6 +263,12 @@ int main() {
             nivel_desactivar(niveles[indice_nivel]);
             f = 1;
           }
+          if(!nivel_return_inf(niveles[indice_nivel]))
+            if(nave_get_posx(navei)<0 || nave_get_posx(navei)>VENTANA_ANCHO/f)
+              nave_rebotar_x(navei); 
+          if(nave_get_posy(navei)<0){
+            nave_rebotar_y(navei);
+          }
           destruir_vector_polilineas(nivel_polilinea,n_nivel);
         }
         //TERMINA NIVELES ARRANCA PANTALLA PRINCIPAL
