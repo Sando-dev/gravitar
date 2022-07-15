@@ -270,7 +270,7 @@ int main() {
             graficar_polilinea(renderer,nivel_polilinea[i],f);
           }
           if(nave_get_posy(navei) > VENTANA_ALTO/f) {
-            nave_matar(navei,388,218);
+            nave_trasladar(navei,388,218);
             nivel_desactivar(niveles[indice_nivel]);
             f = 1;
           }
@@ -280,6 +280,7 @@ int main() {
           if(nave_get_posy(navei)<0){
             nave_rebotar_y(navei);
           }
+
           for(size_t i=0; i<n_nivel;i++){
             if(distancia_punto_a_polilinea(nivel_polilinea[i],nave_get_posx(navei),nave_get_posy(navei))<=1){
               nave_matar(navei,400/f,500/f);
