@@ -14,7 +14,7 @@
 #include "tda_lista.h"
 
 
-float nivel_calcular_escala(polilinea_t **p, size_t n, bool inf, float nave_pos_y){
+float nivel_calcular_escala(polilinea_t **p, size_t n, bool inf, float nave_pos_y,double *ancho){
   float f = 1;
   float x_max = 0;
   float y_max = 0;
@@ -27,6 +27,7 @@ float nivel_calcular_escala(polilinea_t **p, size_t n, bool inf, float nave_pos_
     if(y_max < polilinea_buscar_ymax(p[i]))
       y_max = polilinea_buscar_ymax(p[i]);
   }
+  *ancho=x_max-x_min;
   if(inf) {
     if(nave_pos_y > VENTANA_ALTO * MARGEN_ALTURA)
       f = VENTANA_ALTO * MARGEN_ALTURA / nave_pos_y;
@@ -127,7 +128,8 @@ int main() {
           nivel_set_escala_inicial(nivel, ESCALA_MINIMA);
         else {
           size_t can_polilineas = figura_cant_polilineas(figura_vector[i]);
-          float f = nivel_calcular_escala(figura_return_vector_polilineas(figura_vector[i]), can_polilineas, NULL, 0);
+          double anch;
+          float f = nivel_calcular_escala(figura_return_vector_polilineas(figura_vector[i]), can_polilineas, NULL, 0,&anch);
           nivel_set_escala_inicial(nivel, f);
         }
         niveles[n_niveles++]=nivel;
@@ -135,7 +137,7 @@ int main() {
     }
     //TERMINA VECTOR NIVELES
 
-    nave_t *navei=nave_crear(BASE_POSICION_X,BASE_POSICION_Y);
+    nave_t *navei=nave_crear(388,218);
 
     float a=0;
     float angulo = 0;
@@ -153,6 +155,7 @@ int main() {
 
 
     // Queremos que todo se dibuje escalado por f:
+    float centro=0;
     float f = 1;
     // END código del alumno
 
@@ -216,20 +219,23 @@ int main() {
 
 
         // BEGIN código del alumno
+        /*float angulo_estrella=atan2(364-nave_get_posy(navei),457-nave_get_posx(navei));
+        nave_mover(navei,a,angulo,angulo_estrella);
+*/
         //ARRANCA NAVE
         size_t n_nave;
         polilinea_t **nave;
         if(nave_chorro_esta_prendido(navei)){
-          nave=copiar_polilineas(figura_vector[chorro_en_vector],nave_get_posx(navei),nave_get_posy(navei),nave_get_angulo(navei));
+          nave=copiar_polilineas(figura_vector[chorro_en_vector],nave_get_posx(navei)-centro+ VENTANA_ANCHO / 2 / f,nave_get_posy(navei),nave_get_angulo(navei));
           n_nave=figura_cant_polilineas(figura_vector[chorro_en_vector]);
         }
         else{
-          nave=copiar_polilineas(figura_vector[nave_en_vector],nave_get_posx(navei),nave_get_posy(navei),nave_get_angulo(navei));
+          nave=copiar_polilineas(figura_vector[nave_en_vector],nave_get_posx(navei)-centro+ VENTANA_ANCHO / 2 / f,nave_get_posy(navei),nave_get_angulo(navei));
           n_nave=figura_cant_polilineas(figura_vector[nave_en_vector]);
         }
 
         if(nave_escudo_esta_prendido(navei)){
-          polilinea_t **escudo=copiar_polilineas(figura_vector[escudo_en_vector],nave_get_posx(navei),nave_get_posy(navei),nave_get_angulo(navei));
+          polilinea_t **escudo=copiar_polilineas(figura_vector[escudo_en_vector],nave_get_posx(navei)-centro+ VENTANA_ANCHO / 2 / f,nave_get_posy(navei),nave_get_angulo(navei));
           for(size_t i=0; i<figura_cant_polilineas(figura_vector[escudo_en_vector]);i++){
             graficar_polilinea(renderer,escudo[i],f);
           }
@@ -259,14 +265,13 @@ int main() {
           size_t nivel_en_figuras = figura_buscar(figura_vector,n_figura,nivel_nombre(niveles[indice_nivel]));
 
           size_t n_nivel=figura_cant_polilineas(figura_vector[nivel_en_figuras]);
-          polilinea_t **nivel_polilinea=copiar_polilineas(figura_vector[nivel_en_figuras],0,0,0);
+          polilinea_t **nivel_polilinea=copiar_polilineas(figura_vector[nivel_en_figuras],(-centro+ VENTANA_ANCHO / 2 /f) ,0,0);
 
-          f = nivel_calcular_escala(nivel_polilinea, n_nivel, nivel_return_inf(niveles[indice_nivel]), nave_get_posy(navei));
-          for(size_t i=0; i<n_nivel;i++){
-            graficar_polilinea(renderer,nivel_polilinea[i],f);
-          }
+          double ancho_nivel;
+          f = nivel_calcular_escala(nivel_polilinea, n_nivel, nivel_return_inf(niveles[indice_nivel]), nave_get_posy(navei),&ancho_nivel);
+
           if(nave_get_posy(navei) > VENTANA_ALTO/f) {
-            nave_trasladar(navei,BASE_POSICION_X,BASE_POSICION_Y);
+            nave_trasladar(navei,388,218,true);
             nivel_desactivar(niveles[indice_nivel]);
             f = 1;
           }
@@ -275,6 +280,37 @@ int main() {
               nave_rebotar_x(navei);
             }
           }
+          else{
+
+            if((nave_get_posx(navei) - centro) * f > VENTANA_ANCHO / 2 * MARGEN_ANCHO){
+              centro = nave_get_posx(navei) - VENTANA_ANCHO / 2 * MARGEN_ANCHO / f;
+            }
+            else if((centro - nave_get_posx(navei)) * f > VENTANA_ANCHO / 2 * MARGEN_ANCHO){
+              centro = nave_get_posx(navei) + VENTANA_ANCHO / 2 * MARGEN_ANCHO / f;
+            }
+
+            if(nave_get_posx(navei)>ancho_nivel){
+              nave_trasladar(navei,nave_get_posx(navei)-ancho_nivel,nave_get_posy(navei),false);
+            }
+            else if(nave_get_posx(navei)<0){
+              nave_trasladar(navei,nave_get_posx(navei)+ancho_nivel,nave_get_posy(navei),false);
+            }
+
+            polilinea_t **nivel_polilinea2=copiar_polilineas(figura_vector[nivel_en_figuras],(-centro+ VENTANA_ANCHO / 2 /f)+ancho_nivel ,0,0);
+            polilinea_t **nivel_polilinea3=copiar_polilineas(figura_vector[nivel_en_figuras],(-centro+ VENTANA_ANCHO / 2 /f)-ancho_nivel ,0,0);
+
+            for(size_t i=0; i<n_nivel;i++){
+              graficar_polilinea(renderer,nivel_polilinea2[i],f);
+              graficar_polilinea(renderer,nivel_polilinea3[i],f);
+            }
+
+            destruir_vector_polilineas(nivel_polilinea2,n_nivel);
+            destruir_vector_polilineas(nivel_polilinea3,n_nivel);
+
+
+          }
+
+
           if(nave_get_posy(navei)<0){
             nave_rebotar_y(navei);
           }
@@ -282,8 +318,13 @@ int main() {
           for(size_t i=0; i<n_nivel;i++){
             if(distancia_punto_a_polilinea(nivel_polilinea[i],nave_get_posx(navei),nave_get_posy(navei))<=1){
               f = nivel_return_escala_inicial(niveles[indice_nivel]);
-              nave_matar(navei,START_POSICION_X/f,START_POSICION_Y/f);
+              nave_matar(navei,400/f,550/f);
             }
+          }
+
+
+          for(size_t i=0; i<n_nivel;i++){
+            graficar_polilinea(renderer,nivel_polilinea[i],f);
           }
 
           destruir_vector_polilineas(nivel_polilinea,n_nivel);
@@ -291,35 +332,36 @@ int main() {
         //TERMINA NIVELES ARRANCA PANTALLA PRINCIPAL
 
         else{
+          centro = VENTANA_ANCHO/2/f;
 
-          float angulo_estrella=atan2(ESTRELLA_POSICION_Y-nave_get_posy(navei),ESTRELLA_POSICION_X-nave_get_posx(navei));
+          float angulo_estrella=atan2(364-nave_get_posy(navei),457-nave_get_posx(navei));
           nave_mover(navei,a,angulo,angulo_estrella);
 
           size_t n_base=figura_cant_polilineas(figura_vector[base_en_vector]);
-          polilinea_t **base=copiar_polilineas(figura_vector[base_en_vector],BASE_POSICION_X,BASE_POSICION_Y,0);
+          polilinea_t **base=copiar_polilineas(figura_vector[base_en_vector],388-centro+ VENTANA_ANCHO / 2 / f,218,0);
 
           size_t n_estrella=figura_cant_polilineas(figura_vector[estrella_en_vector]);
-          polilinea_t **estrella=copiar_polilineas(figura_vector[estrella_en_vector],ESTRELLA_POSICION_X,ESTRELLA_POSICION_Y,0);
+          polilinea_t **estrella=copiar_polilineas(figura_vector[estrella_en_vector],457-centro+ VENTANA_ANCHO / 2 / f,364,0);
 
           size_t n_planeta1=figura_cant_polilineas(figura_vector[planeta1_en_vector]);
-          polilinea_t **planeta1=copiar_polilineas(figura_vector[planeta1_en_vector],PLAN1_POSICION_X,PLAN1_POSICION_Y,0);
+          polilinea_t **planeta1=copiar_polilineas(figura_vector[planeta1_en_vector],663-centro+ VENTANA_ANCHO / 2 / f,473,0);
 
           size_t n_planeta2=figura_cant_polilineas(figura_vector[planeta2_en_vector]);
-          polilinea_t **planeta2=copiar_polilineas(figura_vector[planeta2_en_vector],PLAN2_POSICION_X,PLAN2_POSICION_Y,0);
+          polilinea_t **planeta2=copiar_polilineas(figura_vector[planeta2_en_vector],671-centro+ VENTANA_ANCHO / 2 / f,145,0);
 
           size_t n_planeta3=figura_cant_polilineas(figura_vector[planeta3_en_vector]);
-          polilinea_t **planeta3=copiar_polilineas(figura_vector[planeta3_en_vector],PLAN3_POSICION_X,PLAN3_POSICION_Y,0);
+          polilinea_t **planeta3=copiar_polilineas(figura_vector[planeta3_en_vector],110-centro+ VENTANA_ANCHO / 2 / f,79,0);
 
           size_t n_planeta4=figura_cant_polilineas(figura_vector[planeta4_en_vector]);
-          polilinea_t **planeta4=copiar_polilineas(figura_vector[planeta4_en_vector],PLAN4_POSICION_X,PLAN4_POSICION_Y,0);
+          polilinea_t **planeta4=copiar_polilineas(figura_vector[planeta4_en_vector],204-centro+ VENTANA_ANCHO / 2 / f,455,0);
 
           size_t n_planeta5=figura_cant_polilineas(figura_vector[planeta5_en_vector]);
-          polilinea_t **planeta5=copiar_polilineas(figura_vector[planeta5_en_vector],PLAN5_POSICION_X,PLAN5_POSICION_Y,0);
+          polilinea_t **planeta5=copiar_polilineas(figura_vector[planeta5_en_vector],111-centro+ VENTANA_ANCHO / 2 / f,307,0);
 
 
           for(size_t i=0;i<n_estrella;i++){
             if(distancia_punto_a_polilinea(estrella[i],nave_get_posx(navei),nave_get_posy(navei))<=3){
-              nave_matar(navei,BASE_POSICION_X,BASE_POSICION_Y);
+              nave_matar(navei,388,218);
             }
           }
 
@@ -328,7 +370,8 @@ int main() {
               size_t posicion_nivel = nivel_buscar(niveles, n_niveles, "NIVEL1NE");
               nivel_activar(niveles[posicion_nivel]);
               f = nivel_return_escala_inicial(niveles[posicion_nivel]);
-              nave_trasladar(navei,START_POSICION_X/f,START_POSICION_Y/f);
+              nave_trasladar(navei,400/f,500/f,true);
+              centro=nave_get_posx(navei);
             }
           }
 
@@ -337,7 +380,8 @@ int main() {
               size_t posicion_nivel = nivel_buscar(niveles, n_niveles, "NIVEL1SE");
               nivel_activar(niveles[posicion_nivel]);
               f = nivel_return_escala_inicial(niveles[posicion_nivel]);
-              nave_trasladar(navei,START_POSICION_X/f,START_POSICION_Y/f);
+              nave_trasladar(navei,400/f,500/f,true);
+              centro=nave_get_posx(navei);
             }
           }
 
@@ -346,7 +390,8 @@ int main() {
               size_t posicion_nivel = nivel_buscar(niveles, n_niveles, "NIVEL1SW");
               nivel_activar(niveles[posicion_nivel]);
               f = nivel_return_escala_inicial(niveles[posicion_nivel]);
-              nave_trasladar(navei,START_POSICION_X/f,START_POSICION_Y/f);
+              nave_trasladar(navei,400/f,500/f,true);
+              centro=nave_get_posx(navei);
             }
           }
 
@@ -355,7 +400,8 @@ int main() {
               size_t posicion_nivel = nivel_buscar(niveles, n_niveles, "NIVEL1NW");
               nivel_activar(niveles[posicion_nivel]);
               f = nivel_return_escala_inicial(niveles[posicion_nivel]);
-              nave_trasladar(navei,START_POSICION_X/f,START_POSICION_Y/f);
+              nave_trasladar(navei,400/f,500/f,true);
+              centro=nave_get_posx(navei);
             }
           }
 
@@ -364,7 +410,8 @@ int main() {
               size_t posicion_nivel = nivel_buscar(niveles, n_niveles, "NIVEL1R");
               nivel_activar(niveles[posicion_nivel]);
               f = nivel_return_escala_inicial(niveles[posicion_nivel]);
-              nave_trasladar(navei,START_POSICION_X/f,START_POSICION_Y/f);
+              nave_trasladar(navei,400/f,500/f,true);
+              centro=nave_get_posx(navei);
             }
           }
 

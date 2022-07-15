@@ -51,14 +51,18 @@ void nave_matar(nave_t *nave, double px_inicial, double py_inicial){
   nave->angulo=NAVE_ANGULO_INICIAL;
 }
 
-void nave_trasladar(nave_t *nave, double px_inicial, double py_inicial){
+void nave_trasladar(nave_t *nave, double px_inicial, double py_inicial,bool resetear){
   nave->chorro=false;
   nave->escudo=false;
-  nave->vx=0;
-  nave->vy=0;
+  if(resetear){
+    nave->chorro=false;
+    nave->escudo=false;
+    nave->vx=0;
+    nave->vy=0;
+    nave->angulo=NAVE_ANGULO_INICIAL;
+  }
   nave->posx=px_inicial;
   nave->posy=py_inicial;
-  nave->angulo=NAVE_ANGULO_INICIAL;
 }
 
 void nave_prender_chorro(nave_t *nave){
