@@ -97,8 +97,7 @@ int main() {
 
     int dormir = 0;
     polilinea_t *letra_s = polilinea_crear(caracter_s, 6, 0xAD,0xD8,0xE6);
-    polilinea_agrandar(letra_s, 5);
-
+    trasladar(letra_s, (400)/4, 560/4);
     // BEGIN código del alumno
     size_t n_figura;
     figura_t **figura_vector = figura_leer_archivo(&n_figura);
@@ -464,10 +463,8 @@ int main() {
           destruir_vector_polilineas(planeta5, n_planeta5);
 
         }
-        polilinea_t *letra_s_copia = polilinea_clonar(letra_s);
-        trasladar(letra_s_copia, 400/f, 560/f);
-        graficar_polilinea(renderer, letra_s_copia, f);
-        polilinea_destruir(letra_s_copia);
+
+        graficar_polilinea(renderer, letra_s, 4);
 
         //ZONA DESTRUIR
 
