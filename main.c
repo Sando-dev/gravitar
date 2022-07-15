@@ -274,16 +274,19 @@ int main() {
             nivel_desactivar(niveles[indice_nivel]);
             f = 1;
           }
-          if(!nivel_return_inf(niveles[indice_nivel]))
-            if(nave_get_posx(navei)<0 || nave_get_posx(navei)>VENTANA_ANCHO/f)
+          if(!nivel_return_inf(niveles[indice_nivel])) {
+            if(nave_get_posx(navei)<0 || nave_get_posx(navei)>VENTANA_ANCHO/f){
               nave_rebotar_x(navei);
+            }
+          }
           if(nave_get_posy(navei)<0){
             nave_rebotar_y(navei);
           }
 
           for(size_t i=0; i<n_nivel;i++){
             if(distancia_punto_a_polilinea(nivel_polilinea[i],nave_get_posx(navei),nave_get_posy(navei))<=1){
-              nave_matar(navei,400/f,500/f);
+              f = nivel_return_escala_inicial(niveles[indice_nivel]);
+              nave_matar(navei,400/f,550/f);
             }
           }
 
