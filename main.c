@@ -209,9 +209,9 @@ int main() {
 
 
         // BEGIN código del alumno
-        float angulo_estrella=atan2(364-nave_get_posy(navei),457-nave_get_posx(navei));
+        /*float angulo_estrella=atan2(364-nave_get_posy(navei),457-nave_get_posx(navei));
         nave_mover(navei,a,angulo,angulo_estrella);
-
+*/
 
         //ARRANCA NAVE
         size_t n_nave;
@@ -249,8 +249,12 @@ int main() {
         }
 
         if(hay_nivel_activo){
+
+          float angulo_estrella=0;
+          nave_mover(navei,a,angulo,angulo_estrella);
+
           size_t nivel_en_figuras = figura_buscar(figura_vector,n_figura,nivel_nombre(niveles[indice_nivel]));
-          
+
           size_t n_nivel=figura_cant_polilineas(figura_vector[nivel_en_figuras]);
           polilinea_t **nivel_polilinea=copiar_polilineas(figura_vector[nivel_en_figuras],0,0,0);
 
@@ -265,15 +269,20 @@ int main() {
           }
           if(!nivel_return_inf(niveles[indice_nivel]))
             if(nave_get_posx(navei)<0 || nave_get_posx(navei)>VENTANA_ANCHO/f)
-              nave_rebotar_x(navei); 
+              nave_rebotar_x(navei);
           if(nave_get_posy(navei)<0){
             nave_rebotar_y(navei);
           }
+
           destruir_vector_polilineas(nivel_polilinea,n_nivel);
         }
         //TERMINA NIVELES ARRANCA PANTALLA PRINCIPAL
 
         else{
+
+          float angulo_estrella=atan2(364-nave_get_posy(navei),457-nave_get_posx(navei));
+          nave_mover(navei,a,angulo,angulo_estrella);
+
           size_t n_base=figura_cant_polilineas(figura_vector[base_en_vector]);
           polilinea_t **base=copiar_polilineas(figura_vector[base_en_vector],388,218,0);
 
