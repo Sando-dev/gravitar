@@ -53,6 +53,6 @@ extern const float (*caracteres[])[2];
 
 size_t pos_caracter_polilinea(char letra);
 
-size_t tamanio_polilinea(char letra);
+size_t tamanio_letra(char letra);
 
 #endif // _LETRAS_H_

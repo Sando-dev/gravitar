@@ -226,3 +226,10 @@ float polilinea_buscar_ymax(polilinea_t *p) {
   }
   return max;
 }
+
+void polilinea_agrandar(polilinea_t *p, int a) {
+  for(size_t i=0; i<p->n; i++){
+    p->puntos[i][0]*=a;
+    p->puntos[i][1]*=a;
+  }
+}

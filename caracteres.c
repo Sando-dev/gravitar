@@ -496,7 +496,7 @@ size_t pos_caracter_polilinea(char letra){
 	return cantidad;
 }
 
-size_t tamanio_polilinea(char letra){
+size_t tamanio_letra(char letra){
 	size_t cantidad = sizeof(caracteres) / sizeof(caracteres[0]);
 	for(size_t i = 0; i < cantidad; i++){
 		if(letras[i] == letra){

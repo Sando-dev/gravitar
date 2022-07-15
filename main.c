@@ -95,6 +95,8 @@ int main() {
     SDL_SetWindowTitle(window, "Gravitar");
 
     int dormir = 0;
+    polilinea_t *letra_s = polilinea_crear(caracter_s, 6, 0xAD,0xD8,0xE6);
+    polilinea_agrandar(letra_s, 5);
 
     // BEGIN código del alumno
     size_t n_figura;
@@ -415,6 +417,10 @@ int main() {
           destruir_vector_polilineas(planeta5, n_planeta5);
 
         }
+        polilinea_t *letra_s_copia = polilinea_clonar(letra_s);
+        trasladar(letra_s_copia, 400/f, 560/f);
+        graficar_polilinea(renderer, letra_s_copia, f);
+        polilinea_destruir(letra_s_copia);
 
         //ZONA DESTRUIR
 
@@ -446,6 +452,7 @@ int main() {
     SDL_Quit();
 
     nave_destruir(navei);
+    polilinea_destruir(letra_s);
 
     for(size_t i=0; i<n_niveles; i++){
       nivel_destruir(niveles[i]);

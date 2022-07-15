@@ -34,6 +34,8 @@ float polilinea_buscar_xmin(polilinea_t *p);
 
 float polilinea_buscar_ymax(polilinea_t *p);
 
+void polilinea_agrandar(polilinea_t *p, int a);
+
 polilinea_t *leer_polilinea(FILE *f);
 
 #endif
