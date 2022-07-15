@@ -8,7 +8,6 @@ struct torreta{
   double posx;
   double posy;
   double ang;
-  bool activa; //?
   bool viva; //?
   //nivel??
 };
@@ -30,14 +29,6 @@ torreta_t *torreta_crear(double posx, double posy, double angulo){
 
 void torreta_destruir(torreta_t *torreta){
   free(torreta);
-}
-
-void torreta_activar(torreta_t *torreta){
-  torreta->activa=true;
-}
-
-void torreta_desactivar(torreta_t *torreta){
-  torreta->activa=false;
 }
 
 void torreta_matar(torreta_t *torreta){

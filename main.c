@@ -280,6 +280,11 @@ int main() {
           if(nave_get_posy(navei)<0){
             nave_rebotar_y(navei);
           }
+          for(size_t i=0; i<n_nivel;i++){
+            if(distancia_punto_a_polilinea(nivel_polilinea[i],nave_get_posx(navei),nave_get_posy(navei))<=1){
+              nave_matar(navei,400/f,500/f);
+            }
+          }
 
           destruir_vector_polilineas(nivel_polilinea,n_nivel);
         }
