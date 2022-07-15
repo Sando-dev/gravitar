@@ -123,6 +123,13 @@ int main() {
         if(nivel==NULL){
           return 1;
         }
+        if(nivel_return_inf(nivel))
+          nivel_set_escala_inicial(nivel, ESCALA_MINIMA);
+        else {
+          size_t can_polilineas = figura_cant_polilineas(figura_vector[i]);
+          float f = nivel_calcular_escala(figura_return_vector_polilineas(figura_vector[i]), can_polilineas, NULL, 0);
+          nivel_set_escala_inicial(nivel, f);
+        }
         niveles[n_niveles++]=nivel;
       }
     }
@@ -313,32 +320,46 @@ int main() {
 
           for(size_t i=0;i<n_planeta1;i++){
             if(distancia_punto_a_polilinea(planeta1[i],nave_get_posx(navei),nave_get_posy(navei))<=10){
-              nave_matar(navei,300/f,700/f);
-              nivel_activar(niveles[nivel_buscar(niveles, n_niveles, "NIVEL1NE")]);
+              size_t posicion_nivel = nivel_buscar(niveles, n_niveles, "NIVEL1NE");
+              nivel_activar(niveles[posicion_nivel]);
+              f = nivel_return_escala_inicial(niveles[posicion_nivel]);
+              nave_trasladar(navei,400/f,500/f);
             }
           }
 
           for(size_t i=0;i<n_planeta2;i++){
             if(distancia_punto_a_polilinea(planeta2[i],nave_get_posx(navei),nave_get_posy(navei))<=10){
-              nivel_activar(niveles[nivel_buscar(niveles, n_niveles, "NIVEL1SE")]);
+              size_t posicion_nivel = nivel_buscar(niveles, n_niveles, "NIVEL1SE");
+              nivel_activar(niveles[posicion_nivel]);
+              f = nivel_return_escala_inicial(niveles[posicion_nivel]);
+              nave_trasladar(navei,400/f,500/f);
             }
           }
 
           for(size_t i=0;i<n_planeta3;i++){
             if(distancia_punto_a_polilinea(planeta3[i],nave_get_posx(navei),nave_get_posy(navei))<=10){
-              nivel_activar(niveles[nivel_buscar(niveles, n_niveles, "NIVEL1SW")]);
+              size_t posicion_nivel = nivel_buscar(niveles, n_niveles, "NIVEL1SW");
+              nivel_activar(niveles[posicion_nivel]);
+              f = nivel_return_escala_inicial(niveles[posicion_nivel]);
+              nave_trasladar(navei,400/f,500/f);
             }
           }
 
           for(size_t i=0;i<n_planeta4;i++){
             if(distancia_punto_a_polilinea(planeta4[i],nave_get_posx(navei),nave_get_posy(navei))<=10){
-              nivel_activar(niveles[nivel_buscar(niveles, n_niveles, "NIVEL1NW")]);
+              size_t posicion_nivel = nivel_buscar(niveles, n_niveles, "NIVEL1NW");
+              nivel_activar(niveles[posicion_nivel]);
+              f = nivel_return_escala_inicial(niveles[posicion_nivel]);
+              nave_trasladar(navei,400/f,500/f);
             }
           }
 
           for(size_t i=0;i<n_planeta5;i++){
             if(distancia_punto_a_polilinea(planeta5[i],nave_get_posx(navei),nave_get_posy(navei))<=10){
-              nivel_activar(niveles[nivel_buscar(niveles, n_niveles, "NIVEL1R")]);
+              size_t posicion_nivel = nivel_buscar(niveles, n_niveles, "NIVEL1R");
+              nivel_activar(niveles[posicion_nivel]);
+              f = nivel_return_escala_inicial(niveles[posicion_nivel]);
+              nave_trasladar(navei,400/f,500/f);
             }
           }
 

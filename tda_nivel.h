@@ -18,4 +18,8 @@ bool nivel_esta_activo(nivel_t *nivel);
 
 bool nivel_return_inf(nivel_t *nivel);
 
+void nivel_set_escala_inicial(nivel_t *nivel, float f);
+
+float nivel_return_escala_inicial(nivel_t *nivel);
+
 #endif

@@ -9,6 +9,7 @@ struct nivel{
   bool activo;
   bool infinito;
   int puntos;
+  float escala_inicial;
 };
 
 
@@ -55,4 +56,12 @@ bool nivel_esta_activo(nivel_t *nivel){
 
 bool nivel_return_inf(nivel_t *nivel) {
   return nivel->infinito;
+}
+
+void nivel_set_escala_inicial(nivel_t *nivel, float f) {
+  nivel->escala_inicial = f;
+}
+
+float nivel_return_escala_inicial(nivel_t *nivel) {
+  return nivel->escala_inicial;
 }

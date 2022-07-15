@@ -42,6 +42,9 @@ const char* figura_return_tipo(figura_t *f);
 char *figura_return_nombre(figura_t *f);
 bool figura_return_inf(figura_t *f);
 
+polilinea_t **figura_return_vector_polilineas(figura_t *f);
+size_t figura_return_cantidad_polilineas(figura_t *f);
+
 
 size_t figura_buscar(figura_t **f, size_t n_f, char nombre[TAMANIO_NOMBRE]);
 

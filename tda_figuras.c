@@ -153,3 +153,12 @@ size_t figura_buscar(figura_t **f_vector, size_t n_f, char nombre[TAMANIO_NOMBRE
   }
   return n;
 }
+
+
+polilinea_t **figura_return_vector_polilineas(figura_t *f) {
+  return f->polilineas;
+}
+
+size_t figura_return_cantidad_polilineas(figura_t *f) {
+  return f->cantidad_polilineas;
+}

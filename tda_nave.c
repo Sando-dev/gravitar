@@ -51,6 +51,16 @@ void nave_matar(nave_t *nave, double px_inicial, double py_inicial){
   nave->angulo=NAVE_ANGULO_INICIAL;
 }
 
+void nave_trasladar(nave_t *nave, double px_inicial, double py_inicial){
+  nave->chorro=false;
+  nave->escudo=false;
+  nave->vx=0;
+  nave->vy=0;
+  nave->posx=px_inicial;
+  nave->posy=py_inicial;
+  nave->angulo=NAVE_ANGULO_INICIAL;
+}
+
 void nave_prender_chorro(nave_t *nave){
   nave->combustible-=JUEGO_COMBUSTIBLE_POT_X_SEG*((float)1/JUEGO_FPS);
   nave->chorro=true;
