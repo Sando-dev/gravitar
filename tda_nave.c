@@ -26,7 +26,7 @@ nave_t *nave_crear(double px_inicial, double py_inicial){
   }
   nave->chorro=false;
   nave->escudo=false;
-  nave->vidas=3;
+  nave->vidas=6;
   nave->combustible=10000;
   nave->vx=0;
   nave->vy=0;
