@@ -1,6 +1,8 @@
 #ifndef NIVEL_H
 #define NIVEL_H
 
+#include "tda_polilineas.h"
+
 typedef struct nivel nivel_t;
 
 #define TAMANIO_NOMBRE 20
@@ -21,5 +23,7 @@ bool nivel_return_inf(nivel_t *nivel);
 void nivel_set_escala_inicial(nivel_t *nivel, float f);
 
 float nivel_return_escala_inicial(nivel_t *nivel);
+
+float nivel_calcular_escala(polilinea_t **p, size_t n, bool inf, float nave_pos_y,double *ancho);
 
 #endif

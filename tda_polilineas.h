@@ -1,6 +1,8 @@
 #ifndef POLILINEAS_H
 #define POLILINEAS_H
 
+#include <SDL2/SDL.h>
+
 typedef uint8_t color_t;
 
 typedef struct polilinea polilinea_t;
@@ -37,5 +39,7 @@ float polilinea_buscar_ymax(polilinea_t *p);
 void polilinea_agrandar(polilinea_t *p, float a);
 
 polilinea_t *leer_polilinea(FILE *f);
+
+void graficar_polilinea(SDL_Renderer *renderer, polilinea_t *p, float f);
 
 #endif

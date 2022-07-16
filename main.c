@@ -14,35 +14,6 @@
 #include "tda_lista.h"
 
 
-float nivel_calcular_escala(polilinea_t **p, size_t n, bool inf, float nave_pos_y,double *ancho){
-  float f = 1;
-  float x_max = 0;
-  float y_max = 0;
-  float x_min = VENTANA_ANCHO*100;
-  for(size_t i=0; i<n; i++){
-    if(x_max < polilinea_buscar_xmax(p[i]))
-      x_max = polilinea_buscar_xmax(p[i]);
-    if(x_min > polilinea_buscar_xmin(p[i]))
-      x_min = polilinea_buscar_xmin(p[i]);
-    if(y_max < polilinea_buscar_ymax(p[i]))
-      y_max = polilinea_buscar_ymax(p[i]);
-  }
-  *ancho=x_max-x_min;
-  if(inf) {
-    if(nave_pos_y > VENTANA_ALTO * MARGEN_ALTURA)
-      f = VENTANA_ALTO * MARGEN_ALTURA / nave_pos_y;
-    if(f < ESCALA_MINIMA)
-      f = ESCALA_MINIMA;
-  }
-  else{
-    f = VENTANA_ALTO / y_max;
-    if(VENTANA_ANCHO / (x_max + x_min) < f)
-      f = VENTANA_ANCHO / (x_max + x_min);
-  }
-  return f;
-}
-
-
 
 polilinea_t **copiar_polilineas(figura_t *figura, double x, double y, double ang){
   polilinea_t **polilineas=malloc(figura_cant_polilineas(figura)*sizeof(polilinea_t*));
@@ -65,22 +36,6 @@ void destruir_vector_polilineas(polilinea_t **polilineas,size_t n){
     polilinea_destruir(polilineas[i]);
   }
   free(polilineas);
-}
-
-void graficar_polilinea(SDL_Renderer *renderer, polilinea_t *p, float f){
-    SDL_SetRenderDrawColor(renderer, polilinea_get_red(p), polilinea_get_green(p), polilinea_get_blue(p), 0x00);
-    float x1,x2,y1,y2;
-    for(int i = 0; i < polilinea_cantidad_puntos(p)-1; i++) {
-        polilinea_obtener_punto(p,i,&x1,&y1);
-        polilinea_obtener_punto(p,i+1,&x2,&y2);
-        SDL_RenderDrawLine(
-            renderer,
-            x1 * f,
-            VENTANA_ALTO-(y1 * f),
-            x2 * f,
-            VENTANA_ALTO-(y2 * f)
-        );
-    }
 }
 
 

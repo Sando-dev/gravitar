@@ -233,3 +233,20 @@ void polilinea_agrandar(polilinea_t *p, float a) {
     p->puntos[i][1]*=a;
   }
 }
+
+
+void graficar_polilinea(SDL_Renderer *renderer, polilinea_t *p, float f){
+    SDL_SetRenderDrawColor(renderer, polilinea_get_red(p), polilinea_get_green(p), polilinea_get_blue(p), 0x00);
+    float x1,x2,y1,y2;
+    for(int i = 0; i < polilinea_cantidad_puntos(p)-1; i++) {
+        polilinea_obtener_punto(p,i,&x1,&y1);
+        polilinea_obtener_punto(p,i+1,&x2,&y2);
+        SDL_RenderDrawLine(
+            renderer,
+            x1 * f,
+            VENTANA_ALTO-(y1 * f),
+            x2 * f,
+            VENTANA_ALTO-(y2 * f)
+        );
+    }
+}

@@ -20,9 +20,9 @@ tda_figuras.o: tda_figuras.c tda_figuras.h tda_polilineas.h
 	$(CC) $(CFLAGS) $(DEBUG) -c tda_figuras.c
 
 tda_polilineas.o: tda_polilineas.c tda_polilineas.h
-	$(CC) $(CFLAGS) $(DEBUG) -c tda_polilineas.c
+	$(CC) $(CFLAGS) $(DEBUG) -c tda_polilineas.c $(SDLFLAGS)
 
-tda_nivel.o: tda_nivel.c tda_nivel.h
+tda_nivel.o: tda_nivel.c tda_nivel.h tda_polilineas.h
 	$(CC) $(CFLAGS) $(DEBUG) -c tda_nivel.c
 
 tda_nave.o: tda_nave.c tda_nave.h
