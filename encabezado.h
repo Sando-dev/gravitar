@@ -11,5 +11,6 @@ void encabezado_destruir(encabezado_t *e);
 
 void encabezado_graficar(encabezado_t *e, SDL_Renderer *renderer);
 
+void encabezado_set_fuel(encabezado_t *e, int fuel);
 
 #endif

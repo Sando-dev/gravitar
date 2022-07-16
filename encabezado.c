@@ -63,3 +63,7 @@ void encabezado_graficar(encabezado_t *e, SDL_Renderer *renderer) {
         polilinea_destruir(p);
     }
 }
+
+void encabezado_set_fuel(encabezado_t *e, int fuel) {
+    e->fuel = fuel;
+}

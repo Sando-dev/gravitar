@@ -433,7 +433,7 @@ int main() {
             destruir_vector_polilineas(nave_vida,n_nave_vida);
           }
         }
-
+        encabezado_set_fuel(e,nave_get_fuel(navei));
         encabezado_graficar(e,renderer);
 
         //ZONA DESTRUIR

@@ -26,5 +26,6 @@ double nave_get_posy(nave_t *nave);
 double nave_get_angulo(nave_t *nave);
 int nave_get_vidas(nave_t *nave);
 
+int nave_get_fuel(nave_t *nave);
 
 #endif
