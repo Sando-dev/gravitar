@@ -24,6 +24,7 @@ bool nave_escudo_esta_prendido(nave_t *nave);
 double nave_get_posx(nave_t *nave);
 double nave_get_posy(nave_t *nave);
 double nave_get_angulo(nave_t *nave);
+int nave_get_vidas(nave_t *nave);
 
 
 #endif

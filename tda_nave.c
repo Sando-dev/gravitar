@@ -118,3 +118,7 @@ double nave_get_posy(nave_t *nave){
 double nave_get_angulo(nave_t *nave){
   return nave->angulo;
 }
+
+int nave_get_vidas(nave_t *nave){
+  return nave->vidas;
+}
