@@ -1,4 +1,6 @@
 #include <stdbool.h>
+#include <string.h>
+#include <stdlib.h>
 
 #include "encabezado.h"
 #include "caracteres.h"
@@ -51,7 +53,13 @@ void encabezado_graficar(encabezado_t *e, SDL_Renderer *renderer) {
         graficar_polilinea(renderer, p, 2.5);
         polilinea_destruir(p);
     }
-
+    sprintf(e->fuel_number,"%d",e->fuel);
+    for(size_t i=0; e->fuel_number[i]; i++) {
+        size_t posicion = caracter_posicion(e->fuel_number[i]);
+        size_t tam = caracter_size(e->fuel_number[i]);
+        polilinea_t *p = polilinea_crear(caracteres[posicion], tam, 0x00,0xFF,0x00);
+        trasladar(p,(150+(15*i))/2.5,550/2.5);
+        graficar_polilinea(renderer, p, 2.5);
+        polilinea_destruir(p);
+    }
 }
-
-
