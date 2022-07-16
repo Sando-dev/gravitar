@@ -1,6 +1,7 @@
 #include "caracteres.h"
 
 #include <string.h>
+#include <stdio.h>
 
 enum caracter {a,b,c,d,e,f,g,h,i,j,k,l,m,n,o,p,q,r,s,t,u,v,w,x,y,z,CERO,UNO,DOS,TRES,CUATRO,CINCO,SEIS,SIETE,OCHO,NUEVE,ARR,ABJ,DER,IZQ,ESP};
 
@@ -486,7 +487,7 @@ const size_t tamanios[]={
 	[ESP]=1,
 };
 
-size_t pos_caracter_polilinea(char letra){
+size_t caracter_size(char letra){
 	size_t cantidad = sizeof(caracteres) / sizeof(caracteres[0]);
 	for(size_t i = 0; i < cantidad; i++){
 		if(letras[i] == letra){
@@ -496,7 +497,7 @@ size_t pos_caracter_polilinea(char letra){
 	return cantidad;
 }
 
-size_t tamanio_letra(char letra){
+size_t caracter_posicion(char letra){
 	size_t cantidad = sizeof(caracteres) / sizeof(caracteres[0]);
 	for(size_t i = 0; i < cantidad; i++){
 		if(letras[i] == letra){

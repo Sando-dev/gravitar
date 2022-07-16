@@ -1,3 +1,5 @@
+#include <stdbool.h>
+
 #include "encabezado.h"
 #include "caracteres.h"
 
@@ -27,18 +29,29 @@ encabezado_t *encabezado_crear(void) {
 }
 
 void encabezado_destruir(encabezado_t *e) {
-    free(encabezado);
+    free(e);
 }
 
-void encabezado_graficar(encabezado_t *e) {
+void imprimir_matriz(float m[][2], size_t n);
+
+void encabezado_graficar(encabezado_t *e, SDL_Renderer *renderer) {
     for(size_t i=0; e->fuel_string[i]; i++) {
-        size_t posicion = pos_caracter_polilinea(e->fuel_string[i]);
-        size_t tam = tamanio_letra(e->fuel_string[i]);
+        size_t posicion = caracter_posicion(e->fuel_string[i]);
+        size_t tam = caracter_size(e->fuel_string[i]);
         polilinea_t *p = polilinea_crear(caracteres[posicion], tam, 0xAD,0xD8,0xE6);
+        trasladar(p,(372.5+(15*i))/2.5,550/2.5);
+        graficar_polilinea(renderer, p, 2.5);
+        polilinea_destruir(p);
+    }
+    for(size_t i=0; e->score_string[i]; i++) {
+        size_t posicion = caracter_posicion(e->score_string[i]);
+        size_t tam = caracter_size(e->score_string[i]);
+        polilinea_t *p = polilinea_crear(caracteres[posicion], tam, 0xAD,0xD8,0xE6);
+        trasladar(p,(365+(15*i))/2.5,575/2.5);
+        graficar_polilinea(renderer, p, 2.5);
         polilinea_destruir(p);
     }
 
 }
-
 
 

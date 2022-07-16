@@ -12,6 +12,7 @@
 #include "tda_disparos.h"
 #include "caracteres.h"
 #include "tda_lista.h"
+#include "encabezado.h"
 
 
 
@@ -51,8 +52,7 @@ int main() {
     SDL_SetWindowTitle(window, "Gravitar");
 
     int dormir = 0;
-    polilinea_t *letra_s = polilinea_crear(caracter_s, 6, 0xAD,0xD8,0xE6);
-    trasladar(letra_s, (400)/4, 560/4);
+    encabezado_t *e = encabezado_crear();
     // BEGIN código del alumno
     size_t n_figura;
     figura_t **figura_vector = figura_leer_archivo(&n_figura);
@@ -424,7 +424,7 @@ int main() {
 
         }
 
-        graficar_polilinea(renderer, letra_s, 4);
+        encabezado_graficar(e,renderer);
 
         //ZONA DESTRUIR
 
@@ -456,7 +456,7 @@ int main() {
     SDL_Quit();
 
     nave_destruir(navei);
-    polilinea_destruir(letra_s);
+    encabezado_destruir(e);
 
     for(size_t i=0; i<n_niveles; i++){
       nivel_destruir(niveles[i]);

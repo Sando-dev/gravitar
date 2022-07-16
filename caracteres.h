@@ -51,8 +51,8 @@ extern const float caracter_espacio[1][2];
 
 extern const float (*caracteres[])[2];
 
-size_t pos_caracter_polilinea(char letra);
+size_t caracter_posicion(char letra);
 
-size_t tamanio_letra(char letra);
+size_t caracter_size(char letra);
 
 #endif // _LETRAS_H_
