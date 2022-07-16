@@ -231,13 +231,17 @@ int main() {
             nivel_desactivar(niveles[indice_nivel]);
             f = 1;
           }
+
+          if(nave_get_posy(navei)<0){
+            nave_rebotar_y(navei);
+          }
+
           if(!nivel_return_inf(niveles[indice_nivel])) {
             if(nave_get_posx(navei)<0 || nave_get_posx(navei)>VENTANA_ANCHO/f){
               nave_rebotar_x(navei);
             }
           }
           else{
-
             if((nave_get_posx(navei) - centro) * f > VENTANA_ANCHO / 2 * MARGEN_ANCHO){
               centro = nave_get_posx(navei) - VENTANA_ANCHO / 2 * MARGEN_ANCHO / f;
             }
@@ -247,18 +251,23 @@ int main() {
 
             if(nave_get_posx(navei)>ancho_nivel){
               nave_trasladar(navei,nave_get_posx(navei)-ancho_nivel,nave_get_posy(navei),false);
+              centro-=ancho_nivel;
+
             }
             else if(nave_get_posx(navei)<0){
               nave_trasladar(navei,nave_get_posx(navei)+ancho_nivel,nave_get_posy(navei),false);
+              centro+=ancho_nivel;
             }
 
             polilinea_t **nivel_polilinea2=copiar_polilineas(figura_vector[nivel_en_figuras],(-centro+ VENTANA_ANCHO / 2 /f)+ancho_nivel ,0,0);
             polilinea_t **nivel_polilinea3=copiar_polilineas(figura_vector[nivel_en_figuras],(-centro+ VENTANA_ANCHO / 2 /f)-ancho_nivel ,0,0);
 
+
             for(size_t i=0; i<n_nivel;i++){
               graficar_polilinea(renderer,nivel_polilinea2[i],f);
               graficar_polilinea(renderer,nivel_polilinea3[i],f);
             }
+
 
             destruir_vector_polilineas(nivel_polilinea2,n_nivel);
             destruir_vector_polilineas(nivel_polilinea3,n_nivel);
@@ -266,15 +275,11 @@ int main() {
 
           }
 
-
-          if(nave_get_posy(navei)<0){
-            nave_rebotar_y(navei);
-          }
-
           for(size_t i=0; i<n_nivel;i++){
             if(distancia_punto_a_polilinea(nivel_polilinea[i],nave_get_posx(navei),nave_get_posy(navei))<=1){
               f = nivel_return_escala_inicial(niveles[indice_nivel]);
-              nave_matar(navei,400/f,550/f);
+              nave_matar(navei,400/f,500/f);
+              centro=nave_get_posx(navei);
             }
           }
 
