@@ -423,6 +423,16 @@ int main() {
           destruir_vector_polilineas(planeta5, n_planeta5);
 
         }
+        if(nave_get_vidas(navei)>0){
+        for(size_t i=0; i<nave_get_vidas(navei);i++){
+            polilinea_t **nave_vida=copiar_polilineas(figura_vector[nave_en_vector],(150+(40*i))/2.5,920/2.5,NAVE_ANGULO_INICIAL);
+            size_t n_nave_vida=figura_cant_polilineas(figura_vector[nave_en_vector]);
+            for(size_t j=0; j<n_nave_vida;j++){
+              graficar_polilinea(renderer, nave_vida[j], 1.5);
+            }
+            destruir_vector_polilineas(nave_vida,n_nave_vida);
+          }
+        }
 
         encabezado_graficar(e,renderer);
 
