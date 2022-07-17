@@ -32,14 +32,12 @@ disparo_t *crear_disparo(double x, double y, double angulo){
   return disparo;
 }
 
-void disparo_destruir(disparo_t *disparo){
-  free(disparo);
-}
 
-bool disparo_mover(disparo_t *disparo, void *extra){
-  disparo->posx=computar_posicion(disparo->posx, disparo->vx, (float)1/JUEGO_FPS);
-  disparo->posy=computar_posicion(disparo->posy, disparo->vy, (float)1/JUEGO_FPS);
-  disparo->tiempo+=(float)1/JUEGO_FPS;
+
+bool disparo_mover(void *disparo, void *extra){
+  ((disparo_t*)disparo)->posx=computar_posicion(((disparo_t*)disparo)->posx, ((disparo_t*)disparo)->vx, (float)1/JUEGO_FPS);
+  ((disparo_t*)disparo)->posy=computar_posicion(((disparo_t*)disparo)->posy, ((disparo_t*)disparo)->vy, (float)1/JUEGO_FPS);
+  ((disparo_t*)disparo)->tiempo+=(float)1/JUEGO_FPS;
   return true;
 }
 
@@ -59,6 +57,6 @@ double disparo_tiempo(disparo_t *disparo){
   return disparo->tiempo;
 }
 
-int disparo_tiempo_comparar(disparo_t *disparo, double t){
-  return disparo->tiempo - t;
+double disparo_tiempo_comparar(void *disparo, double t){
+  return ((disparo_t*)disparo)->tiempo - t;
 }
