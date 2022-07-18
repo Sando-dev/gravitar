@@ -6,7 +6,7 @@
 #include "config.h"
 
 struct disparo{
-  bool vive;
+  bool expiro;
   double tiempo;
   double posx;
   double posy;
@@ -22,7 +22,6 @@ disparo_t *crear_disparo(double x, double y, double angulo){
   if(disparo==NULL){
     return NULL;
   }
-  disparo->vive=true;
   disparo->tiempo=0;
   disparo->posx=x;
   disparo->posy=y;
@@ -31,8 +30,6 @@ disparo_t *crear_disparo(double x, double y, double angulo){
   disparo->angulo=angulo;
   return disparo;
 }
-
-
 
 bool disparo_mover(void *disparo, void *extra){
   ((disparo_t*)disparo)->posx=computar_posicion(((disparo_t*)disparo)->posx, ((disparo_t*)disparo)->vx, (float)1/JUEGO_FPS);
@@ -57,6 +54,9 @@ double disparo_tiempo(disparo_t *disparo){
   return disparo->tiempo;
 }
 
-double disparo_tiempo_comparar(void *disparo, double t){
-  return ((disparo_t*)disparo)->tiempo - t;
+bool disparo_expiro(void *disparo, void *extra){
+  if(((disparo_t*)disparo)->tiempo<=5){
+    return false;
+  }
+  return true;
 }

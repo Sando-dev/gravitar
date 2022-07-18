@@ -11,7 +11,7 @@
 #include "tda_nivel.h"
 #include "tda_disparos.h"
 #include "caracteres.h"
-#include "tda_lista.h"
+#include "lista.h"
 #include "encabezado.h"
 
 
@@ -108,11 +108,12 @@ int main() {
     size_t nave_en_vector = figura_buscar(figura_vector,n_figura,"NAVE");
     size_t chorro_en_vector = figura_buscar(figura_vector,n_figura,"NAVE+CHORRO");
     size_t escudo_en_vector = figura_buscar(figura_vector,n_figura,"ESCUDO2");
-
+    size_t disparo_en_vector = figura_buscar(figura_vector,n_figura,"DISPARO");
 
     // Queremos que todo se dibuje escalado por f:
     float centro=0;
     float f = 1;
+
     // END código del alumno
 
     unsigned int ticks = SDL_GetTicks();
@@ -175,9 +176,7 @@ int main() {
 
 
         // BEGIN código del alumno
-        /*float angulo_estrella=atan2(364-nave_get_posy(navei),457-nave_get_posx(navei));
-        nave_mover(navei,a,angulo,angulo_estrella);
-*/
+
         //ARRANCA NAVE
         size_t n_nave;
         polilinea_t **nave;
@@ -198,6 +197,9 @@ int main() {
           destruir_vector_polilineas(escudo,figura_cant_polilineas(figura_vector[escudo_en_vector]));
         }
 
+
+
+
         for(size_t i=0; i<n_nave;i++){
           graficar_polilinea(renderer, nave[i], f);
         }
@@ -217,6 +219,8 @@ int main() {
 
           float angulo_estrella=((float)3/2)*PI;
           nave_mover(navei,a,angulo,angulo_estrella);
+
+
 
           size_t nivel_en_figuras = figura_buscar(figura_vector,n_figura,nivel_nombre(niveles[indice_nivel]));
 
@@ -297,6 +301,9 @@ int main() {
 
           float angulo_estrella=atan2(364-nave_get_posy(navei),457-nave_get_posx(navei));
           nave_mover(navei,a,angulo,angulo_estrella);
+
+
+
 
           size_t n_base=figura_cant_polilineas(figura_vector[base_en_vector]);
           polilinea_t **base=copiar_polilineas(figura_vector[base_en_vector],388-centro+ VENTANA_ANCHO / 2 / f,218,0);
