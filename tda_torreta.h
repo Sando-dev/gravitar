@@ -13,7 +13,7 @@ void torreta_destruir(torreta_t *torreta);
 
 void torreta_matar(torreta_t *torreta);
 
-torreta_t **torretas_activar(char nivel[MAX_LVL]);
+torreta_t **torretas_activar(char nivel[MAX_LVL], size_t *n);
 
 void torreta_vector_destruir(torreta_t **t, size_t n);
 

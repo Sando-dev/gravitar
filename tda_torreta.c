@@ -63,11 +63,12 @@ void torreta_matar(torreta_t *torreta){
   torreta->alive=false;
 }
 
-torreta_t **torretas_activar(char nivel[MAX_LVL]){
+torreta_t **torretas_activar(char nivel[MAX_LVL], size_t *n){
   torreta_t **torretas_vector = malloc(sizeof(torreta_t));
   if(torretas_vector == NULL) 
     return NULL;
   size_t cantidad = sizeof(torretas) / sizeof(torretas[0]);
+  size_t j = 0;
   for(size_t i=0; i<cantidad; i++){
     if(!(strcmp(nivel,torretas[i].level))){
       torreta_t **aux = realloc(torretas_vector, (i+1)*sizeof(torreta_t*));
@@ -77,10 +78,11 @@ torreta_t **torretas_activar(char nivel[MAX_LVL]){
       }
       torretas_vector = aux;
       torreta_t *t = torreta_crear(torretas[i].posicion_x,torretas[i].posicion_y,torretas[i].angulo);
-      printf("%f\n", t->posicion_x);
-      torretas_vector[i] =t;
+      torretas_vector[j++] =t;
+
     }
   }
+  *n = j;
   return torretas_vector;
 }
 

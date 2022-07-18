@@ -393,10 +393,12 @@ int main() {
               nivel_activar(niveles[posicion_nivel]);
               f = nivel_return_escala_inicial(niveles[posicion_nivel]);
               nave_trasladar(navei,400/f,500/f,true);
-              torreta_t **t = torretas_activar("NIVEL1SE");
+              size_t n;
+              torreta_t **t = torretas_activar("NIVEL1SE",&n);
               centro=nave_get_posx(navei);
               lista_destruir(disparos,free);
               disparos=lista_crear();
+              torreta_vector_destruir(t,n);
             }
           }
 
