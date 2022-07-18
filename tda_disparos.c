@@ -25,8 +25,8 @@ disparo_t *crear_disparo(double x, double y, double angulo){
   disparo->tiempo=0;
   disparo->posx=x;
   disparo->posy=y;
-  disparo->vx=5*cos(angulo);
-  disparo->vx=5*sin(angulo);
+  disparo->vx=50*cos(angulo);
+  disparo->vy=50*sin(angulo);
   disparo->angulo=angulo;
   return disparo;
 }
@@ -54,9 +54,9 @@ double disparo_tiempo(disparo_t *disparo){
   return disparo->tiempo;
 }
 
-bool disparo_expiro(void *disparo, void *extra){
-  if(((disparo_t*)disparo)->tiempo<=5){
-    return false;
+bool disparo_expiro(disparo_t *disparo, void *extra){
+  if(disparo->tiempo>=5){
+    return true;
   }
-  return true;
+  return false;
 }

@@ -13,6 +13,6 @@ double disparo_get_posy(disparo_t *disparo);
 double disparo_get_angulo(disparo_t *disparo);
 double disparo_tiempo(disparo_t *disparo);
 
-bool disparo_expiro(void *disparo, void *extra);
+bool disparo_expiro(disparo_t *disparo, void *extra);
 
 #endif
