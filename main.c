@@ -13,6 +13,7 @@
 #include "caracteres.h"
 #include "tda_lista.h"
 #include "encabezado.h"
+#include "tda_torreta.h"
 
 
 
@@ -93,7 +94,7 @@ int main() {
     }
     //TERMINA VECTOR NIVELES
 
-    nave_t *navei=nave_crear(388,218);
+    nave_t *navei=nave_crear(BASE_POSICION_X,BASE_POSICION_Y  );
 
     float a=0;
     float angulo = 0;
@@ -108,6 +109,9 @@ int main() {
     size_t nave_en_vector = figura_buscar(figura_vector,n_figura,"NAVE");
     size_t chorro_en_vector = figura_buscar(figura_vector,n_figura,"NAVE+CHORRO");
     size_t escudo_en_vector = figura_buscar(figura_vector,n_figura,"ESCUDO2");
+    size_t fuel_en_vector = figura_buscar(figura_vector, n_figura, "COMBUSTIBLE");
+    size_t torreta_en_vector = figura_buscar(figura_vector,n_figura,"TORRETAS");
+    
 
 
     // Queremos que todo se dibuje escalado por f:
@@ -191,7 +195,8 @@ int main() {
         }
 
         if(nave_escudo_esta_prendido(navei)){
-          polilinea_t **escudo=copiar_polilineas(figura_vector[escudo_en_vector],nave_get_posx(navei)-centro+ VENTANA_ANCHO / 2 / f,nave_get_posy(navei),nave_get_angulo(navei));
+          polilinea_t **escudo=copiar_polilineas(figura_vector[escudo_en_vector],nave_get_posx(navei)-centro+ VENTANA_ANCHO / 2 / f,nave_get_posy(navei),nave_get_angulo(navei)-NAVE_ANGULO_INICIAL);
+
           for(size_t i=0; i<figura_cant_polilineas(figura_vector[escudo_en_vector]);i++){
             graficar_polilinea(renderer,escudo[i],f);
           }
@@ -227,7 +232,7 @@ int main() {
           f = nivel_calcular_escala(nivel_polilinea, n_nivel, nivel_return_inf(niveles[indice_nivel]), nave_get_posy(navei),&ancho_nivel);
 
           if(nave_get_posy(navei) > VENTANA_ALTO/f) {
-            nave_trasladar(navei,388,218,true);
+            nave_trasladar(navei,BASE_POSICION_X,BASE_POSICION_Y,true);
             nivel_desactivar(niveles[indice_nivel]);
             f = 1;
           }
@@ -299,30 +304,30 @@ int main() {
           nave_mover(navei,a,angulo,angulo_estrella);
 
           size_t n_base=figura_cant_polilineas(figura_vector[base_en_vector]);
-          polilinea_t **base=copiar_polilineas(figura_vector[base_en_vector],388-centro+ VENTANA_ANCHO / 2 / f,218,0);
+          polilinea_t **base=copiar_polilineas(figura_vector[base_en_vector],BASE_POSICION_X-centro+ VENTANA_ANCHO / 2 / f,BASE_POSICION_Y,0);
 
           size_t n_estrella=figura_cant_polilineas(figura_vector[estrella_en_vector]);
-          polilinea_t **estrella=copiar_polilineas(figura_vector[estrella_en_vector],457-centro+ VENTANA_ANCHO / 2 / f,364,0);
+          polilinea_t **estrella=copiar_polilineas(figura_vector[estrella_en_vector],ESTRELLA_POSICION_X-centro+ VENTANA_ANCHO / 2 / f,ESTRELLA_POSICION_Y,0);
 
           size_t n_planeta1=figura_cant_polilineas(figura_vector[planeta1_en_vector]);
-          polilinea_t **planeta1=copiar_polilineas(figura_vector[planeta1_en_vector],663-centro+ VENTANA_ANCHO / 2 / f,473,0);
+          polilinea_t **planeta1=copiar_polilineas(figura_vector[planeta1_en_vector],PLAN1_POSICION_X-centro+ VENTANA_ANCHO / 2 / f,PLAN1_POSICION_Y,0);
 
           size_t n_planeta2=figura_cant_polilineas(figura_vector[planeta2_en_vector]);
-          polilinea_t **planeta2=copiar_polilineas(figura_vector[planeta2_en_vector],671-centro+ VENTANA_ANCHO / 2 / f,145,0);
+          polilinea_t **planeta2=copiar_polilineas(figura_vector[planeta2_en_vector],PLAN2_POSICION_X-centro+ VENTANA_ANCHO / 2 / f,PLAN2_POSICION_Y,0);
 
           size_t n_planeta3=figura_cant_polilineas(figura_vector[planeta3_en_vector]);
-          polilinea_t **planeta3=copiar_polilineas(figura_vector[planeta3_en_vector],110-centro+ VENTANA_ANCHO / 2 / f,79,0);
+          polilinea_t **planeta3=copiar_polilineas(figura_vector[planeta3_en_vector],PLAN3_POSICION_X-centro+ VENTANA_ANCHO / 2 / f,PLAN3_POSICION_Y,0);
 
           size_t n_planeta4=figura_cant_polilineas(figura_vector[planeta4_en_vector]);
-          polilinea_t **planeta4=copiar_polilineas(figura_vector[planeta4_en_vector],204-centro+ VENTANA_ANCHO / 2 / f,455,0);
+          polilinea_t **planeta4=copiar_polilineas(figura_vector[planeta4_en_vector],PLAN4_POSICION_X-centro+ VENTANA_ANCHO / 2 / f,PLAN4_POSICION_Y,0);
 
           size_t n_planeta5=figura_cant_polilineas(figura_vector[planeta5_en_vector]);
-          polilinea_t **planeta5=copiar_polilineas(figura_vector[planeta5_en_vector],111-centro+ VENTANA_ANCHO / 2 / f,307,0);
+          polilinea_t **planeta5=copiar_polilineas(figura_vector[planeta5_en_vector],PLAN5_POSICION_X-centro+ VENTANA_ANCHO / 2 / f,PLAN5_POSICION_Y,0);
 
 
           for(size_t i=0;i<n_estrella;i++){
             if(distancia_punto_a_polilinea(estrella[i],nave_get_posx(navei),nave_get_posy(navei))<=3){
-              nave_matar(navei,388,218);
+              nave_matar(navei,BASE_POSICION_X,BASE_POSICION_Y);
             }
           }
 
@@ -342,6 +347,7 @@ int main() {
               nivel_activar(niveles[posicion_nivel]);
               f = nivel_return_escala_inicial(niveles[posicion_nivel]);
               nave_trasladar(navei,400/f,500/f,true);
+              torreta_t **t = torretas_activar("NIVEL1SE");
               centro=nave_get_posx(navei);
             }
           }
