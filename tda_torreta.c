@@ -89,3 +89,7 @@ void torreta_vector_destruir(torreta_t **t, size_t n) {
     torreta_destruir(t[i]);
   free(t);
 }
+
+float torreta_get_posx(torreta_t *t){
+  return t->posicion_x;
+}

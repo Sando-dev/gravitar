@@ -17,4 +17,6 @@ torreta_t **torretas_activar(char nivel[MAX_LVL]);
 
 void torreta_vector_destruir(torreta_t **t, size_t n);
 
+float torreta_get_posx(torreta_t *t);
+
 #endif
