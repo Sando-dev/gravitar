@@ -23,4 +23,6 @@ float torreta_get_posy(torreta_t *t);
 
 float torreta_get_angulo(torreta_t *t);
 
+bool torreta_vive(torreta_t *torreta);
+
 #endif

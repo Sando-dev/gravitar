@@ -246,6 +246,7 @@ int main() {
               if(distancia_punto_a_polilinea(nivel_polilinea[i],disparo_get_posx(disparo),disparo_get_posy(disparo))<=1){
                 lista_iter_borrar(iter_disparos);
                 free(disparo);
+                break;
               }
             }
             for(size_t i=0; i<n_disparo;i++){
@@ -259,12 +260,28 @@ int main() {
           lista_iter_t *iter_torretas = lista_iter_crear(torretas_lista);
           while(!lista_iter_al_final(iter_torretas)){
             torreta_t *torreta = lista_iter_ver_actual(iter_torretas);
-            size_t n_torreta = figura_cant_polilineas(figura_vector[torreta_en_vector]);
-            polilinea_t **torreta_polilinea = copiar_polilineas(figura_vector[torreta_en_vector], torreta_get_posx(torreta)-centro+ VENTANA_ANCHO / 2 / f, torreta_get_posy(torreta), torreta_get_angulo(torreta));
-            for(size_t i=0; i<n_torreta;i++){
-              graficar_polilinea(renderer,torreta_polilinea[i],f);
+            if(torreta_vive(torreta)){
+              size_t n_torreta = figura_cant_polilineas(figura_vector[torreta_en_vector]);
+              polilinea_t **torreta_polilinea = copiar_polilineas(figura_vector[torreta_en_vector], torreta_get_posx(torreta)-centro+ VENTANA_ANCHO / 2 / f, torreta_get_posy(torreta), torreta_get_angulo(torreta));
+              for(size_t i=0; i<n_torreta;i++){
+                graficar_polilinea(renderer,torreta_polilinea[i],f);
+              }
+              destruir_vector_polilineas(torreta_polilinea,n_torreta);
+              lista_iter_t *iter_disparos=lista_iter_crear(disparos);
+              while(!lista_iter_al_final(iter_disparos)){
+                disparo_t *disparo=lista_iter_ver_actual(iter_disparos);
+                for(size_t i=0; i<n_torreta;i++){
+                  if(distancia_punto_a_polilinea(torreta_polilinea[i],disparo_get_posx(disparo),disparo_get_posy(disparo))<=1){
+                    torreta_matar(torreta);
+                    lista_iter_borrar(iter_disparos);
+                    free(disparo);
+                    break;
+                  }
+                }
+                lista_iter_avanzar(iter_disparos);
+              }
+              lista_iter_destruir(iter_disparos);
             }
-            destruir_vector_polilineas(torreta_polilinea,n_torreta);
             lista_iter_avanzar(iter_torretas);
           }
           lista_iter_destruir(iter_torretas);
