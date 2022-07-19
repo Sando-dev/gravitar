@@ -400,7 +400,7 @@ int main() {
               nave_trasladar(navei,400/f,500/f,true);
               centro=nave_get_posx(navei);
               size_t n;
-              torreta_t **t = torretas_activar("NIVEL1SW",&n);
+              torreta_t **t = torretas_activar("NIVEL1NE",&n);
               for(size_t j=0; j<n; j++){
                 lista_insertar_ultimo(torretas_lista,t[j]);
               }
