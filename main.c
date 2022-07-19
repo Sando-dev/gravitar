@@ -112,8 +112,8 @@ int main() {
     size_t disparo_en_vector = figura_buscar(figura_vector,n_figura,"DISPARO");
     size_t fuel_en_vector = figura_buscar(figura_vector, n_figura, "COMBUSTIBLE");
     size_t torreta_en_vector = figura_buscar(figura_vector,n_figura,"TORRETA");
-    
-    
+
+
     // Queremos que todo se dibuje escalado por f:
     float centro=0;
     float f = 1;
@@ -259,7 +259,7 @@ int main() {
           while(!lista_iter_al_final(iter_torretas)){
             torreta_t *torreta = lista_iter_ver_actual(iter_torretas);
             size_t n_torreta = figura_cant_polilineas(figura_vector[torreta_en_vector]);
-            polilinea_t **torreta_polilinea = copiar_polilineas(figura_vector[torreta_en_vector], torreta_get_posx(torreta), torreta_get_posy(torreta), torreta_get_angulo(torreta));
+            polilinea_t **torreta_polilinea = copiar_polilineas(figura_vector[torreta_en_vector], torreta_get_posx(torreta)-centro+ VENTANA_ANCHO / 2 / f, torreta_get_posy(torreta), torreta_get_angulo(torreta));
             for(size_t i=0; i<n_torreta;i++){
               graficar_polilinea(renderer,torreta_polilinea[i],f);
             }
@@ -335,7 +335,7 @@ int main() {
           }
 
           destruir_vector_polilineas(nivel_polilinea,n_nivel);
-          
+
         }
         //TERMINA NIVELES ARRANCA PANTALLA PRINCIPAL
 
@@ -425,7 +425,7 @@ int main() {
               centro=nave_get_posx(navei);
               lista_destruir(disparos,free);
               disparos=lista_crear();
-              
+
             }
           }
 
