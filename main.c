@@ -111,12 +111,14 @@ int main() {
     size_t escudo_en_vector = figura_buscar(figura_vector,n_figura,"ESCUDO2");
     size_t disparo_en_vector = figura_buscar(figura_vector,n_figura,"DISPARO");
     size_t fuel_en_vector = figura_buscar(figura_vector, n_figura, "COMBUSTIBLE");
-    size_t torreta_en_vector = figura_buscar(figura_vector,n_figura,"TORRETAS");
+    size_t torreta_en_vector = figura_buscar(figura_vector,n_figura,"TORRETA");
+    
     
     // Queremos que todo se dibuje escalado por f:
     float centro=0;
     float f = 1;
     lista_t *disparos=lista_crear();
+    lista_t *torretas_lista = lista_crear();
     // END código del alumno
 
     unsigned int ticks = SDL_GetTicks();
@@ -253,12 +255,26 @@ int main() {
             lista_iter_avanzar(iter_disparos);
           }
           lista_iter_destruir(iter_disparos);
+          lista_iter_t *iter_torretas = lista_iter_crear(torretas_lista);
+          while(!lista_iter_al_final(iter_torretas)){
+            torreta_t *torreta = lista_iter_ver_actual(iter_torretas);
+            size_t n_torreta = figura_cant_polilineas(figura_vector[torreta_en_vector]);
+            polilinea_t **torreta_polilinea = copiar_polilineas(figura_vector[torreta_en_vector], torreta_get_posx(torreta), torreta_get_posy(torreta), torreta_get_angulo(torreta));
+            for(size_t i=0; i<n_torreta;i++){
+              graficar_polilinea(renderer,torreta_polilinea[i],f);
+            }
+            destruir_vector_polilineas(torreta_polilinea,n_torreta);
+            lista_iter_avanzar(iter_torretas);
+          }
+          lista_iter_destruir(iter_torretas);
 
           if(nave_get_posy(navei) > VENTANA_ALTO/f) {
             nave_trasladar(navei,BASE_POSICION_X,BASE_POSICION_Y,true);
             nivel_desactivar(niveles[indice_nivel]);
             lista_destruir(disparos,free);
             disparos=lista_crear();
+            lista_destruir(torretas_lista,free);
+            torretas_lista = lista_crear();
             f = 1;
           }
 
@@ -319,6 +335,7 @@ int main() {
           }
 
           destruir_vector_polilineas(nivel_polilinea,n_nivel);
+          
         }
         //TERMINA NIVELES ARRANCA PANTALLA PRINCIPAL
 
@@ -382,6 +399,12 @@ int main() {
               f = nivel_return_escala_inicial(niveles[posicion_nivel]);
               nave_trasladar(navei,400/f,500/f,true);
               centro=nave_get_posx(navei);
+              size_t n;
+              torreta_t **t = torretas_activar("NIVEL1SW",&n);
+              for(size_t j=0; j<n; j++){
+                lista_insertar_ultimo(torretas_lista,t[j]);
+              }
+              free(t);
               lista_destruir(disparos,free);
               disparos=lista_crear();
             }
@@ -395,10 +418,14 @@ int main() {
               nave_trasladar(navei,400/f,500/f,true);
               size_t n;
               torreta_t **t = torretas_activar("NIVEL1SE",&n);
+              for(size_t j=0; j<n; j++){
+                lista_insertar_ultimo(torretas_lista,t[j]);
+              }
+              free(t);
               centro=nave_get_posx(navei);
               lista_destruir(disparos,free);
               disparos=lista_crear();
-              torreta_vector_destruir(t,n);
+              
             }
           }
 
@@ -409,6 +436,12 @@ int main() {
               f = nivel_return_escala_inicial(niveles[posicion_nivel]);
               nave_trasladar(navei,400/f,500/f,true);
               centro=nave_get_posx(navei);
+              size_t n;
+              torreta_t **t = torretas_activar("NIVEL1SW",&n);
+              for(size_t j=0; j<n; j++){
+                lista_insertar_ultimo(torretas_lista,t[j]);
+              }
+              free(t);
               lista_destruir(disparos,free);
               disparos=lista_crear();
             }
@@ -421,6 +454,12 @@ int main() {
               f = nivel_return_escala_inicial(niveles[posicion_nivel]);
               nave_trasladar(navei,400/f,500/f,true);
               centro=nave_get_posx(navei);
+              size_t n;
+              torreta_t **t = torretas_activar("NIVEL1NW",&n);
+              for(size_t j=0; j<n; j++){
+                lista_insertar_ultimo(torretas_lista,t[j]);
+              }
+              free(t);
               lista_destruir(disparos,free);
               disparos=lista_crear();
             }
@@ -433,6 +472,12 @@ int main() {
               f = nivel_return_escala_inicial(niveles[posicion_nivel]);
               nave_trasladar(navei,400/f,500/f,true);
               centro=nave_get_posx(navei);
+              size_t n;
+              torreta_t **t = torretas_activar("NIVEL1R",&n);
+              for(size_t j=0; j<n; j++){
+                lista_insertar_ultimo(torretas_lista,t[j]);
+              }
+              free(t);
               lista_destruir(disparos,free);
               disparos=lista_crear();
             }
@@ -536,6 +581,7 @@ int main() {
     encabezado_destruir(e);
 
     lista_destruir(disparos,free);
+    lista_destruir(torretas_lista,free);
 
     for(size_t i=0; i<n_niveles; i++){
       nivel_destruir(niveles[i]);

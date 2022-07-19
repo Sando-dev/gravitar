@@ -25,8 +25,8 @@ disparo_t *crear_disparo(double x, double y, double angulo){
   disparo->tiempo=0;
   disparo->posx=x;
   disparo->posy=y;
-  disparo->vx=50*cos(angulo);
-  disparo->vy=50*sin(angulo);
+  disparo->vx=80*cos(angulo);
+  disparo->vy=80*sin(angulo);
   disparo->angulo=angulo;
   return disparo;
 }

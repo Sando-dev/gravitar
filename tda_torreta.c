@@ -59,8 +59,8 @@ void torreta_destruir(torreta_t *torreta){
   free(torreta);
 }
 
-void torreta_matar(torreta_t *torreta){
-  torreta->alive=false;
+void torreta_matar(void *torreta){
+  ((torreta_t *)torreta)->alive=false;
 }
 
 torreta_t **torretas_activar(char nivel[MAX_LVL], size_t *n){
@@ -94,4 +94,12 @@ void torreta_vector_destruir(torreta_t **t, size_t n) {
 
 float torreta_get_posx(torreta_t *t){
   return t->posicion_x;
+}
+
+float torreta_get_posy(torreta_t *t) {
+  return t->posicion_y;
+}
+
+float torreta_get_angulo(torreta_t *t) {
+  return t->angulo;
 }
