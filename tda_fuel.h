@@ -11,6 +11,10 @@ typedef struct fuel_diccionario fuel_diccionario_t;
 
 fuel_t *fuel_crear(double posx, double posy, double angulo);
 
+void fuel_matar(fuel_t *fuel);
+
+bool fuel_vive(fuel_t *fuel);
+
 fuel_t **fuel_activar(char nivel[MAX_LVL], size_t *n);
 
 void fuel_vector_destruir(fuel_t **t, size_t n);

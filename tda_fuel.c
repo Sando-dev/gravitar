@@ -10,7 +10,7 @@ struct fuel {
     double posicion_x;
     double posicion_y;
     double angulo;
-    bool taken;
+    bool vive;
 };
 
 struct fuel_diccionario {
@@ -42,7 +42,7 @@ fuel_t *fuel_crear(double posx, double posy, double angulo){
   fuel->posicion_x=posx;
   fuel->posicion_y=posy;
   fuel->angulo=angulo;
-  fuel->taken=true;
+  fuel->vive=true;
   return fuel;
 }
 
@@ -50,10 +50,18 @@ void fuel_destruir(fuel_t *fuel){
   free(fuel);
 }
 
+void fuel_matar(fuel_t *fuel){
+  fuel->vive=false;
+}
+
+bool fuel_vive(fuel_t *fuel){
+  return fuel->vive;
+}
+
 
 fuel_t **fuel_activar(char nivel[MAX_LVL], size_t *n){
   fuel_t **fuel_vector = malloc(sizeof(fuel_t*));
-  if(fuel_vector == NULL) 
+  if(fuel_vector == NULL)
     return NULL;
   size_t cantidad = sizeof(fuels) / sizeof(fuels[0]);
   size_t j = 0;

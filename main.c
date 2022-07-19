@@ -195,14 +195,14 @@ int main() {
           n_nave=figura_cant_polilineas(figura_vector[nave_en_vector]);
         }
 
-        if(nave_escudo_esta_prendido(navei)){
+        /*if(nave_escudo_esta_prendido(navei)){
           polilinea_t **escudo=copiar_polilineas(figura_vector[escudo_en_vector],nave_get_posx(navei)-centro+ VENTANA_ANCHO / 2 / f,nave_get_posy(navei),nave_get_angulo(navei)-NAVE_ANGULO_INICIAL);
 
           for(size_t i=0; i<figura_cant_polilineas(figura_vector[escudo_en_vector]);i++){
             graficar_polilinea(renderer,escudo[i],f);
           }
           destruir_vector_polilineas(escudo,figura_cant_polilineas(figura_vector[escudo_en_vector]));
-        }
+        }*/
 
 
 
@@ -233,6 +233,16 @@ int main() {
 
           size_t n_nivel=figura_cant_polilineas(figura_vector[nivel_en_figuras]);
           polilinea_t **nivel_polilinea=copiar_polilineas(figura_vector[nivel_en_figuras],-centro+ VENTANA_ANCHO / 2 /f ,0,0);
+
+          polilinea_t **escudo=copiar_polilineas(figura_vector[escudo_en_vector],nave_get_posx(navei)-centro+ VENTANA_ANCHO / 2 / f,nave_get_posy(navei),nave_get_angulo(navei)-NAVE_ANGULO_INICIAL);
+          size_t n_escudo=figura_cant_polilineas(figura_vector[escudo_en_vector]);
+
+          if(nave_escudo_esta_prendido(navei)){
+            for(size_t i=0; i<n_escudo;i++){
+              graficar_polilinea(renderer,escudo[i],f);
+            }
+          }
+
 
           double ancho_nivel;
           f = nivel_calcular_escala(nivel_polilinea, n_nivel, nivel_return_inf(niveles[indice_nivel]), nave_get_posy(navei),&ancho_nivel);
@@ -266,7 +276,7 @@ int main() {
               for(size_t i=0; i<n_torreta;i++){
                 graficar_polilinea(renderer,torreta_polilinea[i],f);
               }
-              
+
               lista_iter_t *iter_disparos=lista_iter_crear(disparos);
               while(!lista_iter_al_final(iter_disparos)){
                 disparo_t *disparo=lista_iter_ver_actual(iter_disparos);
@@ -287,15 +297,27 @@ int main() {
           }
           lista_iter_destruir(iter_torretas);
 
+
+
           lista_iter_t *iter_fuel_lista = lista_iter_crear(fuel_lista);
           while(!lista_iter_al_final(iter_fuel_lista)){
-            fuel_t *torreta = lista_iter_ver_actual(iter_fuel_lista);
-            size_t n_fuel = figura_cant_polilineas(figura_vector[fuel_en_vector]);
-            polilinea_t **fuel_polilinea = copiar_polilineas(figura_vector[fuel_en_vector], fuel_get_posx(torreta)-centro+ VENTANA_ANCHO / 2 / f, fuel_get_posy(torreta), fuel_get_ang(torreta));
-            for(size_t i=0; i<n_fuel;i++){
-              graficar_polilinea(renderer,fuel_polilinea[i],f);
+            fuel_t *fuel = lista_iter_ver_actual(iter_fuel_lista);
+            if(fuel_vive(fuel)){
+              size_t n_fuel = figura_cant_polilineas(figura_vector[fuel_en_vector]);
+              polilinea_t **fuel_polilinea = copiar_polilineas(figura_vector[fuel_en_vector], fuel_get_posx(fuel)-centro+ VENTANA_ANCHO / 2 / f, fuel_get_posy(fuel), fuel_get_ang(fuel));
+              for(size_t i=0; i<n_fuel;i++){
+                graficar_polilinea(renderer,fuel_polilinea[i],f);
+              }
+              if(nave_escudo_esta_prendido(navei)){
+                for(size_t i=0; i<n_escudo; i++){
+                  if(distancia_punto_a_polilinea(escudo[i],fuel_get_posx(fuel),fuel_get_posy(fuel))<=5){
+                    fuel_matar(fuel);
+                    break;
+                  }
+                }
+              }
+              destruir_vector_polilineas(fuel_polilinea,n_fuel);
             }
-            destruir_vector_polilineas(fuel_polilinea,n_fuel);
             lista_iter_avanzar(iter_fuel_lista);
           }
           lista_iter_destruir(iter_fuel_lista);
@@ -369,7 +391,7 @@ int main() {
           for(size_t i=0; i<n_nivel;i++){
             graficar_polilinea(renderer,nivel_polilinea[i],f);
           }
-
+          destruir_vector_polilineas(escudo,n_escudo);
           destruir_vector_polilineas(nivel_polilinea,n_nivel);
 
         }
@@ -444,7 +466,7 @@ int main() {
               fuel_t **f = fuel_activar("NIVEL1NE",&n);
               for(size_t j=0; j<n; j++){
                 lista_insertar_ultimo(fuel_lista,f[j]);
-              } 
+              }
               free(f);
               lista_destruir(disparos,free);
               disparos=lista_crear();
@@ -466,7 +488,7 @@ int main() {
               fuel_t **f = fuel_activar("NIVEL1SE",&n);
               for(size_t j=0; j<n; j++){
                 lista_insertar_ultimo(fuel_lista,f[j]);
-              } 
+              }
               free(f);
               centro=nave_get_posx(navei);
               lista_destruir(disparos,free);
@@ -491,7 +513,7 @@ int main() {
               fuel_t **f = fuel_activar("NIVEL1SW",&n);
               for(size_t j=0; j<n; j++){
                 lista_insertar_ultimo(fuel_lista,f[j]);
-              } 
+              }
               free(f);
               lista_destruir(disparos,free);
               disparos=lista_crear();
@@ -514,7 +536,7 @@ int main() {
               fuel_t **f = fuel_activar("NIVEL1NW",&n);
               for(size_t j=0; j<n; j++){
                 lista_insertar_ultimo(fuel_lista,f[j]);
-              } 
+              }
               free(f);
               lista_destruir(disparos,free);
               disparos=lista_crear();
@@ -537,7 +559,7 @@ int main() {
               fuel_t **f = fuel_activar("NIVEL1R",&n);
               for(size_t j=0; j<n; j++){
                 lista_insertar_ultimo(fuel_lista,f[j]);
-              } 
+              }
               free(f);
               lista_destruir(disparos,free);
               disparos=lista_crear();
