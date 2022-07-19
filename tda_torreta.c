@@ -21,7 +21,7 @@ struct torreta_diccionario{
 };
 
 
-torreta_diccionario_t torretas[20] = {
+torreta_diccionario_t torretas[] = {
   {916,75,-0.66,1,"NIVEL1NE"},
   {1425,159,0.66,1,"NIVEL1NE"},
   {423,195,-0.66,1,"NIVEL1SE"},
@@ -107,4 +107,15 @@ float torreta_get_angulo(torreta_t *t) {
 
 bool torreta_vive(torreta_t *torreta){
   return torreta->alive;
+}
+
+
+void torreta_diccionario_matar(float posicion_x, float posicion_y, char nivel[MAX_LVL]){
+  size_t cantidad = sizeof(torretas) / sizeof(torretas[0]);
+  for(size_t i=0; i<cantidad; i++){
+    if(posicion_x == torretas[i].posicion_x && posicion_y == torretas[i].posicion_y && !strcmp(nivel, torretas[i].level)){
+      torretas[i].alive = 0;
+      break;
+    } 
+  }
 }

@@ -25,4 +25,6 @@ float torreta_get_angulo(torreta_t *t);
 
 bool torreta_vive(torreta_t *torreta);
 
+void torreta_diccionario_matar(float posicion_x, float posicion_y, char nivel[MAX_LVL]);
+
 #endif
