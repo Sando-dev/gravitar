@@ -13,4 +13,6 @@ void encabezado_graficar(encabezado_t *e, SDL_Renderer *renderer);
 
 void encabezado_set_fuel(encabezado_t *e, int fuel);
 
+void encabezado_torreta_matada(encabezado_t *e);
+
 #endif

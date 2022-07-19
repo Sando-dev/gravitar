@@ -283,6 +283,7 @@ int main() {
                 for(size_t i=0; i<n_torreta;i++){
                   if(distancia_punto_a_polilinea(torreta_polilinea[i],disparo_get_posx(disparo),disparo_get_posy(disparo))<=1){
                     torreta_matar(torreta);
+                    encabezado_torreta_matada(e);
                     lista_iter_borrar(iter_disparos);
                     free(disparo);
                     break;

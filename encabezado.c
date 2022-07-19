@@ -7,6 +7,7 @@
 
 #define MAX_DIGITS 7
 #define MAX_STRING 20
+#define TURRET_SCORE 250
 
 struct encabezado {
     int score;
@@ -62,8 +63,21 @@ void encabezado_graficar(encabezado_t *e, SDL_Renderer *renderer) {
         graficar_polilinea(renderer, p, 2.5);
         polilinea_destruir(p);
     }
+    sprintf(e->score_number,"%d",e->score);
+    for(size_t i=0; e->score_number[i]; i++) {
+        size_t posicion = caracter_posicion(e->score_number[i]);
+        size_t tam = caracter_size(e->score_number[i]);
+        polilinea_t *p = polilinea_crear(caracteres[posicion], tam, 0x00,0xFF,0x00);
+        trasladar(p,(675+(15*i))/2.5,575/2.5);
+        graficar_polilinea(renderer, p, 2.5);
+        polilinea_destruir(p);
+    }
 }
 
 void encabezado_set_fuel(encabezado_t *e, int fuel) {
     e->fuel = fuel;
+}
+
+void encabezado_torreta_matada(encabezado_t *e) {
+    e->score += TURRET_SCORE;
 }
