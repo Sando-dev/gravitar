@@ -7,8 +7,8 @@ DEBUG=-g
 
 all: $(PROGRAM)
 
-$(PROGRAM): main.o tda_figuras.o 	tda_fisicaymatematica.o tda_polilineas.o tda_nave.o tda_disparos.o lista.o tda_nivel.o caracteres.o encabezado.o tda_torreta.o
-	$(CC) $(CFLAGS) $(DEBUG) tda_figuras.o tda_fisicaymatematica.o tda_polilineas.o tda_nivel.o tda_nave.o tda_disparos.o lista.o caracteres.o encabezado.o tda_torreta.o main.o -o $(PROGRAM) $(LDFLAGS) $(SDLFLAGS)
+$(PROGRAM): main.o tda_figuras.o 	tda_fisicaymatematica.o tda_polilineas.o tda_nave.o tda_disparos.o lista.o tda_nivel.o caracteres.o encabezado.o tda_torreta.o tda_fuel.o
+	$(CC) $(CFLAGS) $(DEBUG) tda_figuras.o tda_fisicaymatematica.o tda_polilineas.o tda_nivel.o tda_nave.o tda_disparos.o lista.o caracteres.o encabezado.o tda_torreta.o tda_fuel.o main.o -o $(PROGRAM) $(LDFLAGS) $(SDLFLAGS)
 
 main.o: main.c tda_fisicaymatematica.h tda_figuras.h tda_polilineas.h
 	$(CC) $(CFLAGS) $(DEBUG) -c main.c
@@ -42,6 +42,9 @@ encabezado.o: encabezado.c encabezado.h caracteres.h tda_polilineas.h
 
 tda_torreta.o: tda_torreta.c tda_torreta.h
 	$(CC) $(CFLAGS) $(DEBUG) -c tda_torreta.c
+
+tda_fuel.o: tda_fuel.c tda_fuel.h
+	$(CC) $(CFLAGS) $(DEBUG) -c tda_fuel.c
 
 clean:
 	rm -vf *.o $(PROGRAM)

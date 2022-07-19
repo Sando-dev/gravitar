@@ -64,7 +64,7 @@ void torreta_matar(void *torreta){
 }
 
 torreta_t **torretas_activar(char nivel[MAX_LVL], size_t *n){
-  torreta_t **torretas_vector = malloc(sizeof(torreta_t));
+  torreta_t **torretas_vector = malloc(sizeof(torreta_t*));
   if(torretas_vector == NULL) 
     return NULL;
   size_t cantidad = sizeof(torretas) / sizeof(torretas[0]);

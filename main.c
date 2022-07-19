@@ -14,7 +14,7 @@
 #include "lista.h"
 #include "encabezado.h"
 #include "tda_torreta.h"
-
+#include "tda_fuel.h"
 
 
 polilinea_t **copiar_polilineas(figura_t *figura, double x, double y, double ang){
@@ -119,6 +119,7 @@ int main() {
     float f = 1;
     lista_t *disparos=lista_crear();
     lista_t *torretas_lista = lista_crear();
+    lista_t *fuel_lista = lista_crear();
     // END código del alumno
 
     unsigned int ticks = SDL_GetTicks();
@@ -268,6 +269,21 @@ int main() {
           }
           lista_iter_destruir(iter_torretas);
 
+          lista_iter_t *iter_fuel_lista = lista_iter_crear(fuel_lista);
+          while(!lista_iter_al_final(iter_fuel_lista)){
+            fuel_t *torreta = lista_iter_ver_actual(iter_fuel_lista);
+            size_t n_fuel = figura_cant_polilineas(figura_vector[fuel_en_vector]);
+            polilinea_t **fuel_polilinea = copiar_polilineas(figura_vector[fuel_en_vector], fuel_get_posx(torreta)-centro+ VENTANA_ANCHO / 2 / f, fuel_get_posy(torreta), fuel_get_ang(torreta));
+            for(size_t i=0; i<n_fuel;i++){
+              graficar_polilinea(renderer,fuel_polilinea[i],f);
+            }
+            destruir_vector_polilineas(fuel_polilinea,n_fuel);
+            lista_iter_avanzar(iter_fuel_lista);
+          }
+          lista_iter_destruir(iter_fuel_lista);
+
+
+
           if(nave_get_posy(navei) > VENTANA_ALTO/f) {
             nave_trasladar(navei,BASE_POSICION_X,BASE_POSICION_Y,true);
             nivel_desactivar(niveles[indice_nivel]);
@@ -275,6 +291,8 @@ int main() {
             disparos=lista_crear();
             lista_destruir(torretas_lista,free);
             torretas_lista = lista_crear();
+            lista_destruir(fuel_lista,free);
+            fuel_lista = lista_crear();
             f = 1;
           }
 
@@ -405,6 +423,11 @@ int main() {
                 lista_insertar_ultimo(torretas_lista,t[j]);
               }
               free(t);
+              fuel_t **f = fuel_activar("NIVEL1NE",&n);
+              for(size_t j=0; j<n; j++){
+                lista_insertar_ultimo(fuel_lista,f[j]);
+              } 
+              free(f);
               lista_destruir(disparos,free);
               disparos=lista_crear();
             }
@@ -422,6 +445,11 @@ int main() {
                 lista_insertar_ultimo(torretas_lista,t[j]);
               }
               free(t);
+              fuel_t **f = fuel_activar("NIVEL1SE",&n);
+              for(size_t j=0; j<n; j++){
+                lista_insertar_ultimo(fuel_lista,f[j]);
+              } 
+              free(f);
               centro=nave_get_posx(navei);
               lista_destruir(disparos,free);
               disparos=lista_crear();
@@ -442,6 +470,11 @@ int main() {
                 lista_insertar_ultimo(torretas_lista,t[j]);
               }
               free(t);
+              fuel_t **f = fuel_activar("NIVEL1SW",&n);
+              for(size_t j=0; j<n; j++){
+                lista_insertar_ultimo(fuel_lista,f[j]);
+              } 
+              free(f);
               lista_destruir(disparos,free);
               disparos=lista_crear();
             }
@@ -460,6 +493,11 @@ int main() {
                 lista_insertar_ultimo(torretas_lista,t[j]);
               }
               free(t);
+              fuel_t **f = fuel_activar("NIVEL1NW",&n);
+              for(size_t j=0; j<n; j++){
+                lista_insertar_ultimo(fuel_lista,f[j]);
+              } 
+              free(f);
               lista_destruir(disparos,free);
               disparos=lista_crear();
             }
@@ -478,6 +516,11 @@ int main() {
                 lista_insertar_ultimo(torretas_lista,t[j]);
               }
               free(t);
+              fuel_t **f = fuel_activar("NIVEL1R",&n);
+              for(size_t j=0; j<n; j++){
+                lista_insertar_ultimo(fuel_lista,f[j]);
+              } 
+              free(f);
               lista_destruir(disparos,free);
               disparos=lista_crear();
             }
@@ -582,6 +625,7 @@ int main() {
 
     lista_destruir(disparos,free);
     lista_destruir(torretas_lista,free);
+    lista_destruir(fuel_lista, free);
 
     for(size_t i=0; i<n_niveles; i++){
       nivel_destruir(niveles[i]);
