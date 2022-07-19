@@ -266,7 +266,7 @@ int main() {
               for(size_t i=0; i<n_torreta;i++){
                 graficar_polilinea(renderer,torreta_polilinea[i],f);
               }
-              destruir_vector_polilineas(torreta_polilinea,n_torreta);
+              
               lista_iter_t *iter_disparos=lista_iter_crear(disparos);
               while(!lista_iter_al_final(iter_disparos)){
                 disparo_t *disparo=lista_iter_ver_actual(iter_disparos);
@@ -280,6 +280,7 @@ int main() {
                 }
                 lista_iter_avanzar(iter_disparos);
               }
+              destruir_vector_polilineas(torreta_polilinea,n_torreta);
               lista_iter_destruir(iter_disparos);
             }
             lista_iter_avanzar(iter_torretas);
