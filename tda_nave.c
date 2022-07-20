@@ -5,6 +5,8 @@
 #include "tda_nave.h"
 #include "config.h"
 
+#define FUEL_CRATE 3000
+
 struct nave{
   bool chorro;
   bool escudo;
@@ -125,4 +127,8 @@ int nave_get_vidas(nave_t *nave){
 
 int nave_get_fuel(nave_t *nave) {
   return nave->combustible;
+}
+
+void nave_add_fuel(nave_t *nave) {
+  nave->combustible += FUEL_CRATE;
 }

@@ -28,4 +28,6 @@ int nave_get_vidas(nave_t *nave);
 
 int nave_get_fuel(nave_t *nave);
 
+void nave_add_fuel(nave_t *nave);
+
 #endif

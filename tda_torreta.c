@@ -3,6 +3,7 @@
 #include <stdlib.h>
 #include <string.h>
 #include "tda_torreta.h"
+#include "config.h"
 
 
 struct torreta {
@@ -17,31 +18,41 @@ struct torreta_diccionario{
   double posicion_y;
   double angulo;
   bool alive;
+  bool reactor;
   char level[MAX_LVL];
+};
+
+struct reactor {
+  double posicion_x;
+  double posicion_y;
+  double angulo;
+  bool alive;
+  double tiempo;
 };
 
 
 torreta_diccionario_t torretas[] = {
-  {916,75,-0.66,1,"NIVEL1NE"},
-  {1425,159,0.66,1,"NIVEL1NE"},
-  {423,195,-0.66,1,"NIVEL1SE"},
-  {806,215,-0.33,1,"NIVEL1SE"},
-  {1254,153,0.66,1,"NIVEL1SE"},
-  {1587,223,2.23,1,"NIVEL1SE"},
-  {70,46,0,1,"NIVEL1SW"},
-  {506,12,0,1,"NIVEL1SW"},
-  {952,12,0,1,"NIVEL1SW"},
-  {1385,12,0,1,"NIVEL1SW"},
-  {757,210,3.14,1,"NIVEL1SW"},
-  {1161,210,3.14,1,"NIVEL1SW"},
-  {257,440,0.66,1,"NIVEL1NW"},
-  {719,674,2.23,1,"NIVEL1NW"},
-  {985,565,0,1,"NIVEL1NW"},
-  {1125,417,3.8,1,"NIVEL1NW"},
-  {862,163,3.8,1,"NIVEL1NW"},
-  {626,323,2.23,1,"NIVEL1NW"},
-  {505,331,3.8,1,"NIVEL1NW"},
-  {378,296,2.23,1,"NIVEL1NW"}
+  {916,75,-0.66,1,0,"NIVEL1NE"},
+  {1425,159,0.66,1,0,"NIVEL1NE"},
+  {423,195,-0.66,1,0,"NIVEL1SE"},
+  {806,215,-0.33,1,0,"NIVEL1SE"},
+  {1254,153,0.66,1,0,"NIVEL1SE"},
+  {1587,223,2.23,1,0,"NIVEL1SE"},
+  {70,46,0,1,0,"NIVEL1SW"},
+  {506,12,0,1,0,"NIVEL1SW"},
+  {952,12,0,1,0,"NIVEL1SW"},
+  {1385,12,0,1,0,"NIVEL1SW"},
+  {757,210,3.14,1,0,"NIVEL1SW"},
+  {1161,210,3.14,1,0,"NIVEL1SW"},
+  {257,440,0.66,1,0,"NIVEL1NW"},
+  {719,674,2.23,1,0,"NIVEL1NW"},
+  {985,565,0,1,0,"NIVEL1NW"},
+  {1125,417,3.8,1,0,"NIVEL1NW"},
+  {862,163,3.8,1,0,"NIVEL1NW"},
+  {626,323,2.23,1,0,"NIVEL1NW"},
+  {505,331,3.8,1,0,"NIVEL1NW"},
+  {378,296,2.23,1,0,"NIVEL1NW"},
+  {815,309,0,1,0,"NIVEL1R"}
 };
 
 torreta_t *torreta_crear(double posx, double posy, double angulo){
@@ -71,7 +82,7 @@ torreta_t **torretas_activar(char nivel[MAX_LVL], size_t *n){
   size_t cantidad = sizeof(torretas) / sizeof(torretas[0]);
   size_t j = 0;
   for(size_t i=0; i<cantidad; i++){
-    if((!(strcmp(nivel,torretas[i].level))) && torretas[i].alive){
+    if((!(strcmp(nivel,torretas[i].level))) && torretas[i].alive && (!torretas[i].reactor)){
       torreta_t **aux = realloc(torretas_vector, (i+1)*sizeof(torreta_t*));
       if(aux == NULL) {
         torreta_vector_destruir(torretas_vector,i);
@@ -118,4 +129,50 @@ void torreta_diccionario_matar(float posicion_x, float posicion_y, char nivel[MA
       break;
     } 
   }
+}
+
+reactor_t **reactor_activar(char nivel[MAX_LVL], size_t *n) {
+  reactor_t **reactores_vector = malloc(sizeof(reactor_t*));
+  if(reactores_vector == NULL) 
+    return NULL;
+  size_t cantidad = sizeof(torretas) / sizeof(torretas[0]);
+  size_t j = 0;
+  for(size_t i=0; i<cantidad; i++){
+    if((!(strcmp(nivel,torretas[i].level))) && torretas[i].alive && torretas[i].reactor){
+      torreta_t **aux = realloc(reactores_vector, (i+1)*sizeof(reactor_t*));
+      if(aux == NULL) {
+        reactor_vector_destruir(reactores_vector,i);
+        return NULL;
+      }
+      reactores_vector = aux;
+      torreta_t *t = reactor_crear(torretas[i].posicion_x,torretas[i].posicion_y,torretas[i].angulo);
+      reactores_vector[j++] =t;
+
+    }
+  }
+  *n = j;
+  return reactores_vector;
+}
+
+reactor_t *reactor_crear(double posx, double posy, double angulo){
+  reactor_t *reactor=malloc(sizeof(reactor_t));
+  if(reactor==NULL){
+    return NULL;
+  }
+  reactor->posicion_x=posx;
+  reactor->posicion_y=posy;
+  reactor->angulo=angulo;
+  reactor->alive=true;
+  reactor->tiempo = 0;
+  return reactor;
+}
+
+bool reactor_explotar(reactor_t *r) {
+  if(r->tiempo >= 25)
+    return true;
+  return false;
+}
+
+void reactor_pasa_tiempo(reactor_t *r) {
+  r->tiempo +=(float)1/JUEGO_FPS;
 }

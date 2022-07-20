@@ -8,6 +8,8 @@ typedef struct torreta torreta_t;
 
 typedef struct torreta_diccionario torreta_diccionario_t;
 
+typedef struct reactor reactor_t;
+
 torreta_t *torreta_crear(double posx, double posy, double angulo);
 void torreta_destruir(torreta_t *torreta);
 

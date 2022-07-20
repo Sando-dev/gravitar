@@ -25,5 +25,7 @@ float fuel_get_posy(fuel_t *f);
 
 float fuel_get_posx(fuel_t *f);
 
+void fuel_diccionario_taken(float posicion_x, float posicion_y, char nivel[MAX_LVL]);
+
 
 #endif

@@ -17,21 +17,22 @@ struct fuel_diccionario {
     double posicion_x;
     double posicion_y;
     double angulo;
+    bool not_taken;
     char level[MAX_LVL];
 };
 
-const fuel_diccionario_t fuels[] = {
-    {1064,13,0,"NIVEL1NE"},
-    {1685,113,0,"NIVEL1NE"},
-    {482,94,0,"NIVEL1SE"},
-    {1751,247,0,"NIVEL1SE"},
-    {820,46,0,"NIVEL1SW"},
-    {1196,68,0,"NIVEL1SW"},
-    {1602,46,0,"NIVEL1SW"},
-    {188,429,0,"NIVEL1NW"},
-    {667,600,0,"NIVEL1NW"},
-    {1054,404,3.14,"NIVEL1NW"},
-    {574,344,3.14,"NIVEL1NW"}
+fuel_diccionario_t fuels[] = {
+    {1064,13,0,1,"NIVEL1NE"},
+    {1685,113,0,1,"NIVEL1NE"},
+    {482,94,0,1,"NIVEL1SE"},
+    {1751,247,0,1,"NIVEL1SE"},
+    {820,46,0,1,"NIVEL1SW"},
+    {1196,68,0,1,"NIVEL1SW"},
+    {1602,46,0,1,"NIVEL1SW"},
+    {188,429,0,1,"NIVEL1NW"},
+    {667,600,0,1,"NIVEL1NW"},
+    {1054,404,3.14,1,"NIVEL1NW"},
+    {574,344,3.14,1,"NIVEL1NW"}
 };
 
 fuel_t *fuel_crear(double posx, double posy, double angulo){
@@ -66,7 +67,7 @@ fuel_t **fuel_activar(char nivel[MAX_LVL], size_t *n){
   size_t cantidad = sizeof(fuels) / sizeof(fuels[0]);
   size_t j = 0;
   for(size_t i=0; i<cantidad; i++){
-    if(!(strcmp(nivel,fuels[i].level))){
+    if((!(strcmp(nivel,fuels[i].level))) && fuels[i].not_taken){
       fuel_t **aux = realloc(fuel_vector, (i+1)*sizeof(fuel_t*));
       if(aux == NULL) {
         fuel_vector_destruir(fuel_vector,i);
@@ -98,4 +99,14 @@ float fuel_get_posy(fuel_t *f) {
 
 float fuel_get_posx(fuel_t *f) {
     return f->posicion_x;
+}
+
+void fuel_diccionario_taken(float posicion_x, float posicion_y, char nivel[MAX_LVL]){
+  size_t cantidad = sizeof(fuels) / sizeof(fuels[0]);
+  for(size_t i=0; i<cantidad; i++){
+    if(posicion_x == fuels[i].posicion_x && posicion_y == fuels[i].posicion_y && !strcmp(nivel, fuels[i].level)){
+      fuels[i].not_taken = 0;
+      break;
+    } 
+  }
 }

@@ -357,8 +357,10 @@ int main() {
               }
               if(nave_escudo_esta_prendido(navei)){
                 for(size_t i=0; i<n_escudo; i++){
-                  if(distancia_punto_a_polilinea(escudo[i],fuel_get_posx(fuel),fuel_get_posy(fuel))<=5){
+                  if(distancia_punto_a_polilinea(escudo[i],fuel_get_posx(fuel),fuel_get_posy(fuel))<=15){
                     fuel_matar(fuel);
+                    fuel_diccionario_taken(fuel_get_posx(fuel),fuel_get_posy(fuel),nivel_nombre(niveles[indice_nivel]));
+                    nave_add_fuel(navei);
                     break;
                   }
                 }
@@ -449,7 +451,7 @@ int main() {
         else{
           centro = VENTANA_ANCHO/2/f;
 
-          float angulo_estrella=atan2(364-nave_get_posy(navei),457-nave_get_posx(navei));
+          float angulo_estrella=atan2(ESTRELLA_POSICION_Y-nave_get_posy(navei),ESTRELLA_POSICION_X-nave_get_posx(navei));
           nave_mover(navei,a,angulo,angulo_estrella);
 
           lista_iterar(disparos,disparo_mover,NULL);
