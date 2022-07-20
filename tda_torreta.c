@@ -52,7 +52,7 @@ torreta_diccionario_t torretas[] = {
   {626,323,2.23,1,0,"NIVEL1NW"},
   {505,331,3.8,1,0,"NIVEL1NW"},
   {378,296,2.23,1,0,"NIVEL1NW"},
-  {815,309,0,1,0,"NIVEL1R"}
+  {815,309,0,1,1,"NIVEL1R"}
 };
 
 torreta_t *torreta_crear(double posx, double posy, double angulo){
@@ -82,7 +82,7 @@ torreta_t **torretas_activar(char nivel[MAX_LVL], size_t *n){
   size_t cantidad = sizeof(torretas) / sizeof(torretas[0]);
   size_t j = 0;
   for(size_t i=0; i<cantidad; i++){
-    if((!(strcmp(nivel,torretas[i].level))) && torretas[i].alive && (!torretas[i].reactor)){
+    if((!(strcmp(nivel,torretas[i].level))) && torretas[i].alive && (!(torretas[i].reactor))){
       torreta_t **aux = realloc(torretas_vector, (i+1)*sizeof(torreta_t*));
       if(aux == NULL) {
         torreta_vector_destruir(torretas_vector,i);
@@ -139,13 +139,13 @@ reactor_t **reactor_activar(char nivel[MAX_LVL], size_t *n) {
   size_t j = 0;
   for(size_t i=0; i<cantidad; i++){
     if((!(strcmp(nivel,torretas[i].level))) && torretas[i].alive && torretas[i].reactor){
-      torreta_t **aux = realloc(reactores_vector, (i+1)*sizeof(reactor_t*));
+      reactor_t **aux = realloc(reactores_vector, (i+1)*sizeof(reactor_t*));
       if(aux == NULL) {
         reactor_vector_destruir(reactores_vector,i);
         return NULL;
       }
       reactores_vector = aux;
-      torreta_t *t = reactor_crear(torretas[i].posicion_x,torretas[i].posicion_y,torretas[i].angulo);
+      reactor_t *t = reactor_crear(torretas[i].posicion_x,torretas[i].posicion_y,torretas[i].angulo);
       reactores_vector[j++] =t;
 
     }
@@ -175,4 +175,26 @@ bool reactor_explotar(reactor_t *r) {
 
 void reactor_pasa_tiempo(reactor_t *r) {
   r->tiempo +=(float)1/JUEGO_FPS;
+}
+
+void reactor_vector_destruir(reactor_t **r, size_t n) {
+  for(size_t i=0; i<n; i++)
+    free(r[i]);
+  free(r);
+}
+
+bool reactor_get_alive(reactor_t *r) {
+  return r->alive;
+}
+
+float reactor_get_posy(reactor_t *r) {
+  return r->posicion_x;
+}
+
+float reactor_get_posx(reactor_t *r) {
+  return r->posicion_y;
+}
+
+float reactor_get_angulo(reactor_t *r) {
+  return r->angulo;
 }

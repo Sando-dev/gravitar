@@ -32,5 +32,6 @@ bool fuel_vive(fuel_t *fuel);
 //POST: cambia el estado de vivo a muerto
 void fuel_matar(fuel_t *fuel);
 
+void fuel_diccionario_taken(float posicion_x, float posicion_y, char nivel[MAX_LVL]);
 
 #endif

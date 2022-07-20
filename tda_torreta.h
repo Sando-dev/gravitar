@@ -38,4 +38,22 @@ void torreta_matar(void *torreta);
 
 void torreta_diccionario_matar(float posicion_x, float posicion_y, char nivel[MAX_LVL]);
 
+reactor_t **reactor_activar(char nivel[MAX_LVL], size_t *n);
+
+reactor_t *reactor_crear(double posx, double posy, double angulo);
+
+void reactor_vector_destruir(reactor_t **r, size_t n);
+
+bool reactor_get_alive(reactor_t *r);
+
+float reactor_get_posy(reactor_t *r);
+
+float reactor_get_posx(reactor_t *r);
+
+float reactor_get_angulo(reactor_t *r);
+
+void reactor_pasa_tiempo(reactor_t *r);
+
+bool reactor_explotar(reactor_t *r);
+
 #endif

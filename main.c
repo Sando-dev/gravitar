@@ -53,13 +53,13 @@ int main() {
     SDL_SetWindowTitle(window, "Gravitar");
 
     int dormir = 0;
-    encabezado_t *e = encabezado_crear();
+    
     // BEGIN código del alumno
     size_t n_figura;
     figura_t **figura_vector = figura_leer_archivo(&n_figura);
     if(figura_vector == NULL)
         return 1;
-
+    encabezado_t *e = encabezado_crear();
     //VECTOR NIVELEEEESSSS
     size_t n_niveles=0;
     nivel_t **niveles=malloc(sizeof(nivel_t*));
@@ -112,7 +112,7 @@ int main() {
     size_t disparo_en_vector = figura_buscar(figura_vector,n_figura,"DISPARO");
     size_t fuel_en_vector = figura_buscar(figura_vector, n_figura, "COMBUSTIBLE");
     size_t torreta_en_vector = figura_buscar(figura_vector,n_figura,"TORRETA");
-
+    size_t reactor_en_vector = figura_buscar(figura_vector,n_figura,"REACTOR");
 
     // Queremos que todo se dibuje escalado por f:
     float tiempo_coldown_torretas=0;
@@ -122,6 +122,7 @@ int main() {
     lista_t *torretas_lista = lista_crear();
     lista_t *torreta_disparos= lista_crear();
     lista_t *fuel_lista = lista_crear();
+    lista_t *reactor_lista = lista_crear();
     // END código del alumno
 
     unsigned int ticks = SDL_GetTicks();
@@ -373,6 +374,22 @@ int main() {
 
 
 
+          lista_iter_t *iter_reactor_lista = lista_iter_crear(reactor_lista);
+          while(!lista_iter_al_final(iter_reactor_lista)){
+            reactor_t *reactor = lista_iter_ver_actual(iter_reactor_lista);
+            if(reactor_get_alive(reactor)){
+              size_t n_reactor = figura_cant_polilineas(figura_vector[reactor_en_vector]);
+              polilinea_t **reactor_polilinea = copiar_polilineas(figura_vector[reactor_en_vector], reactor_get_posx(reactor)-centro+ VENTANA_ANCHO / 2 / f, reactor_get_posy(reactor), reactor_get_angulo(reactor));
+              for(size_t i=0; i<n_reactor;i++){
+                graficar_polilinea(renderer,reactor_polilinea[i],f);
+              }
+              destruir_vector_polilineas(reactor_polilinea,n_reactor);
+            }
+            lista_iter_avanzar(iter_reactor_lista);
+          }
+          lista_iter_destruir(iter_reactor_lista);
+
+
           if(nave_get_posy(navei) > VENTANA_ALTO/f) {
             nave_trasladar(navei,BASE_POSICION_X,BASE_POSICION_Y,true);
             nivel_desactivar(niveles[indice_nivel]);
@@ -382,6 +399,8 @@ int main() {
             torretas_lista = lista_crear();
             lista_destruir(fuel_lista,free);
             lista_destruir(torreta_disparos,free);
+            lista_destruir(reactor_lista, free);
+            reactor_lista = lista_crear();
             torreta_disparos=lista_crear();
             fuel_lista = lista_crear();
             f = 1;
@@ -543,6 +562,11 @@ int main() {
                 lista_insertar_ultimo(fuel_lista,f[j]);
               }
               free(f);
+              reactor_t **reactores_vector = reactor_activar("NIVEL1SE",&n);
+              for(size_t j=0; j<n; j++){
+                lista_insertar_ultimo(reactor_lista,f[j]);
+              }
+              free(reactores_vector);
               centro=nave_get_posx(navei);
               lista_destruir(disparos,free);
               disparos=lista_crear();
@@ -619,6 +643,11 @@ int main() {
                 lista_insertar_ultimo(fuel_lista,f[j]);
               }
               free(f);
+              reactor_t **reactores_vector = reactor_activar("NIVEL1R",&n);
+              for(size_t j=0; j<n; j++){
+                lista_insertar_ultimo(reactor_lista,f[j]);
+              }
+              free(reactores_vector);
               lista_destruir(disparos,free);
               disparos=lista_crear();
               lista_destruir(torreta_disparos,free);
