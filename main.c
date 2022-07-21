@@ -383,7 +383,40 @@ int main() {
               for(size_t i=0; i<n_reactor;i++){
                 graficar_polilinea(renderer,reactor_polilinea[i],f);
               }
-              destruir_vector_polilineas(reactor_polilinea,n_reactor);
+              lista_iter_t *iter_disparos=lista_iter_crear(disparos);
+              while(!lista_iter_al_final(iter_disparos)){
+                disparo_t *disparo=lista_iter_ver_actual(iter_disparos);
+                for(size_t i=0; i<n_reactor;i++){
+                  if(distancia_punto_a_polilinea(reactor_polilinea[i],disparo_get_posx(disparo),disparo_get_posy(disparo))<=1){
+                    reactor_matar(reactor);
+                    torreta_diccionario_matar(reactor_get_posx(reactor), reactor_get_posy(reactor), nivel_nombre(niveles[indice_nivel]));
+                    lista_iter_borrar(iter_disparos);
+                    free(disparo);
+                    break;
+                  }
+                }
+                lista_iter_avanzar(iter_disparos);
+              }
+              destruir_vector_polilineas(reactor_polilinea,n_reactor);  
+              lista_iter_destruir(iter_disparos);
+
+
+              reactor_pasa_tiempo(reactor);
+              if(reactor_explotar(reactor)){
+                  nave_matar(navei,BASE_POSICION_X,BASE_POSICION_Y);
+                  nivel_desactivar(niveles[indice_nivel]);
+                  lista_destruir(disparos,free);
+                  disparos=lista_crear();
+                  lista_destruir(torretas_lista,free);
+                  torretas_lista = lista_crear();
+                  lista_destruir(fuel_lista,free);
+                  lista_destruir(torreta_disparos,free);
+                  lista_destruir(reactor_lista, free);
+                  reactor_lista = lista_crear();
+                  torreta_disparos=lista_crear();
+                  fuel_lista = lista_crear();
+                  f = 1;
+              }
             }
             lista_iter_avanzar(iter_reactor_lista);
           }

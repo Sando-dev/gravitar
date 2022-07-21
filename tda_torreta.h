@@ -56,4 +56,6 @@ void reactor_pasa_tiempo(reactor_t *r);
 
 bool reactor_explotar(reactor_t *r);
 
+void reactor_matar(reactor_t *r);
+
 #endif

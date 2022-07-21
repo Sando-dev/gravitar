@@ -188,13 +188,17 @@ bool reactor_get_alive(reactor_t *r) {
 }
 
 float reactor_get_posy(reactor_t *r) {
-  return r->posicion_x;
+  return r->posicion_y;
 }
 
 float reactor_get_posx(reactor_t *r) {
-  return r->posicion_y;
+  return r->posicion_x;
 }
 
 float reactor_get_angulo(reactor_t *r) {
   return r->angulo;
+}
+
+void reactor_matar(reactor_t *r) {
+  r->alive = 0;
 }
