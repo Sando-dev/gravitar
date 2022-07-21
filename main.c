@@ -329,7 +329,7 @@ int main() {
                 disparo_t *disparo=lista_iter_ver_actual(iter_disparos);
                 for(size_t i=0; i<n_torreta;i++){
                   if(distancia_punto_a_polilinea(torreta_polilinea[i],disparo_get_posx(disparo),disparo_get_posy(disparo))<=1){
-                    //torreta_matar(torreta);
+                    torreta_matar(torreta);
                     lista_iter_borrar(iter_torretas);
                     torreta_diccionario_matar(torreta_get_posx(torreta), torreta_get_posy(torreta), nivel_nombre(niveles[indice_nivel]));
                     encabezado_torreta_matada(e);
@@ -361,7 +361,7 @@ int main() {
                 for(size_t i=0; i<n_escudo; i++){
                   if(distancia_punto_a_polilinea(escudo[i],fuel_get_posx(fuel),fuel_get_posy(fuel))<=15){
                     lista_iter_borrar(iter_fuel_lista);
-                    //fuel_matar(fuel);
+                    fuel_matar(fuel);
                     fuel_diccionario_taken(fuel_get_posx(fuel),fuel_get_posy(fuel),nivel_nombre(niveles[indice_nivel]));
                     nave_add_fuel(navei);
                     break;
@@ -390,7 +390,7 @@ int main() {
                 disparo_t *disparo=lista_iter_ver_actual(iter_disparos);
                 for(size_t i=0; i<n_reactor;i++){
                   if(distancia_punto_a_polilinea(reactor_polilinea[i],disparo_get_posx(disparo),disparo_get_posy(disparo))<=1){
-                    //reactor_matar(reactor);
+                    reactor_matar(reactor);
                     lista_iter_borrar(iter_reactor_lista);
                     torreta_diccionario_matar(reactor_get_posx(reactor), reactor_get_posy(reactor), nivel_nombre(niveles[indice_nivel]));
                     lista_iter_borrar(iter_disparos);

@@ -6,7 +6,6 @@
 #define MAX_STRING 20
 
 typedef struct encabezado encabezado_t; 
-typedef struct encabezado encabezado_t;
 
 encabezado_t *encabezado_crear(void);
 
