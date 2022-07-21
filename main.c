@@ -53,7 +53,7 @@ int main() {
     SDL_SetWindowTitle(window, "Gravitar");
 
     int dormir = 0;
-    
+
     // BEGIN código del alumno
     size_t n_figura;
     figura_t **figura_vector = figura_leer_archivo(&n_figura);
@@ -225,7 +225,7 @@ int main() {
           size_t nivel_en_figuras = figura_buscar(figura_vector,n_figura,nivel_nombre(niveles[indice_nivel]));
 
           size_t n_nivel=figura_cant_polilineas(figura_vector[nivel_en_figuras]);
-          polilinea_t **nivel_polilinea=copiar_polilineas(figura_vector[nivel_en_figuras],-centro+ VENTANA_ANCHO / 2 /f ,0,0);
+          polilinea_t **nivel_polilinea=copiar_polilineas(figura_vector[nivel_en_figuras],-centro+ VENTANA_ANCHO / 2 / f,0,0);
 
           polilinea_t **escudo=copiar_polilineas(figura_vector[escudo_en_vector],nave_get_posx(navei)-centro+ VENTANA_ANCHO / 2 / f,nave_get_posy(navei),nave_get_angulo(navei)-NAVE_ANGULO_INICIAL);
           size_t n_escudo=figura_cant_polilineas(figura_vector[escudo_en_vector]);
@@ -445,11 +445,49 @@ int main() {
             polilinea_t **nivel_polilinea3=copiar_polilineas(figura_vector[nivel_en_figuras],(-centro+ VENTANA_ANCHO / 2 /f)-ancho_nivel ,0,0);
 
 
+
             for(size_t i=0; i<n_nivel;i++){
               graficar_polilinea(renderer,nivel_polilinea2[i],f);
               graficar_polilinea(renderer,nivel_polilinea3[i],f);
             }
 
+            lista_iter_t *iter_torretas = lista_iter_crear(torretas_lista);
+            while(!lista_iter_al_final(iter_torretas)){
+              torreta_t *torreta = lista_iter_ver_actual(iter_torretas);
+              if(torreta_vive(torreta)){
+                size_t n_torreta = figura_cant_polilineas(figura_vector[torreta_en_vector]);
+                polilinea_t **torreta_polilinea2 = copiar_polilineas(figura_vector[torreta_en_vector], torreta_get_posx(torreta)-centro+ VENTANA_ANCHO / 2 / f +ancho_nivel, torreta_get_posy(torreta), torreta_get_angulo(torreta));
+                polilinea_t **torreta_polilinea3 = copiar_polilineas(figura_vector[torreta_en_vector], torreta_get_posx(torreta)-centro+ VENTANA_ANCHO / 2 / f -ancho_nivel, torreta_get_posy(torreta), torreta_get_angulo(torreta));
+                for(size_t i=0; i<n_torreta;i++){
+                  graficar_polilinea(renderer,torreta_polilinea2[i],f);
+                  graficar_polilinea(renderer,torreta_polilinea3[i],f);
+                }
+                destruir_vector_polilineas(torreta_polilinea2,n_torreta);
+                destruir_vector_polilineas(torreta_polilinea3,n_torreta);
+              }
+              lista_iter_avanzar(iter_torretas);
+            }
+            lista_iter_destruir(iter_torretas);
+
+
+
+            lista_iter_t *iter_fuel_lista = lista_iter_crear(fuel_lista);
+            while(!lista_iter_al_final(iter_fuel_lista)){
+              fuel_t *fuel = lista_iter_ver_actual(iter_fuel_lista);
+              if(fuel_vive(fuel)){
+                size_t n_fuel = figura_cant_polilineas(figura_vector[fuel_en_vector]);
+                polilinea_t **fuel_polilinea2 = copiar_polilineas(figura_vector[fuel_en_vector], fuel_get_posx(fuel)-centro+ VENTANA_ANCHO / 2 / f +ancho_nivel, fuel_get_posy(fuel), fuel_get_ang(fuel));
+                polilinea_t **fuel_polilinea3 = copiar_polilineas(figura_vector[fuel_en_vector], fuel_get_posx(fuel)-centro+ VENTANA_ANCHO / 2 / f -ancho_nivel, fuel_get_posy(fuel), fuel_get_ang(fuel));
+                for(size_t i=0; i<n_fuel;i++){
+                  graficar_polilinea(renderer,fuel_polilinea2[i],f);
+                  graficar_polilinea(renderer,fuel_polilinea3[i],f);
+                }
+                destruir_vector_polilineas(fuel_polilinea2,n_fuel);
+                destruir_vector_polilineas(fuel_polilinea3,n_fuel);
+              }
+              lista_iter_avanzar(iter_fuel_lista);
+            }
+            lista_iter_destruir(iter_fuel_lista);
 
             destruir_vector_polilineas(nivel_polilinea2,n_nivel);
             destruir_vector_polilineas(nivel_polilinea3,n_nivel);
@@ -645,7 +683,7 @@ int main() {
               free(f);
               reactor_t **reactores_vector = reactor_activar("NIVEL1R",&n);
               for(size_t j=0; j<n; j++){
-                lista_insertar_ultimo(reactor_lista,f[j]);
+                lista_insertar_ultimo(reactor_lista,reactores_vector[j]);
               }
               free(reactores_vector);
               lista_destruir(disparos,free);
@@ -722,6 +760,7 @@ int main() {
           free(primer_disparo);
         }
 
+
         destruir_vector_polilineas(nave,n_nave);
 
 
@@ -756,6 +795,7 @@ int main() {
     lista_destruir(torreta_disparos,free);
     lista_destruir(torretas_lista,free);
     lista_destruir(fuel_lista, free);
+    lista_destruir(reactor_lista,free);
 
     for(size_t i=0; i<n_niveles; i++){
       nivel_destruir(niveles[i]);
