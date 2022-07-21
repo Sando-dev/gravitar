@@ -6,6 +6,7 @@
 #define MAX_STRING 20
 
 typedef struct encabezado encabezado_t; 
+typedef struct encabezado encabezado_t;
 
 encabezado_t *encabezado_crear(void);
 
@@ -18,5 +19,7 @@ void encabezado_set_fuel(encabezado_t *e, int fuel);
 void encabezado_torreta_matada(encabezado_t *e);
 
 void encabezado_nivel_completado(encabezado_t *e, char level[MAX_STRING]);
+
+int encabezado_get_score(encabezado_t *e);
 
 #endif

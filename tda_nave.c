@@ -132,3 +132,7 @@ int nave_get_fuel(nave_t *nave) {
 void nave_add_fuel(nave_t *nave) {
   nave->combustible += FUEL_CRATE;
 }
+
+void nave_add_vida(nave_t *nave){
+  nave->vidas+=1;
+}

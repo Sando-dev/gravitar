@@ -107,3 +107,6 @@ void encabezado_nivel_completado(encabezado_t *e, char level[MAX_STRING]) {
         }
     }
 }
+int encabezado_get_score(encabezado_t *e){
+  return e->score;
+}

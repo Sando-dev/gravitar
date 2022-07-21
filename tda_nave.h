@@ -47,6 +47,9 @@ double nave_get_angulo(nave_t *nave);
 int nave_get_vidas(nave_t *nave);
 int nave_get_fuel(nave_t *nave);
 
+//PRE: nave ya fue creada
+//POST: suma fuel/vida a la nave
 void nave_add_fuel(nave_t *nave);
+void nave_add_vida(nave_t *nave);
 
 #endif
