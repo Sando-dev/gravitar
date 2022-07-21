@@ -6,7 +6,7 @@
 #include "caracteres.h"
 
 #define MAX_DIGITS 7
-#define MAX_STRING 20
+
 #define TURRET_SCORE 250
 
 struct encabezado {
@@ -17,6 +17,21 @@ struct encabezado {
     char fuel_number[MAX_DIGITS];
     char fuel_string[MAX_STRING];
 };
+
+typedef struct niveles_points {
+    char lvl[MAX_STRING];
+    int points;
+}lvl_point_t;
+
+lvl_point_t niveles_points[] = {
+    {"NIVEL1NE", 2000},
+    {"NIVEL1SE", 4000},
+    {"NIVEL1SW", 6000},
+    {"NIVEL1NW", 8000},
+    {"NIVEL1R", 9000}
+};
+
+
 
 encabezado_t *encabezado_crear(void) {
     encabezado_t *e = malloc(sizeof(encabezado_t));
@@ -80,4 +95,15 @@ void encabezado_set_fuel(encabezado_t *e, int fuel) {
 
 void encabezado_torreta_matada(encabezado_t *e) {
     e->score += TURRET_SCORE;
+}
+
+
+void encabezado_nivel_completado(encabezado_t *e, char level[MAX_STRING]) {
+    size_t cantidad = sizeof(niveles_points) / sizeof(niveles_points[0]);
+    for(size_t i=0; i<cantidad; i++) {
+        if(!strcmp(level,niveles_points[i].lvl)){
+            e->score += niveles_points[i].points;
+            niveles_points[i].points = 0;
+        }
+    }
 }

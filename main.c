@@ -328,7 +328,8 @@ int main() {
                 disparo_t *disparo=lista_iter_ver_actual(iter_disparos);
                 for(size_t i=0; i<n_torreta;i++){
                   if(distancia_punto_a_polilinea(torreta_polilinea[i],disparo_get_posx(disparo),disparo_get_posy(disparo))<=1){
-                    torreta_matar(torreta);
+                    //torreta_matar(torreta);
+                    lista_iter_borrar(iter_torretas);
                     torreta_diccionario_matar(torreta_get_posx(torreta), torreta_get_posy(torreta), nivel_nombre(niveles[indice_nivel]));
                     encabezado_torreta_matada(e);
                     lista_iter_borrar(iter_disparos);
@@ -346,7 +347,6 @@ int main() {
           lista_iter_destruir(iter_torretas);
 
 
-
           lista_iter_t *iter_fuel_lista = lista_iter_crear(fuel_lista);
           while(!lista_iter_al_final(iter_fuel_lista)){
             fuel_t *fuel = lista_iter_ver_actual(iter_fuel_lista);
@@ -359,7 +359,8 @@ int main() {
               if(nave_escudo_esta_prendido(navei)){
                 for(size_t i=0; i<n_escudo; i++){
                   if(distancia_punto_a_polilinea(escudo[i],fuel_get_posx(fuel),fuel_get_posy(fuel))<=15){
-                    fuel_matar(fuel);
+                    lista_iter_borrar(iter_fuel_lista);
+                    //fuel_matar(fuel);
                     fuel_diccionario_taken(fuel_get_posx(fuel),fuel_get_posy(fuel),nivel_nombre(niveles[indice_nivel]));
                     nave_add_fuel(navei);
                     break;
@@ -388,7 +389,8 @@ int main() {
                 disparo_t *disparo=lista_iter_ver_actual(iter_disparos);
                 for(size_t i=0; i<n_reactor;i++){
                   if(distancia_punto_a_polilinea(reactor_polilinea[i],disparo_get_posx(disparo),disparo_get_posy(disparo))<=1){
-                    reactor_matar(reactor);
+                    //reactor_matar(reactor);
+                    lista_iter_borrar(iter_reactor_lista);
                     torreta_diccionario_matar(reactor_get_posx(reactor), reactor_get_posy(reactor), nivel_nombre(niveles[indice_nivel]));
                     lista_iter_borrar(iter_disparos);
                     free(disparo);
@@ -424,6 +426,8 @@ int main() {
 
 
           if(nave_get_posy(navei) > VENTANA_ALTO/f) {
+            if(lista_esta_vacia(fuel_lista) & lista_esta_vacia(reactor_lista) && lista_esta_vacia(torretas_lista))
+              encabezado_nivel_completado(e,nivel_nombre(niveles[indice_nivel]));
             nave_trasladar(navei,BASE_POSICION_X,BASE_POSICION_Y,true);
             nivel_desactivar(niveles[indice_nivel]);
             lista_destruir(disparos,free);
@@ -609,6 +613,11 @@ int main() {
                 lista_insertar_ultimo(fuel_lista,f[j]);
               }
               free(f);
+              reactor_t **reactores_vector = reactor_activar("NIVEL1NE",&n);
+              for(size_t j=0; j<n; j++){
+                lista_insertar_ultimo(reactor_lista,reactores_vector[j]);
+              }
+              free(reactores_vector);
               lista_destruir(disparos,free);
               disparos=lista_crear();
               lista_destruir(torreta_disparos,free);
@@ -664,6 +673,11 @@ int main() {
                 lista_insertar_ultimo(fuel_lista,f[j]);
               }
               free(f);
+              reactor_t **reactores_vector = reactor_activar("NIVEL1SW",&n);
+              for(size_t j=0; j<n; j++){
+                lista_insertar_ultimo(reactor_lista,reactores_vector[j]);
+              }
+              free(reactores_vector);
               lista_destruir(disparos,free);
               disparos=lista_crear();
               lista_destruir(torreta_disparos,free);
@@ -689,6 +703,11 @@ int main() {
                 lista_insertar_ultimo(fuel_lista,f[j]);
               }
               free(f);
+              reactor_t **reactores_vector = reactor_activar("NIVEL1NW",&n);
+              for(size_t j=0; j<n; j++){
+                lista_insertar_ultimo(reactor_lista,reactores_vector[j]);
+              }
+              free(reactores_vector);
               lista_destruir(disparos,free);
               disparos=lista_crear();
               lista_destruir(torreta_disparos,free);
