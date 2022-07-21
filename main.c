@@ -115,6 +115,7 @@ int main() {
     size_t reactor_en_vector = figura_buscar(figura_vector,n_figura,"REACTOR");
 
     // Queremos que todo se dibuje escalado por f:
+    int next_ship=10000;
     float tiempo_coldown_torretas=0;
     float centro=0;
     float f = 1;
@@ -292,7 +293,7 @@ int main() {
             }
 
             for(size_t i=0; i<n_nivel;i++){
-              if(distancia_punto_a_polilinea(nivel_polilinea[i],disparo_get_posx(disparo),disparo_get_posy(disparo))<=0.1){
+              if(distancia_punto_a_polilinea(nivel_polilinea[i],disparo_get_posx(disparo),disparo_get_posy(disparo))<=0.2){
                 lista_iter_borrar(iter_disparos_torretas);
                 free(disparo);
                 break;
@@ -317,7 +318,7 @@ int main() {
                 graficar_polilinea(renderer,torreta_polilinea[i],f);
               }
 
-              if(norma(torreta_get_posx(torreta)-nave_get_posx(navei),torreta_get_posy(torreta)-nave_get_posy(navei))<100 && tiempo_coldown_torretas>0.5){
+              if(norma(torreta_get_posx(torreta)-nave_get_posx(navei),torreta_get_posy(torreta)-nave_get_posy(navei))<250 && tiempo_coldown_torretas>0.5){
                 float angulo_disparo=atan2(nave_get_posy(navei)-torreta_get_posy(torreta),nave_get_posx(navei)-torreta_get_posx(torreta));
                 lista_insertar_ultimo(torreta_disparos,crear_disparo(torreta_get_posx(torreta),torreta_get_posy(torreta),angulo_disparo));
                 tiempo_coldown_torretas=0;
@@ -397,7 +398,7 @@ int main() {
                 }
                 lista_iter_avanzar(iter_disparos);
               }
-              destruir_vector_polilineas(reactor_polilinea,n_reactor);  
+              destruir_vector_polilineas(reactor_polilinea,n_reactor);
               lista_iter_destruir(iter_disparos);
 
 
@@ -773,6 +774,11 @@ int main() {
           destruir_vector_polilineas(planeta5, n_planeta5);
 
         }
+        if(encabezado_get_score(e)>=next_ship){
+          next_ship+=10000;
+          nave_add_vida(navei);
+        }
+
         if(nave_get_vidas(navei)>0){
         for(size_t i=0; i<nave_get_vidas(navei);i++){
             polilinea_t **nave_vida=copiar_polilineas(figura_vector[nave_en_vector],(100+(40*i))/2.5,960/2.5,NAVE_ANGULO_INICIAL);
@@ -791,6 +797,12 @@ int main() {
         if(primer_disparo!=NULL && disparo_expiro(primer_disparo,NULL)){
           lista_borrar_primero(disparos);
           free(primer_disparo);
+        }
+
+        disparo_t *primer_disparo_torreta=lista_ver_primero(torreta_disparos);
+        if(primer_disparo_torreta!=NULL && disparo_expiro(primer_disparo_torreta,NULL)){
+          lista_borrar_primero(torreta_disparos);
+          free(primer_disparo_torreta);
         }
 
 

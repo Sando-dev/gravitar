@@ -81,3 +81,7 @@ void encabezado_set_fuel(encabezado_t *e, int fuel) {
 void encabezado_torreta_matada(encabezado_t *e) {
     e->score += TURRET_SCORE;
 }
+
+int encabezado_get_score(encabezado_t *e){
+  return e->score;
+}
