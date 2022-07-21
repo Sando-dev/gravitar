@@ -146,7 +146,7 @@ reactor_t **reactor_activar(char nivel[MAX_LVL], size_t *n) {
       }
       reactores_vector = aux;
       reactor_t *t = reactor_crear(torretas[i].posicion_x,torretas[i].posicion_y,torretas[i].angulo);
-      reactores_vector[j++] =t;
+      reactores_vector[j++] = t;
 
     }
   }

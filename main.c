@@ -645,7 +645,7 @@ int main() {
               free(f);
               reactor_t **reactores_vector = reactor_activar("NIVEL1R",&n);
               for(size_t j=0; j<n; j++){
-                lista_insertar_ultimo(reactor_lista,f[j]);
+                lista_insertar_ultimo(reactor_lista,reactores_vector[j]);
               }
               free(reactores_vector);
               lista_destruir(disparos,free);
