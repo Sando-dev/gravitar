@@ -403,11 +403,11 @@ int main() {
                   fuel_lista = lista_crear();
                   f = 1;
                   encabezado_set_timer(e,0);
+                  break;
               }
               
             }
-            if(lista_iter_avanzar(iter_reactor_lista))
-              break;
+            lista_iter_avanzar(iter_reactor_lista);
           }
           lista_iter_destruir(iter_reactor_lista);
 
@@ -765,7 +765,9 @@ int main() {
 
 
 
-
+        if(nave_get_vidas(navei) == 0){
+          break;
+        }
 
 
 
