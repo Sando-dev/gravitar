@@ -16,6 +16,20 @@
 #include "tda_torreta.h"
 #include "tda_fuel.h"
 
+typedef struct {
+  char *nombre;
+  double posx;
+  double posy;
+  char *nivel;
+} planetas_niveles_t;
+
+planetas_niveles_t planetas_niveles[]={
+  {"PLANETA1",PLAN1_POSICION_X, PLAN1_POSICION_Y,"NIVEL1NE"},
+  {"PLANETA2",PLAN2_POSICION_X, PLAN2_POSICION_Y,"NIVEL1SE"},
+  {"PLANETA3",PLAN3_POSICION_X, PLAN3_POSICION_Y,"NIVEL1SW"},
+  {"PLANETA4",PLAN4_POSICION_X, PLAN4_POSICION_Y,"NIVEL1NW"},
+  {"PLANETA5",PLAN5_POSICION_X, PLAN5_POSICION_Y,"NIVEL1R"},
+};
 
 polilinea_t **copiar_polilineas(figura_t *figura, double x, double y, double ang){
   polilinea_t **polilineas=malloc(figura_cant_polilineas(figura)*sizeof(polilinea_t*));
@@ -99,13 +113,9 @@ int main() {
     float a=0;
     float angulo = 0;
     float angulo_estrella = atan2(ESTRELLA_POSICION_Y-nave_get_posy(navei),ESTRELLA_POSICION_X-nave_get_posx(navei));
+
     size_t base_en_vector = figura_buscar(figura_vector,n_figura,"BASE");
     size_t estrella_en_vector = figura_buscar(figura_vector,n_figura,"ESTRELLA");
-    size_t planeta1_en_vector = figura_buscar(figura_vector,n_figura,"PLANETA1");
-    size_t planeta2_en_vector = figura_buscar(figura_vector,n_figura,"PLANETA2");
-    size_t planeta3_en_vector = figura_buscar(figura_vector,n_figura,"PLANETA3");
-    size_t planeta4_en_vector = figura_buscar(figura_vector,n_figura,"PLANETA4");
-    size_t planeta5_en_vector = figura_buscar(figura_vector,n_figura,"PLANETA5");
     size_t nave_en_vector = figura_buscar(figura_vector,n_figura,"NAVE");
     size_t chorro_en_vector = figura_buscar(figura_vector,n_figura,"NAVE+CHORRO");
     size_t escudo_en_vector = figura_buscar(figura_vector,n_figura,"ESCUDO2");
@@ -114,7 +124,7 @@ int main() {
     size_t torreta_en_vector = figura_buscar(figura_vector,n_figura,"TORRETA");
     size_t reactor_en_vector = figura_buscar(figura_vector,n_figura,"REACTOR");
 
-    // Queremos que todo se dibuje escalado por f:
+    size_t n_planetas= sizeof(planetas_niveles) / sizeof(planetas_niveles[0]);
     int next_ship=10000;
     float tiempo_coldown_torretas=0;
     float centro=0;
@@ -306,7 +316,6 @@ int main() {
                 for(size_t i=0; i<n_torreta;i++){
                   if(distancia_punto_a_polilinea(torreta_polilinea[i],disparo_get_posx(disparo),disparo_get_posy(disparo))<=1){
                     torreta_matar(torreta);
-                    lista_iter_borrar(iter_torretas);
                     torreta_diccionario_matar(torreta_get_posx(torreta), torreta_get_posy(torreta), nivel_nombre(niveles[indice_nivel]));
                     encabezado_torreta_matada(e);
                     lista_iter_borrar(iter_disparos);
@@ -334,7 +343,6 @@ int main() {
               if(nave_escudo_esta_prendido(navei)){
                 for(size_t i=0; i<n_escudo; i++){
                   if(distancia_punto_a_polilinea(escudo[i],fuel_get_posx(fuel),fuel_get_posy(fuel))<=15){
-                    lista_iter_borrar(iter_fuel_lista);
                     fuel_matar(fuel);
                     fuel_diccionario_taken(fuel_get_posx(fuel),fuel_get_posy(fuel),nivel_nombre(niveles[indice_nivel]));
                     nave_add_fuel(navei);
@@ -356,14 +364,13 @@ int main() {
             if(reactor_get_alive(reactor)){
               size_t n_reactor = figura_cant_polilineas(figura_vector[reactor_en_vector]);
               polilinea_t **reactor_polilinea = copiar_polilineas(figura_vector[reactor_en_vector], reactor_get_posx(reactor), reactor_get_posy(reactor), reactor_get_angulo(reactor));
-    
+
               lista_iter_t *iter_disparos=lista_iter_crear(disparos);
               while(!lista_iter_al_final(iter_disparos)){
                 disparo_t *disparo=lista_iter_ver_actual(iter_disparos);
                 for(size_t i=0; i<n_reactor;i++){
                   if(distancia_punto_a_polilinea(reactor_polilinea[i],disparo_get_posx(disparo),disparo_get_posy(disparo))<=1){
                     reactor_matar(reactor);
-                    lista_iter_borrar(iter_reactor_lista);
                     torreta_diccionario_matar(reactor_get_posx(reactor), reactor_get_posy(reactor), nivel_nombre(niveles[indice_nivel]));
                     lista_iter_borrar(iter_disparos);
                     free(disparo);
@@ -545,6 +552,7 @@ int main() {
             for(size_t i=0; i<n_disparo;i++){
               graficar_polilinea(renderer,disparo_polilinea[i],f);
             }
+            destruir_vector_polilineas(disparo_polilinea,n_disparo);
             lista_iter_avanzar(iter_disparos_torretas2);
           }
           lista_iter_destruir(iter_disparos_torretas2);
@@ -634,183 +642,56 @@ int main() {
           size_t n_estrella=figura_cant_polilineas(figura_vector[estrella_en_vector]);
           polilinea_t **estrella=copiar_polilineas(figura_vector[estrella_en_vector],ESTRELLA_POSICION_X,ESTRELLA_POSICION_Y,0);
 
-          size_t n_planeta1=figura_cant_polilineas(figura_vector[planeta1_en_vector]);
-          polilinea_t **planeta1=copiar_polilineas(figura_vector[planeta1_en_vector],PLAN1_POSICION_X,PLAN1_POSICION_Y,0);
-
-          size_t n_planeta2=figura_cant_polilineas(figura_vector[planeta2_en_vector]);
-          polilinea_t **planeta2=copiar_polilineas(figura_vector[planeta2_en_vector],PLAN2_POSICION_X,PLAN2_POSICION_Y,0);
-
-          size_t n_planeta3=figura_cant_polilineas(figura_vector[planeta3_en_vector]);
-          polilinea_t **planeta3=copiar_polilineas(figura_vector[planeta3_en_vector],PLAN3_POSICION_X,PLAN3_POSICION_Y,0);
-
-          size_t n_planeta4=figura_cant_polilineas(figura_vector[planeta4_en_vector]);
-          polilinea_t **planeta4=copiar_polilineas(figura_vector[planeta4_en_vector],PLAN4_POSICION_X,PLAN4_POSICION_Y,0);
-
-          size_t n_planeta5=figura_cant_polilineas(figura_vector[planeta5_en_vector]);
-          polilinea_t **planeta5=copiar_polilineas(figura_vector[planeta5_en_vector],PLAN5_POSICION_X,PLAN5_POSICION_Y,0);
-
-
           for(size_t i=0;i<n_estrella;i++){
             if(distancia_punto_a_polilinea(estrella[i],nave_get_posx(navei),nave_get_posy(navei))<=3){
               nave_matar(navei,BASE_POSICION_X,BASE_POSICION_Y);
             }
           }
 
-          for(size_t i=0;i<n_planeta1;i++){
-            if(distancia_punto_a_polilinea(planeta1[i],nave_get_posx(navei),nave_get_posy(navei))<=10){
-              size_t posicion_nivel = nivel_buscar(niveles, n_niveles, "NIVEL1NE");
+          for(size_t i=0;i<n_planetas;i++){
+
+            size_t planeta_en_vector = figura_buscar(figura_vector,n_figura,planetas_niveles[i].nombre);
+
+            size_t n_planeta=figura_cant_polilineas(figura_vector[planeta_en_vector]);
+            polilinea_t **planeta=copiar_polilineas(figura_vector[planeta_en_vector],planetas_niveles[i].posx,planetas_niveles[i].posy,0);
+
+            if(norma(planetas_niveles[i].posx-nave_get_posx(navei),planetas_niveles[i].posy-nave_get_posy(navei))<=25){
+              size_t posicion_nivel = nivel_buscar(niveles, n_niveles, planetas_niveles[i].nivel);
               nivel_activar(niveles[posicion_nivel]);
               f = nivel_return_escala_inicial(niveles[posicion_nivel]);
               nave_trasladar(navei,400/f,500/f,true);
               centro=nave_get_posx(navei);
               size_t n;
-              torreta_t **t = torretas_activar("NIVEL1NE",&n);
+              torreta_t **t = torretas_activar(planetas_niveles[i].nivel,&n);
               for(size_t j=0; j<n; j++){
                 lista_insertar_ultimo(torretas_lista,t[j]);
               }
               free(t);
-              fuel_t **f = fuel_activar("NIVEL1NE",&n);
+              fuel_t **f = fuel_activar(planetas_niveles[i].nivel,&n);
               for(size_t j=0; j<n; j++){
                 lista_insertar_ultimo(fuel_lista,f[j]);
               }
               free(f);
-              reactor_t **reactores_vector = reactor_activar("NIVEL1NE",&n);
-              for(size_t j=0; j<n; j++){
-                lista_insertar_ultimo(reactor_lista,reactores_vector[j]);
-              }
-              encabezado_activar_timer(e,n);
-              free(reactores_vector);
-              lista_destruir(disparos,free);
-              disparos=lista_crear();
-              lista_destruir(torreta_disparos,free);
-              torreta_disparos=lista_crear();
-            }
-          }
-
-          for(size_t i=0;i<n_planeta2;i++){
-            if(distancia_punto_a_polilinea(planeta2[i],nave_get_posx(navei),nave_get_posy(navei))<=10){
-              size_t posicion_nivel = nivel_buscar(niveles, n_niveles, "NIVEL1SE");
-              nivel_activar(niveles[posicion_nivel]);
-              f = nivel_return_escala_inicial(niveles[posicion_nivel]);
-              nave_trasladar(navei,400/f,500/f,true);
-
-              size_t n;
-              torreta_t **t = torretas_activar("NIVEL1SE",&n);
-              for(size_t j=0; j<n; j++){
-                lista_insertar_ultimo(torretas_lista,t[j]);
-              }
-              free(t);
-              fuel_t **f = fuel_activar("NIVEL1SE",&n);
-              for(size_t j=0; j<n; j++){
-                lista_insertar_ultimo(fuel_lista,f[j]);
-              }
-              free(f);
-              reactor_t **reactores_vector = reactor_activar("NIVEL1SE",&n);
-              for(size_t j=0; j<n; j++){
-                lista_insertar_ultimo(reactor_lista,f[j]);
-              }
-              free(reactores_vector);
-              encabezado_activar_timer(e,n);
-              centro=nave_get_posx(navei);
-              lista_destruir(disparos,free);
-              disparos=lista_crear();
-              lista_destruir(torreta_disparos,free);
-              torreta_disparos=lista_crear();
-            }
-          }
-
-          for(size_t i=0;i<n_planeta3;i++){
-            if(distancia_punto_a_polilinea(planeta3[i],nave_get_posx(navei),nave_get_posy(navei))<=10){
-              size_t posicion_nivel = nivel_buscar(niveles, n_niveles, "NIVEL1SW");
-              nivel_activar(niveles[posicion_nivel]);
-              f = nivel_return_escala_inicial(niveles[posicion_nivel]);
-              nave_trasladar(navei,400/f,500/f,true);
-              centro=nave_get_posx(navei);
-              size_t n;
-              torreta_t **t = torretas_activar("NIVEL1SW",&n);
-              for(size_t j=0; j<n; j++){
-                lista_insertar_ultimo(torretas_lista,t[j]);
-              }
-              free(t);
-              fuel_t **f = fuel_activar("NIVEL1SW",&n);
-              for(size_t j=0; j<n; j++){
-                lista_insertar_ultimo(fuel_lista,f[j]);
-              }
-              free(f);
-              reactor_t **reactores_vector = reactor_activar("NIVEL1SW",&n);
+              reactor_t **reactores_vector = reactor_activar(planetas_niveles[i].nivel,&n);
               for(size_t j=0; j<n; j++){
                 lista_insertar_ultimo(reactor_lista,reactores_vector[j]);
               }
               free(reactores_vector);
-              encabezado_activar_timer(e,n);
               lista_destruir(disparos,free);
               disparos=lista_crear();
               lista_destruir(torreta_disparos,free);
               torreta_disparos=lista_crear();
             }
+
+            for(size_t i=0; i<n_planeta;i++){
+              trasladar(planeta[i],-centro + VENTANA_ANCHO / 2 / f,0);
+              graficar_polilinea(renderer,planeta[i],f);
+            }
+
+            destruir_vector_polilineas(planeta, n_planeta);
           }
 
-          for(size_t i=0;i<n_planeta4;i++){
-            if(distancia_punto_a_polilinea(planeta4[i],nave_get_posx(navei),nave_get_posy(navei))<=10){
-              size_t posicion_nivel = nivel_buscar(niveles, n_niveles, "NIVEL1NW");
-              nivel_activar(niveles[posicion_nivel]);
-              f = nivel_return_escala_inicial(niveles[posicion_nivel]);
-              nave_trasladar(navei,400/f,500/f,true);
-              centro=nave_get_posx(navei);
-              size_t n;
-              torreta_t **t = torretas_activar("NIVEL1NW",&n);
-              for(size_t j=0; j<n; j++){
-                lista_insertar_ultimo(torretas_lista,t[j]);
-              }
-              free(t);
-              fuel_t **f = fuel_activar("NIVEL1NW",&n);
-              for(size_t j=0; j<n; j++){
-                lista_insertar_ultimo(fuel_lista,f[j]);
-              }
-              free(f);
-              reactor_t **reactores_vector = reactor_activar("NIVEL1NW",&n);
-              for(size_t j=0; j<n; j++){
-                lista_insertar_ultimo(reactor_lista,reactores_vector[j]);
-              }
-              free(reactores_vector);
-              encabezado_activar_timer(e,n);
-              lista_destruir(disparos,free);
-              disparos=lista_crear();
-              lista_destruir(torreta_disparos,free);
-              torreta_disparos=lista_crear();
-            }
-          }
 
-          for(size_t i=0;i<n_planeta5;i++){
-            if(distancia_punto_a_polilinea(planeta5[i],nave_get_posx(navei),nave_get_posy(navei))<=10){
-              size_t posicion_nivel = nivel_buscar(niveles, n_niveles, "NIVEL1R");
-              nivel_activar(niveles[posicion_nivel]);
-              f = nivel_return_escala_inicial(niveles[posicion_nivel]);
-              nave_trasladar(navei,400/f,500/f,true);
-              centro=nave_get_posx(navei);
-              size_t n;
-              torreta_t **t = torretas_activar("NIVEL1R",&n);
-              for(size_t j=0; j<n; j++){
-                lista_insertar_ultimo(torretas_lista,t[j]);
-              }
-              free(t);
-              fuel_t **f = fuel_activar("NIVEL1R",&n);
-              for(size_t j=0; j<n; j++){
-                lista_insertar_ultimo(fuel_lista,f[j]);
-              }
-              free(f);
-              reactor_t **reactores_vector = reactor_activar("NIVEL1R",&n);
-              for(size_t j=0; j<n; j++){
-                lista_insertar_ultimo(reactor_lista,reactores_vector[j]);
-              }
-              free(reactores_vector);
-              encabezado_activar_timer(e,n);
-              lista_destruir(disparos,free);
-              disparos=lista_crear();
-              lista_destruir(torreta_disparos,free);
-              torreta_disparos=lista_crear();
-            }
-          }
 
           if(nave_get_posx(navei)<0 || nave_get_posx(navei)>VENTANA_ANCHO){
             nave_rebotar_x(navei);
@@ -832,38 +713,9 @@ int main() {
             graficar_polilinea(renderer,estrella[i],f);
           }
 
-          for(size_t i=0; i<n_planeta1;i++){
-            trasladar(planeta1[i],-centro + VENTANA_ANCHO / 2 / f, 0);
-            graficar_polilinea(renderer,planeta1[i],f);
-          }
-
-          for(size_t i=0; i<n_planeta2;i++){
-            trasladar(planeta2[i],-centro + VENTANA_ANCHO / 2 / f, 0);
-            graficar_polilinea(renderer,planeta2[i],f);
-          }
-
-          for(size_t i=0; i<n_planeta3;i++){
-            trasladar(planeta3[i],-centro + VENTANA_ANCHO / 2 / f, 0);
-            graficar_polilinea(renderer,planeta3[i],f);
-          }
-
-          for(size_t i=0; i<n_planeta4;i++){
-            trasladar(planeta4[i],-centro + VENTANA_ANCHO / 2 / f, 0);
-            graficar_polilinea(renderer,planeta4[i],f);
-          }
-
-          for(size_t i=0; i<n_planeta5;i++){
-            trasladar(planeta5[i],-centro + VENTANA_ANCHO / 2 / f, 0);
-            graficar_polilinea(renderer,planeta5[i],f);
-          }
 
           destruir_vector_polilineas(base, n_base);
           destruir_vector_polilineas(estrella, n_estrella);
-          destruir_vector_polilineas(planeta1, n_planeta1);
-          destruir_vector_polilineas(planeta2, n_planeta2);
-          destruir_vector_polilineas(planeta3, n_planeta3);
-          destruir_vector_polilineas(planeta4, n_planeta4);
-          destruir_vector_polilineas(planeta5, n_planeta5);
 
         }
 
@@ -904,6 +756,7 @@ int main() {
           lista_borrar_primero(torreta_disparos);
           free(primer_disparo_torreta);
         }
+
 
 
 

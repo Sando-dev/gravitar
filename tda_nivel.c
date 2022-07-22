@@ -10,7 +10,6 @@ struct nivel{
   char nombre[TAMANIO_NOMBRE];
   bool activo;
   bool infinito;
-  int puntos;
   float escala_inicial;
 };
 
@@ -23,7 +22,6 @@ nivel_t *nivel_crear(char nombre[], bool inf){
   strcpy(nivel->nombre,nombre);
   nivel->activo=false;
   nivel->infinito = inf;
-  //nivel->puntos=0;
   return nivel;
 }
 
