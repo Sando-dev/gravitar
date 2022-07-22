@@ -16,6 +16,10 @@ struct encabezado {
     int fuel;
     char fuel_number[MAX_DIGITS];
     char fuel_string[MAX_STRING];
+    int timer;
+    char timer_number[MAX_DIGITS];
+    bool lvl_completed;
+    char lvl_completed_string[MAX_STRING];
 };
 
 typedef struct niveles_points {
@@ -43,6 +47,9 @@ encabezado_t *encabezado_crear(void) {
     e->score = 0;
     strcpy(e->score_number, "0");
     strcpy(e->score_string, "score");
+    e->timer = 0;
+    e->lvl_completed = false;
+    strcpy(e->lvl_completed_string,"level completed");
     return e;
 }
 
@@ -56,7 +63,7 @@ void encabezado_graficar(encabezado_t *e, SDL_Renderer *renderer) {
     for(size_t i=0; e->fuel_string[i]; i++) {
         size_t posicion = caracter_posicion(e->fuel_string[i]);
         size_t tam = caracter_size(e->fuel_string[i]);
-        polilinea_t *p = polilinea_crear(caracteres[posicion], tam, 0xAD,0xD8,0xE6);
+        polilinea_t *p = polilinea_crear(caracteres[posicion], tam, 0x00,0xFF,0xFF);
         trasladar(p,(372.5+(15*i))/2.5,550/2.5);
         graficar_polilinea(renderer, p, 2.5);
         polilinea_destruir(p);
@@ -64,7 +71,7 @@ void encabezado_graficar(encabezado_t *e, SDL_Renderer *renderer) {
     for(size_t i=0; e->score_string[i]; i++) {
         size_t posicion = caracter_posicion(e->score_string[i]);
         size_t tam = caracter_size(e->score_string[i]);
-        polilinea_t *p = polilinea_crear(caracteres[posicion], tam, 0xAD,0xD8,0xE6);
+        polilinea_t *p = polilinea_crear(caracteres[posicion], tam, 0x00,0xFF,0xFF);
         trasladar(p,(365+(15*i))/2.5,575/2.5);
         graficar_polilinea(renderer, p, 2.5);
         polilinea_destruir(p);
@@ -86,6 +93,27 @@ void encabezado_graficar(encabezado_t *e, SDL_Renderer *renderer) {
         trasladar(p,(675+(15*i))/2.5,575/2.5);
         graficar_polilinea(renderer, p, 2.5);
         polilinea_destruir(p);
+    }
+    if(e->timer) {
+        sprintf(e->timer_number,"%d",e->timer);
+        for(size_t i=0; e->timer_number[i]; i++) {
+            size_t posicion = caracter_posicion(e->timer_number[i]);
+            size_t tam = caracter_size(e->timer_number[i]);
+            polilinea_t *p = polilinea_crear(caracteres[posicion], tam, 0xFF,0x00,0x00);
+            trasladar(p,(300+(32*i))/6,200/6);
+            graficar_polilinea(renderer, p, 6);
+            polilinea_destruir(p);
+        }
+    }
+    if(e->lvl_completed){
+        for(size_t i=0; e->lvl_completed_string[i]; i++) {
+            size_t posicion = caracter_posicion(e->lvl_completed_string[i]);
+            size_t tam = caracter_size(e->lvl_completed_string[i]);
+            polilinea_t *p = polilinea_crear(caracteres[posicion], tam, 0x00,0xFF,0xFF);
+            trasladar(p,(300+(15*i))/2.5,350/2.5);
+            graficar_polilinea(renderer, p, 2.5);
+            polilinea_destruir(p);
+        }
     }
 }
 
@@ -109,4 +137,18 @@ void encabezado_nivel_completado(encabezado_t *e, char level[MAX_STRING]) {
 }
 int encabezado_get_score(encabezado_t *e){
   return e->score;
+}
+
+
+void encabezado_activar_timer(encabezado_t *e, bool hay_reactor) {
+    if(hay_reactor)
+        e->timer = 25;
+}
+
+void encabezado_set_timer(encabezado_t *e, int time) {
+    e->timer = time;
+}
+
+void encabezado_set_lvl_completed(encabezado_t *e, bool lvl_state) {
+    e->lvl_completed = lvl_state;
 }

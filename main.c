@@ -356,7 +356,7 @@ int main() {
             if(reactor_get_alive(reactor)){
               size_t n_reactor = figura_cant_polilineas(figura_vector[reactor_en_vector]);
               polilinea_t **reactor_polilinea = copiar_polilineas(figura_vector[reactor_en_vector], reactor_get_posx(reactor), reactor_get_posy(reactor), reactor_get_angulo(reactor));
-
+    
               lista_iter_t *iter_disparos=lista_iter_crear(disparos);
               while(!lista_iter_al_final(iter_disparos)){
                 disparo_t *disparo=lista_iter_ver_actual(iter_disparos);
@@ -375,7 +375,7 @@ int main() {
               destruir_vector_polilineas(reactor_polilinea,n_reactor);
               lista_iter_destruir(iter_disparos);
 
-
+              encabezado_set_timer(e,25-reactor_get_time(reactor));
               reactor_pasa_tiempo(reactor);
               if(reactor_explotar(reactor)){
                   nave_matar(navei,BASE_POSICION_X,BASE_POSICION_Y);
@@ -391,12 +391,15 @@ int main() {
                   torreta_disparos=lista_crear();
                   fuel_lista = lista_crear();
                   f = 1;
+                  encabezado_set_timer(e,0);
+                  encabezado_set_lvl_completed(e,false);
               }
             }
             lista_iter_avanzar(iter_reactor_lista);
           }
           lista_iter_destruir(iter_reactor_lista);
-
+          if(lista_esta_vacia(fuel_lista) & lista_esta_vacia(reactor_lista) && lista_esta_vacia(torretas_lista))
+            encabezado_set_lvl_completed(e,true);
 
           if(nave_get_posy(navei) > VENTANA_ALTO/f) {
             if(lista_esta_vacia(fuel_lista) & lista_esta_vacia(reactor_lista) && lista_esta_vacia(torretas_lista))
@@ -414,6 +417,8 @@ int main() {
             torreta_disparos=lista_crear();
             fuel_lista = lista_crear();
             f = 1;
+            encabezado_set_timer(e,0);
+            encabezado_set_lvl_completed(e,false);
           }
 
           if(nave_get_posy(navei)<0){
@@ -673,6 +678,7 @@ int main() {
               for(size_t j=0; j<n; j++){
                 lista_insertar_ultimo(reactor_lista,reactores_vector[j]);
               }
+              encabezado_activar_timer(e,n);
               free(reactores_vector);
               lista_destruir(disparos,free);
               disparos=lista_crear();
@@ -704,6 +710,7 @@ int main() {
                 lista_insertar_ultimo(reactor_lista,f[j]);
               }
               free(reactores_vector);
+              encabezado_activar_timer(e,n);
               centro=nave_get_posx(navei);
               lista_destruir(disparos,free);
               disparos=lista_crear();
@@ -735,6 +742,7 @@ int main() {
                 lista_insertar_ultimo(reactor_lista,reactores_vector[j]);
               }
               free(reactores_vector);
+              encabezado_activar_timer(e,n);
               lista_destruir(disparos,free);
               disparos=lista_crear();
               lista_destruir(torreta_disparos,free);
@@ -765,6 +773,7 @@ int main() {
                 lista_insertar_ultimo(reactor_lista,reactores_vector[j]);
               }
               free(reactores_vector);
+              encabezado_activar_timer(e,n);
               lista_destruir(disparos,free);
               disparos=lista_crear();
               lista_destruir(torreta_disparos,free);
@@ -795,6 +804,7 @@ int main() {
                 lista_insertar_ultimo(reactor_lista,reactores_vector[j]);
               }
               free(reactores_vector);
+              encabezado_activar_timer(e,n);
               lista_destruir(disparos,free);
               disparos=lista_crear();
               lista_destruir(torreta_disparos,free);

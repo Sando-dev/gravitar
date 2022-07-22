@@ -3,7 +3,7 @@
 
 #include "tda_polilineas.h"
 
-#define MAX_STRING 20
+#define MAX_STRING 30
 
 typedef struct encabezado encabezado_t; 
 
@@ -20,5 +20,11 @@ void encabezado_torreta_matada(encabezado_t *e);
 void encabezado_nivel_completado(encabezado_t *e, char level[MAX_STRING]);
 
 int encabezado_get_score(encabezado_t *e);
+
+void encabezado_activar_timer(encabezado_t *e, bool hay_reactor);
+
+void encabezado_set_timer(encabezado_t *e, int time);
+
+void encabezado_set_lvl_completed(encabezado_t *e, bool lvl_state);
 
 #endif

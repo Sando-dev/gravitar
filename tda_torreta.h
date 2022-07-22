@@ -58,4 +58,6 @@ bool reactor_explotar(reactor_t *r);
 
 void reactor_matar(reactor_t *r);
 
+float reactor_get_time(reactor_t *r);
+
 #endif

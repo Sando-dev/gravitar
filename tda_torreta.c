@@ -202,3 +202,7 @@ float reactor_get_angulo(reactor_t *r) {
 void reactor_matar(reactor_t *r) {
   r->alive = 0;
 }
+
+float reactor_get_time(reactor_t *r) {
+  return r->tiempo;
+}
