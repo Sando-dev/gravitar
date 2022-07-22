@@ -226,6 +226,7 @@ int main() {
           tiempo_coldown_torretas+=(float)1/JUEGO_FPS;
           angulo_estrella=((float)3/2)*PI;
 
+          bool nivel_completo = true;
 
           lista_iterar(disparos,disparo_mover,NULL);
           lista_iterar(torreta_disparos,disparo_mover,NULL);
@@ -301,6 +302,7 @@ int main() {
           while(!lista_iter_al_final(iter_torretas)){
             torreta_t *torreta = lista_iter_ver_actual(iter_torretas);
             if(torreta_vive(torreta)){
+              nivel_completo = false;
               size_t n_torreta = figura_cant_polilineas(figura_vector[torreta_en_vector]);
               polilinea_t **torreta_polilinea = copiar_polilineas(figura_vector[torreta_en_vector], torreta_get_posx(torreta), torreta_get_posy(torreta), torreta_get_angulo(torreta));
 
@@ -337,6 +339,7 @@ int main() {
           while(!lista_iter_al_final(iter_fuel_lista)){
             fuel_t *fuel = lista_iter_ver_actual(iter_fuel_lista);
             if(fuel_vive(fuel)){
+              nivel_completo = false; 
               size_t n_fuel = figura_cant_polilineas(figura_vector[fuel_en_vector]);
               polilinea_t **fuel_polilinea = copiar_polilineas(figura_vector[fuel_en_vector],fuel_get_posx(fuel), fuel_get_posy(fuel), fuel_get_ang(fuel));
 
@@ -362,6 +365,7 @@ int main() {
           while(!lista_iter_al_final(iter_reactor_lista)){
             reactor_t *reactor = lista_iter_ver_actual(iter_reactor_lista);
             if(reactor_get_alive(reactor)){
+              nivel_completo = false;
               size_t n_reactor = figura_cant_polilineas(figura_vector[reactor_en_vector]);
               polilinea_t **reactor_polilinea = copiar_polilineas(figura_vector[reactor_en_vector], reactor_get_posx(reactor), reactor_get_posy(reactor), reactor_get_angulo(reactor));
 
@@ -399,18 +403,20 @@ int main() {
                   fuel_lista = lista_crear();
                   f = 1;
                   encabezado_set_timer(e,0);
-                  encabezado_set_lvl_completed(e,false);
               }
+              
             }
-            lista_iter_avanzar(iter_reactor_lista);
+            if(lista_iter_avanzar(iter_reactor_lista))
+              break;
           }
           lista_iter_destruir(iter_reactor_lista);
-          if(lista_esta_vacia(fuel_lista) & lista_esta_vacia(reactor_lista) && lista_esta_vacia(torretas_lista))
-            encabezado_set_lvl_completed(e,true);
 
-          if(nave_get_posy(navei) > VENTANA_ALTO/f) {
-            if(lista_esta_vacia(fuel_lista) & lista_esta_vacia(reactor_lista) && lista_esta_vacia(torretas_lista))
+          if(nivel_completo){
+              encabezado_set_lvl_completed(e,true);
               encabezado_nivel_completado(e,nivel_nombre(niveles[indice_nivel]));
+          }
+          if(nave_get_posy(navei) > VENTANA_ALTO/f) {
+            
             nave_trasladar(navei,BASE_POSICION_X,BASE_POSICION_Y,true);
             nivel_desactivar(niveles[indice_nivel]);
             lista_destruir(disparos,free);

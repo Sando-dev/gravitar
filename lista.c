@@ -144,9 +144,9 @@ lista_iter_t *lista_iter_crear(lista_t *lista) {
 }
 
 bool lista_iter_avanzar(lista_iter_t *iter) {
-    if (lista_iter_al_final(iter))
+    if (lista_iter_al_final(iter)){
         return false;
-
+    }
     iter->ant = iter->act;
     iter->act = iter->act->prox;
 
